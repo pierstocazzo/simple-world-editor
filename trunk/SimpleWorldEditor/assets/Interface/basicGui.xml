@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty-1.3.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
+    <useStyles filename="nifty-default-styles.xml" />
+    <useStyles filename="Interface/Styles/panel_styles.xml"/>  
+    <useStyles filename="Interface/Styles/ma_button.xml" />
+    <useStyles filename="Interface/Styles/ma_nifty-checkbox.xml" />
+    <useStyles filename="Interface/Styles/nifty-tabs-my.xml" />
+    <useControls filename="nifty-default-controls.xml" />
+  
+    
+  
+    
+            
+    <screen id="null" controller="com.simpleEditor.EditorGuiManager">
+        <layer id="emptyLayer" childLayout="center">
+        </layer>
+    </screen>  
+
+    <!--Data Components Popup-->
+    <popup id="popupEditComponent" childLayout="center" >
+        <panel width="300px" height="200px" align="center" valign="center" childLayout="vertical" style="panel_style_02" padding="10" >
+            <effect>
+                <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="500"/>
+                <onEndScreen  name="fade" startColor="#000f" endColor="#0000" length="500"/>
+            </effect>                    
+            
+            <panel align="center" width="95%" valign="center" childLayout="vertical" padding="5">
+                <control name="label" text="Edit Data Component" />
+                
+                <panel align="center" valign="center" childLayout="horizontal" padding="5">
+                    <control id="entityDataName" name="textfield" />
+                    <control id="entityData" name="textfield" />
+                </panel>
+            </panel>
+            
+            <panel align="center" valign="center" childLayout="horizontal" padding="5">
+                <control id="finishEditComponent" name="button" style="ma_button" label="Ok" visibleToMouse="true">
+                    <interact onClick="finishEditComponent(true)"/>
+                </control>
+                <control id="cancelEditComponent" name="button" style="ma_button" label="Cancel" visibleToMouse="true">
+                    <interact onClick="finishEditComponent(false)"/>
+                </control>
+            </panel>
+                        
+        </panel>        
+    </popup>
+
+
+    <!--Move to another layer Popup-->
+    <popup id="popupMoveToLayer" childLayout="center" >
+        <!--<control id="myListBox" name="listBox" vertical="optional" horizontal="optional" displayItems="20" selection="Multiple" />-->
+
+        <panel width="220px" height="130px" align="center" valign="center" childLayout="vertical" padding="10" >
+            <effect>
+                <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="500"/>
+                <onEndScreen  name="fade" startColor="#000f" endColor="#0000" length="500"/>
+            </effect>                    
+
+            <panel id="moveTobottomPanel" width="200px" height="100%" valign="bottom" align="center" childLayout="vertical" style="panel_style_02" padding="10">
+                            
+                <panel id="moveTobottomPanel2" width="100%" height="30px" align="center" childLayout="horizontal" >
+                                
+                    <control id="moveTolayer1" name="checkbox" >
+                        <interact onClick="moveToLayer(1)" />
+                    </control>
+
+                    <control id="moveTolayer2" name="checkbox"  >
+                        <interact onClick="moveToLayer(2)" />
+                    </control>
+
+                    <control id="moveTolayer3" name="checkbox"  >
+                        <interact onClick="moveToLayer(3)" />
+                    </control>
+
+                    <control id="moveTolayer4" name="checkbox"  >
+                        <interact onClick="moveToLayer(4)" />
+                    </control>
+
+                    <control id="moveTolayer5" name="checkbox"  >
+                        <interact onClick="moveToLayer(5)" />
+                    </control>
+
+                    <control id="moveTolayer6" name="checkbox" >
+                        <interact onClick="moveToLayer(6)" />
+                    </control>
+
+                    <control id="moveTolayer7" name="checkbox"  >
+                        <interact onClick="moveToLayer(7)" />
+                    </control>
+
+                    <control id="moveTolayer8" name="checkbox"  >
+                        <interact onClick="moveToLayer(8)" />
+                    </control>
+
+                    <control id="moveTolayer9" name="checkbox"    >
+                        <interact onClick="moveToLayer(9)" />
+                    </control>
+
+                    <control id="moveTolayer10" name="checkbox"    >
+                        <interact onClick="moveToLayer(10)" />
+                    </control>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                </panel> 
+                            
+                <panel id="moveTobottomPanel3" width="100%" height="30px" align="center" childLayout="horizontal" >
+                    <control id="moveTolayer11" name="checkbox"    >
+                        <interact onClick="moveToLayer(11)" />
+                    </control>
+                    <control id="moveTolayer12" name="checkbox"    >
+                        <interact onClick="moveToLayer(12)" />
+                    </control>
+                    <control id="moveTolayer13" name="checkbox"    >
+                        <interact onClick="moveToLayer(13)" />
+                    </control>
+                    <control id="moveTolayer14" name="checkbox"    >
+                        <interact onClick="moveToLayer(14)" />
+                    </control>
+                    <control id="moveTolayer15" name="checkbox"    >
+                        <interact onClick="moveToLayer(15)" />
+                    </control>
+                    <control id="moveTolayer16" name="checkbox"    >
+                        <interact onClick="moveToLayer(16)" />
+                    </control>
+                    <control id="moveTolayer17" name="checkbox"    >
+                        <interact onClick="moveToLayer(17)" />
+                    </control>
+                    <control id="moveTolayer18" name="checkbox"    >
+                        <interact onClick="moveToLayer(18)" />
+                    </control>
+                    <control id="moveTolayer19" name="checkbox"    >
+                        <interact onClick="moveToLayer(19)" />
+                    </control>
+                    <control id="moveTolayer20" name="checkbox"    >
+                        <interact onClick="moveToLayer(20)" />
+                    </control>                                                                                                                                                                                                                                                                                                                                    
+                </panel>
+                    
+                <panel height="40px" align="center" childLayout="horizontal">
+                    <control id="moveToLayerFalse" name="button" style="ma_button" label="Cancel" visibleToMouse="true">
+                        <interact onClick="moveToLayerEnable(false)"/>
+                    </control>
+                </panel>
+            </panel>
+        </panel>
+    </popup>   
+
+    <screen id="start" controller="com.simpleEditor.EditorGuiManager">
+
+        <layer id="layer" childLayout="center">
+                
+            <panel width="100%" height="100%" childLayout="horizontal" align="center" valign="center">
+
+
+
+                <!--Tools Panel-->        
+                <panel width="150px" height="90%" align="left" valign="center" childLayout="vertical" style="panel_style_02" padding="10" >
+                    <effect>
+                        <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="1500"/>
+                        <onEndScreen name="move" mode="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
+                    </effect>
+                
+                    <panel height="10px" padding="10">
+                        <!-- add your content here -->
+                    </panel>
+                    
+
+        
+                    <!--Transforms-->
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_move" name="button" style="ma_button" label="Move" visibleToMouse="true">
+                            <interact onClick="setMoveManipulator()"/>
+                        </control>              
+                    </panel>  
+        
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_rotate" name="button" style="ma_button" label="Rotate" visibleToMouse="true">
+                            <interact onClick="setRotateManipulator()"/>
+                        </control>              
+                    </panel>  
+        
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_scale" name="button" style="ma_button" label="Scale" visibleToMouse="true">
+                            <interact onClick="setScaleManipulator()"/>
+                        </control>              
+                    </panel>
+        
+                    <panel height="10px" padding="10">
+                        
+                    </panel>
+          
+                    <!--Coords-->
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_set_local_coords" name="button" style="ma_button" label="Local Coords" visibleToMouse="true">
+                            <interact onClick="setLocalCoords()"/>
+                        </control>              
+                    </panel>                       
+        
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_set_world_coords" name="button" style="ma_button" label="World Coords" visibleToMouse="true">
+                            <interact onClick="setWorldCoords()"/>
+                        </control>              
+                    </panel>                               
+        
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_set_view_coords" name="button" style="ma_button" label="View Coords" visibleToMouse="true">
+                            <interact onClick="setViewCoords()"/>
+                        </control>              
+                    </panel>           
+        
+                    <panel height="10px" padding="10">
+                        <!-- add your content here -->
+                    </panel>
+
+                    <!--Clear Transforms-->
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_clear_location" name="button" style="ma_button" label="Clear Location" visibleToMouse="true">
+                            <interact onClick="clearTransform(Translation)"/>
+                        </control>              
+                    </panel>                       
+        
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_clear_rotation" name="button" style="ma_button" label="Clear Rotation" visibleToMouse="true">
+                            <interact onClick="clearTransform(Rotation)"/>
+                        </control>              
+                    </panel>                               
+        
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_clear_scale" name="button" style="ma_button" label="Clear Scale" visibleToMouse="true">
+                            <interact onClick="clearTransform(Scale)"/>
+                        </control>              
+                    </panel>
+
+                    <panel height="10px" padding="10">
+                        <!-- add your content here -->
+                    </panel>
+                    
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_snap_grid" name="button" style="ma_button" label="Snap Grid" visibleToMouse="true">
+                            <interact onClick="snapObjectsToGrid()"/>
+                        </control>              
+                    </panel>        
+
+                    <panel height="10px" padding="10">
+                        <!-- add your content here -->
+                    </panel>        
+
+
+
+                    <!--Constraints-->
+                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" backgroundColor="#55a5">
+                        <control id="RadioGroupConstraints" name="radioButtonGroup" />
+                        <panel width="10" />
+                        <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
+                            <effect>
+                                <onActive name="border" color="#0008" />
+                            </effect>
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="None" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="constraint_none" group="RadioGroupConstraints" />
+                                </panel>
+                            </panel>
+
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="0.5" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="constraint_0.5" group="RadioGroupConstraints" />
+                                </panel>
+                            </panel>
+
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="1" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="constraint_1" group="RadioGroupConstraints" />
+                                </panel>
+                            </panel>
+                            
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="5" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="constraint_5" group="RadioGroupConstraints" />
+                                </panel>
+                            </panel>                            
+
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="10" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="constraint_10" group="RadioGroupConstraints" />
+                                </panel>
+                            </panel>                            
+                                                                    
+                        </panel>
+                    </panel>
+
+                    <panel height="10px" padding="10">
+                    </panel>
+                    
+                    <!--Selection-->
+                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" backgroundColor="#55a5">
+                        <control id="RadioGroupSelection" name="radioButtonGroup" />
+                        <!--<control name="label" text="Coordinates" />-->
+                        <panel width="10" />
+                        <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
+                            <effect>
+                                <onActive name="border" color="#0008" />
+                            </effect>
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="Mouse" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="mouse_sel" group="RadioGroupSelection" />
+                                </panel>
+                            </panel>
+
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="Rectangle" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="rectangle_sel" group="RadioGroupSelection" />
+                                </panel>
+                            </panel>
+                    
+                        </panel>
+                    </panel>
+                                                                                    
+                    <panel height="10px" padding="10">
+                    </panel>
+                            
+                    <!--Selection Normal/Additive-->
+                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" backgroundColor="#55a5">
+                        <control id="RadioGroupSelectionAdditive" name="radioButtonGroup" />
+                        <!--                        <control name="label" text="Transforms" />-->
+                        <panel width="10" />
+                        <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
+                            <effect>
+                                <onActive name="border" color="#0008" />
+                            </effect>
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="Normal" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="normal_sel" group="RadioGroupSelectionAdditive" />
+                                </panel>
+                            </panel>
+
+                            <panel childLayout="horizontal" width="100%" align="right">
+                                <panel childLayout="horizontal" width="70%" align="right">
+                                    <control name="label" text="Additive" with="100%"/>
+                                </panel>                        
+                                <panel childLayout="horizontal" width="30%">
+                                    <control name="radioButton" id="additive_sel" group="RadioGroupSelectionAdditive" />
+                                </panel>
+                            </panel>
+                    
+                        </panel>
+                    </panel>        
+
+
+                    <panel height="10px" padding="10">
+                    </panel>
+
+                                        
+                    <panel align="center" childLayout="vertical">
+                        <control id="cloneSelectedButton()" name="button" valign="center" align="center" style="ma_button" label="CloneSelected" visibleToMouse="true">
+                            <interact onClick="cloneSelectedButton()"/>
+                        </control>
+                       
+                        <control id="moveToLayerTrue" name="button" style="ma_button" label="MoveToLayer" visibleToMouse="true">
+                            <interact onClick="moveToLayerEnable(true)"/>
+                        </control>
+                        
+                        <control id="selectAllButton" name="button" style="ma_button" label="SelectAll" visibleToMouse="true">
+                            <interact onClick="selectAllButton()"/>
+                        </control>                        
+                    </panel>                        
+                    
+                    <panel height="10px" padding="10">
+                        <!-- add your content here -->
+                    </panel>              
+                    
+                    <panel height="30px" align="center" childLayout="vertical">
+                        <control id="button_set_grid" name="button" style="ma_button" label="Show Grid" visibleToMouse="true">
+                            <interact onClick="setGrid()"/>
+                        </control>              
+                    </panel>
+                                                                                                                                                                                                                                            
+                    <panel height="10px" padding="10">
+                        <!-- add your content here -->
+                    </panel>              
+                    
+                    <panel align="center" childLayout="vertical">
+                        <control id="removeEntityInScene" name="button" valign="center" align="center" style="ma_button" label="RemoveSelected" visibleToMouse="true">
+                            <interact onClick="removeSelectedButton()"/>
+                        </control>                                                                          
+                    </panel>      
+                                                                                
+                </panel>
+                
+                
+                <!--Layers Panel-->
+                <panel id="bottomPanel" height="100px" valign="bottom" align="center" childLayout="center">
+                    <effect>
+                        <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="1500"/>
+                        <onEndScreen name="move" mode="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
+                    </effect>                                
+                    <panel width="100%" height="100%" align="center" valign="center" childLayout="center" padding="10">
+                        <panel width="200px" height="100%" valign="bottom" align="center" childLayout="vertical" style="panel_style_02" padding="10">
+                            
+                            <panel width="100%" height="50%" align="center" childLayout="horizontal" >
+                                
+                                <control id="layer1" name="checkbox"   >
+                                    <interact onClick="switchLayer(1)"   />
+                                </control>
+
+                                <control id="layer2" name="checkbox"    >
+                                    <interact onClick="switchLayer(2)" />
+                                </control>
+
+                                <control id="layer3" name="checkbox"    >
+                                    <interact onClick="switchLayer(3)" />
+                                </control>
+
+                                <control id="layer4" name="checkbox"    >
+                                    <interact onClick="switchLayer(4)" />
+                                </control>
+
+                                <control id="layer5" name="checkbox"    >
+                                    <interact onClick="switchLayer(5)" />
+                                </control>
+
+                                <control id="layer6" name="checkbox"    >
+                                    <interact onClick="switchLayer(6)" />
+                                </control>
+
+                                <control id="layer7" name="checkbox"    >
+                                    <interact onClick="switchLayer(7)" />
+                                </control>
+
+                                <control id="layer8" name="checkbox"    >
+                                    <interact onClick="switchLayer(8)" />
+                                </control>
+
+                                <control id="layer9" name="checkbox"    >
+                                    <interact onClick="switchLayer(9)" />
+                                </control>
+
+                                <control id="layer10" name="checkbox"    >
+                                    <interact onClick="switchLayer(10)" />
+                                </control>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                            </panel> 
+                            
+                            <panel width="100%" height="50%" align="center" childLayout="horizontal" >
+                                <control id="layer11" name="checkbox"    >
+                                    <interact onClick="switchLayer(11)" />
+                                </control>
+                                <control id="layer12" name="checkbox"    >
+                                    <interact onClick="switchLayer(12)" />
+                                </control>
+                                <control id="layer13" name="checkbox"    >
+                                    <interact onClick="switchLayer(13)" />
+                                </control>
+                                <control id="layer14" name="checkbox"    >
+                                    <interact onClick="switchLayer(14)" />
+                                </control>
+                                <control id="layer15" name="checkbox"    >
+                                    <interact onClick="switchLayer(15)" />
+                                </control>
+                                <control id="layer16" name="checkbox"    >
+                                    <interact onClick="switchLayer(16)" />
+                                </control>
+                                <control id="layer17" name="checkbox"    >
+                                    <interact onClick="switchLayer(17)" />
+                                </control>
+                                <control id="layer18" name="checkbox"    >
+                                    <interact onClick="switchLayer(18)" />
+                                </control>
+                                <control id="layer19" name="checkbox"    >
+                                    <interact onClick="switchLayer(19)" />
+                                </control>
+                                <control id="layer20" name="checkbox"    >
+                                    <interact onClick="switchLayer(20)" />
+                                </control>                                                                                                                                                                                                                                                                                                                                    
+                            </panel> 
+                        </panel>
+                        
+                       
+                    </panel>
+
+                </panel>
+
+                                
+                <!--Settings panel-->
+                <panel id="settingsRightPanel" height="99%" width="256px" valign="center" align="center" childLayout="horizontal" padding="10">
+                    <effect>
+                        <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="1500"/>
+                        <onEndScreen name="move" mode="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
+                    </effect> 
+                                       
+                    <control id="settingsTabsGroup" name="tabGroup">
+                        
+                        <control id="SceneTab" name="tab" caption="Scene" group="settingsTabsGroup"  style="nifty-tabs-my">
+                            <panel height="95%" width="98%" align="center" childLayout="vertical" padding="10" >
+                                
+                                <panel childLayout="horizontal">
+                                    <control id="newScene" name="button" valign="center" align="center" style="ma_button" label="New Scene" visibleToMouse="true">
+                                        <interact onClick="newSceneButton()"/>
+                                    </control>
+                                    <control id="loadScene" name="button" valign="center" align="center" style="ma_button" label="Load Scene" visibleToMouse="true">
+                                        <interact onClick="loadSceneButton()"/>
+                                    </control>
+                                </panel>
+                                
+                                <panel childLayout="horizontal">
+                                    <control id="saveScene" name="button" valign="center" align="center" style="ma_button" label="Save Scene" visibleToMouse="true">
+                                        <interact onClick="saveSceneButton()"/>
+                                    </control>                                    
+                                    <control id="saveAsNewScene" name="button" valign="center" align="center" style="ma_button" label="Save as New" visibleToMouse="true">
+                                        <interact onClick="saveAsNewSceneButton()"/>
+                                    </control>
+                                </panel>                                
+                                
+                                <!--Assets-->
+                                <panel childLayout="vertical" height="400px" width="100%" align="center">
+                                    <!--Assets folder/zip/jar path-->
+                                    <panel childLayout="vertical"  width="100%" align="center">
+                                        <control name="label" text="Assets Folder" />
+                                        <control id="scenePath1" name="textfield" />
+                                        <control id="scenePath2" name="textfield" />
+                                        <control id="scenePath3" name="textfield" />
+                                        <control id="scenePath4" name="textfield" />
+                                        <control id="scenePath5" name="textfield" />
+                                        <control id="scenePath6" name="textfield" />
+                                        <control id="scenePath7" name="textfield" />
+                                    </panel>
+                                
+                                    <!--Entity lists-->
+                                    <!--                                    <panel childLayout="vertical"  width="100%" align="center">
+                                        <control name="label" text="Entity Lists of Assets (JSON File)" />
+                                        <control id="entityList1" name="textfield" />
+                                        <control id="entityList2" name="textfield" />
+                                        <control id="entityList3" name="textfield" />
+                                        <control id="entityList4" name="textfield" />
+                                        <control id="entityList5" name="textfield" />
+                                    </panel>-->
+                                    
+                                    <!--Update assets-->
+                                    <control id="updateAssets" name="button" valign="center" align="center" style="ma_button" label="Update Assets" visibleToMouse="true">
+                                        <interact onClick="updateAssetsButton()"/>
+                                    </control>
+                                    
+                                    <panel childLayout="horizontal">
+                                        <control id="savePreviewJ3O" name="checkbox" >
+                                            <interact onClick="savePreviewJ3O()" />
+                                        </control>
+                                        <control name="label" text="Save j3o Scene" />
+                                    </panel>
+                                    
+                                    
+                             <!--Not Implemented as Lights are not implemented-->
+                             
+<!--                                    <panel childLayout="horizontal">
+                                        <control id="switchDefaultLighting" name="checkbox" >
+                                            <interact onClick="switchDefaultLighting()" />
+                                        </control>
+                                        <control name="label" text="Default Ligting" />
+                                    </panel>                                    -->
+                                    
+                                </panel>
+                            </panel> 
+                            
+                        </control>
+                        
+                        
+                        <control id="EntitiesTab" name="tab" caption="Entities" group="settingsTabsGroup" style="nifty-tabs-my">
+
+                            <panel height="95%" width="98%" align="center" childLayout="vertical" padding="10" >
+                                
+                                <panel childLayout="vertical">
+                                    <control name="label" text="Assets List" />
+                                    
+                                    <control id="entitiesListBox" name="listBox" vertical="optional" horizontal="optional" displayItems="10" selection="Single">
+                                    </control>
+                                    
+                                    <panel childLayout="horizontal">
+                                        <control id="addEntity" name="button" valign="center" align="center" style="ma_button" label="Add Entity" visibleToMouse="true">
+                                            <interact onClick="addEntityToSceneButton()"/>
+                                        </control> 
+                                        <control id="removeEntityClones" name="button" valign="center" align="center" style="ma_button" label="Remove Clones" visibleToMouse="true">
+                                            <interact onClick="removeClonesButton()"/>
+                                        </control> 
+                                    </panel>                  
+                                </panel>
+                                
+                                <panel childLayout="vertical">
+                                    <control name="label" text="Scene Oblects List" />
+                                    
+                                    <control id="sceneObjectsListBox" name="listBox" vertical="optional" horizontal="optional" displayItems="15" selection="Multiple">
+                                    </control>
+                                    
+                                    <panel childLayout="horizontal">
+                                        <control id="selectEntityInScene" name="button" valign="center" align="center" style="ma_button" label="SelectFromList" visibleToMouse="true">
+                                            <interact onClick="selectEntitiesButton()"/>
+                                        </control> 
+                                        <control id="showSelectedEntitiesButton" name="button" valign="center" align="center" style="ma_button" label="ShowSelected" visibleToMouse="true">
+                                            <interact onClick="showSelectedEntitiesButton()"/>
+                                        </control> 
+                                    </panel>
+                                    
+                                     <panel childLayout="horizontal">   
+                                        <control id="clearSelectedEntitiesButton" name="button" valign="center" align="center" style="ma_button" label="Clear List" visibleToMouse="true">
+                                            <interact onClick="clearSelectedEntitiesButton()"/>
+                                        </control> 
+                                    </panel>
+
+                  
+                                </panel>                                
+                            </panel>
+                        </control>
+                        
+                        <control id="ComponentsTab" name="tab" caption="Data" group="settingsTabsGroup" style="nifty-tabs-my">
+
+                            <panel height="95%" width="98%" align="center" childLayout="vertical" padding="10" >
+                                
+                                
+                                <panel childLayout="vertical">
+                                    <control id="componentsListBox" name="listBox" vertical="optional" horizontal="optional" displayItems="10" selection="Multiple">
+                                    </control>
+
+                                    <panel childLayout="horizontal">
+                                        <control id="addComponent" name="button" valign="center" align="center" style="ma_button" label="Add" visibleToMouse="true">
+                                            <interact onClick="addComponentButton()"/>
+                                        </control> 
+                                        <control id="removeSelectedComponent" name="button" valign="center" align="center" style="ma_button" label="Remove" visibleToMouse="true">
+                                            <interact onClick="removeSelectedComponentButton()"/>
+                                        </control>
+                                    </panel>                                    
+
+                                    <panel childLayout="horizontal">
+                                        <control id="editComponent" name="button" valign="center" align="center" style="ma_button" label="Edit" visibleToMouse="true">
+                                            <interact onClick="editComponent()"/>
+                                        </control>                                         
+                                    </panel>
+                                        
+                                    <panel childLayout="vertical">
+                                        <effect>
+                                            <onActive name="border" color="#8888" />
+                                        </effect>
+                            
+                                        <control name="label" text="Apply to Selected" />
+                                        
+                                        <panel childLayout="horizontal">
+                                            <control id="copyComponentToSelectedEntity" name="button" valign="center" align="center" style="ma_button" label="Copy" visibleToMouse="true">
+                                                <interact onClick="copyComponentToSelectedEntityButton()"/>
+                                            </control>
+                                            <control id="removeComponentFromSelectedEntity" name="button" valign="center" align="center" style="ma_button" label="Remove" visibleToMouse="true">
+                                                <interact onClick="removeComponentFromSelectedEntityButton()"/>
+                                            </control>
+                                        </panel>
+                                    </panel>
+                                </panel>                                
+                                
+                            </panel>
+                        </control>
+
+<!--                    <control id="tempTabsGroup" name="tabGroup">
+                        <control id="ComponentsTab" name="tab" caption="Data" group="tempTabsGroup" style="nifty-tabs-my">
+                            
+                        </control>         
+                    </control>                         -->
+                                                                        
+                    </control> 
+
+
+
+                </panel>    
+                
+            </panel>
+      
+        </layer>
+    </screen>
+</nifty>
