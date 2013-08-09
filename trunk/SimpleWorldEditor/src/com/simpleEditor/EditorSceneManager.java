@@ -139,7 +139,7 @@ public class EditorSceneManager {
         // set new IDX
         long lastIDX = Long.valueOf((String) jsScene.get("LastIDX"));
         base.getEntityManager().setIdx(lastIDX);
-        
+
         // version of the editor which the scene was saved
         String SWEVersion = (String) jsScene.get("EditorVersion");
 
@@ -282,7 +282,7 @@ public class EditorSceneManager {
 
         // save Last IDX
         saveSceneJson.put("LastIDX", String.valueOf(base.getEntityManager().getIdx()));
-        
+
         // save assets paths
         JSONObject assetsToSave = new JSONObject();
         for (int i = 0; i < assetsList.size(); i++) {
@@ -297,10 +297,9 @@ public class EditorSceneManager {
 
     }
 
-    
     private void saveSweFile(String pathToSave) {
         JSONObject saveSceneJson = new JSONObject();
-    
+
         saveSettings(pathToSave, saveSceneJson);
 
         //save layers
@@ -365,7 +364,6 @@ public class EditorSceneManager {
         System.out.println("File saved: " + pathToSave + ".swe");
     }
 
-
     protected void clearScene() {
         // clear selection
         base.getSelectionManager().clearSelectionList();
@@ -417,11 +415,14 @@ public class EditorSceneManager {
 
         // registerLocator
 //        System.out.println(fl.exists());
-        if (fl.exists() && !assetsList.contains(thePath)) {
-            dsk.registerLocator(thePath, FileLocator.class);
-            findFiles(thePath, thePath, "j3o");
+        if (!assetsList.contains(thePath)) {
+            if (fl.exists()) {
+                dsk.registerLocator(thePath, FileLocator.class);
+                findFiles(thePath, thePath, "j3o");
+            }
+            assetsList.add(thePath);
         }
-        assetsList.add(thePath);
+
     }
 
     protected void savePreviewScene(String pathToSave, String sceneName) {
