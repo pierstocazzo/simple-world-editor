@@ -141,7 +141,8 @@ public class EditorSceneManager {
         base.getEntityManager().setIdx(lastIDX);
 
         // version of the editor which the scene was saved
-        String SWEVersion = (String) jsScene.get("EditorVersion");
+        // Not Used Yet
+        //String SWEVersion = (String) jsScene.get("EditorVersion");
 
         // SevePreviewj3O
         savePreviewJ3o = (Boolean) jsScene.get("savePreviewJ3o");

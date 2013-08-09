@@ -155,7 +155,7 @@ public class SimpleEditorSwing {
     
     
     private static void createFrame(){
-        frame = new JFrame("simpleEditor " + EditorVerion.editorVersion);
+        frame = new JFrame("SimpleWorldEditor " + EditorVerion.editorVersion);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter(){
             @Override
