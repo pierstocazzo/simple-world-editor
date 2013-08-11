@@ -34,6 +34,7 @@ import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.scrollbar.ScrollbarControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -159,14 +160,13 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         rightPanel = nifty.getScreen("start").findElementByName("settingsRightPanel");
 
         //Temp
-//        nifty.getScreen("start").findNiftyControl("entityList1", TextField.class).setText("/home/mifth/jMonkeyProjects/AD/ad/trunk/ADAssets/assets/Scripts/Entities/entities.json");
         nifty.getScreen("start").findNiftyControl("scenePath1", TextField.class).setText("/home/mifth/jMonkeyProjects/AD/ad/trunk/ADAssets/assets");
-//        base.getSceneManager().findFiles("/home/mifth/jMonkeyProjects/AD/ad/trunk/ADAssets/assets", "j3o");
 
         nifty.gotoScreen("start"); // start the screen 
         screen.getFocusHandler().resetFocusElements();
     }
 
+    
     protected void clearGui() {
         // clear gui lists
         entitiesListBox.clear();
@@ -192,10 +192,12 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
     }
 
+    
     public static Nifty getNifty() {
         return nifty;
     }
 
+    
     /**
      * This is called when the RadioButton selection has changed.
      */
@@ -241,6 +243,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
     }
 
+    
 //    // for sceneObjectsListBox manipulation
 //    @NiftyEventSubscriber(id = "sceneObjectsListBox")
 //    public void onListBoxSelectionChanged(final String id, final ListBoxSelectionChangedEvent changed) {

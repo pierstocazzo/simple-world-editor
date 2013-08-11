@@ -27,7 +27,7 @@
   <style id="nifty-tab-button">
     <attributes backgroundImage="tabs/tabs.png"
                 imageMode="sprite-resize:31,23,2,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
-                paddingRight="11px" width="100px" height="23px" childLayout="center" visibleToMouse="true"/>
+                paddingRight="11px" width="45px" height="23px" childLayout="center" visibleToMouse="true"/>
     <effect>
       <onHover name="imageOverlay" filename="tabs/tabs.png"
                imageMode="sprite-resize:31,23,1,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
@@ -44,7 +44,7 @@
   <style id="nifty-tab-button-active">
     <attributes backgroundImage="tabs/tabs.png"
                 imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
-                paddingRight="11px" width="100px" height="23px" childLayout="center" visibleToMouse="true"/>
+                paddingRight="11px" width="80px" height="23px" childLayout="center" visibleToMouse="true"/>
     <effect>
       <!-- weiss noch net :)
      <onHover name="imageOverlay" filename="tabs/tabs.png"

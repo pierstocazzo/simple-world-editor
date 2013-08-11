@@ -723,10 +723,11 @@ public class EditorSceneManager {
             } else if (f.getName().endsWith("." + fileExtension)) {
 
                 String strF = f.getName();
-                String modelName = f.getName().substring(0, f.getName().indexOf(".j3o"));
+                String modelName = f.getName().substring(0, f.getName().indexOf("." + fileExtension));
                 String modelRelativePath = f.getAbsolutePath().substring(dirEntity.length(), f.getAbsolutePath().length());
+                
+                // Add found models
                 entitiesList.put(modelName, modelRelativePath);
-//                strF = strF.substring(globalDirToFind.length(), strF.length());
                 System.out.println("========>>FOUND ENTITY :: " + modelRelativePath);
             }
         }
