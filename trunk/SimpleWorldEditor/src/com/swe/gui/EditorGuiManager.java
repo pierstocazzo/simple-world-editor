@@ -170,7 +170,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         screen.getFocusHandler().resetFocusElements();
     }
 
-    
     protected void clearGui() {
         // clear gui lists
         entitiesListBox.clear();
@@ -196,12 +195,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
     }
 
-    
     public static Nifty getNifty() {
         return nifty;
     }
 
-    
     /**
      * This is called when the RadioButton selection has changed.
      */
@@ -247,7 +244,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
     }
 
-    
 //    // for sceneObjectsListBox manipulation
 //    @NiftyEventSubscriber(id = "sceneObjectsListBox")
 //    public void onListBoxSelectionChanged(final String id, final ListBoxSelectionChangedEvent changed) {
@@ -424,36 +420,32 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             } else {
                 cbPreview.uncheck();
             }
-//        sceneObjectsListBox.
-//        System.out.println(base.getEntityManager().getAllControls().size());
-//        screen.getFocusHandler().resetFocusElements();           
+
+            getEntitiesListBox().sortAllItems();
+            getSceneObjectsListBox().sortAllItems();
+            screen.getFocusHandler().resetFocusElements();
         }
 
     }
 
-    
     public void saveSceneButton() {
         base.getSceneManager().saveScene();
 //        screen.getFocusHandler().resetFocusElements();
     }
 
-    
     public void saveAsNewSceneButton() {
         base.getSceneManager().saveAsNewScene();
 //        screen.getFocusHandler().resetFocusElements();
     }
 
-    
     public ListBox getEntitiesListBox() {
         return entitiesListBox;
     }
 
-    
     public ListBox getSceneObjectsListBox() {
         return sceneObjectsListBox;
     }
 
-    
     public void updateAssetsButton() {
         // update assets
         base.getSceneManager().clearAssets();
@@ -478,7 +470,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         entitiesListBox.sortAllItems();
     }
 
-    
     public void addEntityToSceneButton() {
         // create entity
         if (entitiesListBox.getSelection().size() > 0 && base.getLayerManager().getActiveLayer() != null) {
@@ -512,7 +503,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
     }
 
-    
     // This is just visual representation of selected objects
     protected void setSelectedObjectsList() {
 
@@ -529,7 +519,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
     }
 
-    
     public void removeClonesButton() {
         if (entitiesListBox.getSelection().size() > 0) {
             base.getSceneManager().removeClones(entitiesListBox.getSelection().get(0).toString());
@@ -580,26 +569,23 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         setSelectedObjectsList();
     }
 
-    
     public void clearSelectedEntitiesButton() {
         for (Object indexDeselect : sceneObjectsListBox.getSelection()) {
             sceneObjectsListBox.deselectItem(indexDeselect);
         }
     }
 
-    
     public void removeSelectedButton() {
         for (long id : base.getSelectionManager().getSelectionList()) {
             EntityNameComponent nameComponent = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
             sceneObjectsListBox.removeItem(nameComponent.getName());
-            
+
             base.getSceneManager().removeEntityObject(id);
         }
 
         base.getSelectionManager().getSelectionList().clear();
         base.getSelectionManager().calculateSelectionCenter();
     }
-
 
     public void selectAllButton() {
         if (base.getSelectionManager().getSelectionList().size() > 0) {
