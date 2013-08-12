@@ -19,7 +19,7 @@
 
     <!--Data Components Popup-->
     <popup id="popupEditComponent" childLayout="center" >
-        <panel width="300px" height="200px" align="center" valign="center" childLayout="vertical" style="panel_style_02" padding="10" >
+        <panel width="300px" height="200px" align="center" valign="center" childLayout="vertical" style="panel_style_01" padding="10" >
             <effect>
                 <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="500"/>
                 <onEndScreen  name="fade" startColor="#000f" endColor="#0000" length="500"/>
@@ -57,7 +57,7 @@
                 <onEndScreen  name="fade" startColor="#000f" endColor="#0000" length="500"/>
             </effect>                    
 
-            <panel id="moveTobottomPanel" width="200px" height="100%" valign="bottom" align="center" childLayout="vertical" style="panel_style_02" padding="10">
+            <panel id="moveTobottomPanel" width="200px" height="100%" valign="bottom" align="center" childLayout="vertical" style="panel_style_01" padding="10">
                             
                 <panel id="moveTobottomPanel2" width="100%" height="30px" align="center" childLayout="horizontal" >
                                 
@@ -154,106 +154,106 @@
 
 
                 <!--Tools Panel-->        
-                <panel width="150px" height="90%" align="left" valign="center" childLayout="vertical" style="panel_style_02" padding="10" >
+                <panel width="150px" height="90%" align="left" valign="center" childLayout="vertical" style="panel_style_01" padding="10" >
                     <effect>
                         <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="1500"/>
                         <onEndScreen name="move" mode="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
                     </effect>
                 
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                         <!-- add your content here -->
                     </panel>
                     
 
         
                     <!--Transforms-->
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_move" name="button" style="ma_button" label="Move" visibleToMouse="true">
                             <interact onClick="setMoveManipulator()"/>
                         </control>              
                     </panel>  
         
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_rotate" name="button" style="ma_button" label="Rotate" visibleToMouse="true">
                             <interact onClick="setRotateManipulator()"/>
                         </control>              
                     </panel>  
         
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_scale" name="button" style="ma_button" label="Scale" visibleToMouse="true">
                             <interact onClick="setScaleManipulator()"/>
                         </control>              
                     </panel>
         
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                         
                     </panel>
           
                     <!--Coords-->
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_set_local_coords" name="button" style="ma_button" label="Local Coords" visibleToMouse="true">
                             <interact onClick="setLocalCoords()"/>
                         </control>              
                     </panel>                       
         
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_set_world_coords" name="button" style="ma_button" label="World Coords" visibleToMouse="true">
                             <interact onClick="setWorldCoords()"/>
                         </control>              
                     </panel>                               
         
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_set_view_coords" name="button" style="ma_button" label="View Coords" visibleToMouse="true">
                             <interact onClick="setViewCoords()"/>
                         </control>              
                     </panel>           
         
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                         <!-- add your content here -->
                     </panel>
 
                     <!--Clear Transforms-->
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_clear_location" name="button" style="ma_button" label="Clear Location" visibleToMouse="true">
                             <interact onClick="clearTransform(Translation)"/>
                         </control>              
                     </panel>                       
         
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_clear_rotation" name="button" style="ma_button" label="Clear Rotation" visibleToMouse="true">
                             <interact onClick="clearTransform(Rotation)"/>
                         </control>              
                     </panel>                               
         
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_clear_scale" name="button" style="ma_button" label="Clear Scale" visibleToMouse="true">
                             <interact onClick="clearTransform(Scale)"/>
                         </control>              
                     </panel>
 
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                         <!-- add your content here -->
                     </panel>
                     
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_snap_grid" name="button" style="ma_button" label="Snap Grid" visibleToMouse="true">
                             <interact onClick="snapObjectsToGrid()"/>
                         </control>              
                     </panel>        
 
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                         <!-- add your content here -->
                     </panel>        
 
 
 
                     <!--Constraints-->
-                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" backgroundColor="#55a5">
+                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
                         <control id="RadioGroupConstraints" name="radioButtonGroup" />
                         <panel width="10" />
                         <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
                             <effect>
-                                <onActive name="border" color="#0008" />
+                                <onActive name="border" color="#0003" />
                             </effect>
                             <panel childLayout="horizontal" width="100%" align="right">
                                 <panel childLayout="horizontal" width="70%" align="right">
@@ -303,17 +303,17 @@
                         </panel>
                     </panel>
 
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                     </panel>
                     
                     <!--Selection-->
-                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" backgroundColor="#55a5">
+                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" >
                         <control id="RadioGroupSelection" name="radioButtonGroup" />
                         <!--<control name="label" text="Coordinates" />-->
                         <panel width="10" />
                         <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
                             <effect>
-                                <onActive name="border" color="#0008" />
+                                <onActive name="border" color="#0003" />
                             </effect>
                             <panel childLayout="horizontal" width="100%" align="right">
                                 <panel childLayout="horizontal" width="70%" align="right">
@@ -336,17 +336,17 @@
                         </panel>
                     </panel>
                                                                                     
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                     </panel>
                             
                     <!--Selection Normal/Additive-->
-                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" backgroundColor="#55a5">
+                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" >
                         <control id="RadioGroupSelectionAdditive" name="radioButtonGroup" />
                         <!--                        <control name="label" text="Transforms" />-->
                         <panel width="10" />
                         <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
                             <effect>
-                                <onActive name="border" color="#0008" />
+                                <onActive name="border" color="#0003" />
                             </effect>
                             <panel childLayout="horizontal" width="100%" align="right">
                                 <panel childLayout="horizontal" width="70%" align="right">
@@ -370,39 +370,45 @@
                     </panel>        
 
 
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                     </panel>
 
                                         
                     <panel align="center" childLayout="vertical">
+                        <panel height="26px" align="center" childLayout="vertical">
                         <control id="cloneSelectedButton()" name="button" valign="center" align="center" style="ma_button" label="CloneSelected" visibleToMouse="true">
                             <interact onClick="cloneSelectedButton()"/>
                         </control>
+                        </panel>
                        
+                       <panel height="26px" align="center" childLayout="vertical">
                         <control id="moveToLayerTrue" name="button" style="ma_button" label="MoveToLayer" visibleToMouse="true">
                             <interact onClick="moveToLayerEnable(true)"/>
                         </control>
+                        </panel>
                         
+                        <panel height="26px" align="center" childLayout="vertical">
                         <control id="selectAllButton" name="button" style="ma_button" label="SelectAll" visibleToMouse="true">
                             <interact onClick="selectAllButton()"/>
                         </control>                        
+                        </panel>
                     </panel>                        
                     
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                         <!-- add your content here -->
                     </panel>              
                     
-                    <panel height="30px" align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="button_set_grid" name="button" style="ma_button" label="Show Grid" visibleToMouse="true">
                             <interact onClick="setGrid()"/>
                         </control>              
                     </panel>
                                                                                                                                                                                                                                             
-                    <panel height="10px" padding="10">
+                    <panel height="5px" padding="10">
                         <!-- add your content here -->
                     </panel>              
                     
-                    <panel align="center" childLayout="vertical">
+                    <panel height="26px" align="center" childLayout="vertical">
                         <control id="removeEntityInScene" name="button" valign="center" align="center" style="ma_button" label="RemoveSelected" visibleToMouse="true">
                             <interact onClick="removeSelectedButton()"/>
                         </control>                                                                          
@@ -418,7 +424,7 @@
                         <onEndScreen name="move" mode="out" direction="bottom" length="300" startDelay="0" inherit="true"/>
                     </effect>                                
                     <panel width="100%" height="100%" align="center" valign="center" childLayout="center" padding="10">
-                        <panel width="200px" height="100%" valign="bottom" align="center" childLayout="vertical" style="panel_style_02" padding="10">
+                        <panel width="200px" height="100%" valign="bottom" align="center" childLayout="vertical" style="panel_style_01" padding="10">
                             
                             <panel width="100%" height="50%" align="center" childLayout="horizontal" >
                                 
