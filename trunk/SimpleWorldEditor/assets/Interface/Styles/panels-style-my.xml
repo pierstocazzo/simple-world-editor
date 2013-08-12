@@ -3,14 +3,14 @@
 
   <style id="panel_style_01">
   <attributes
-    backgroundImage="Interface/Styles/Sources/panel_style_01.png"
+    backgroundImage="Interface/Textures/Panels/Panel_01/panel_style_01.png"
     imageMode="resize:22,84,22,22,22,84,22,212,22,84,22,22" />
    
   </style>
   
     <style id="panel_style_02">
   <attributes
-    backgroundImage="Interface/Styles/Sources/panel_style_02.png"
+    backgroundImage="Interface/Textures/Panels/Panel_02/panel_style_02.png"
     imageMode="resize:22,84,22,22,22,84,22,212,22,84,22,22" />
    
   </style>

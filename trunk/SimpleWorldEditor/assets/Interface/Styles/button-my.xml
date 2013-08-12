@@ -4,11 +4,11 @@
   <!-- style for the button background panel -->
   <!-- +++++++++++++++++++++++++++++++++++++ -->
   <style id="ma_button#panel">
-    <attributes backgroundImage="Interface/Styles/Sources/button_01_1.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" paddingLeft="7px" paddingRight="7px" width="100px" height="30px" childLayout="center" visibleToMouse="true" />
+    <attributes backgroundImage="Interface/Textures/Buttons/Button_01/button_01_1.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" paddingLeft="7px" paddingRight="7px" width="100px" height="30px" childLayout="center" visibleToMouse="true" />
     <effect>
-      <onHover name="imageOverlay" filename="Interface/Styles/Sources/button_01_2.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" post="true"/>
-      <onFocus name="imageOverlay" filename="Interface/Styles/Sources/button_01_1.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" post="true" />
-      <onClick name="imageOverlay" filename="Interface/Styles/Sources/button_01_3.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" post="true" />
+      <onHover name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_2.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" post="true"/>
+      <onFocus name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_1.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" post="true" />
+      <onClick name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_3.png" imageMode="resize:16,68,16,14,16,68,16,2,16,68,16,14" post="true" />
       <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
       <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>

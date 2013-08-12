@@ -88,7 +88,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         nifty = niftyDisplay.getNifty();
 //     nifty.loadStyleFile("nifty-default-styles.xml");
 //     nifty.loadControlFile("nifty-default-controls.xml");        
-        nifty.fromXml("Interface/basicGui.xml", "start", this);
+        nifty.fromXml("Interface/Main/basicGui.xml", "start", this);
 
 
         // attach the nifty display to the gui view port as a processor

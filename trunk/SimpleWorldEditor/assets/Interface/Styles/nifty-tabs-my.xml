@@ -8,7 +8,7 @@
 <!--    <attributes width="100%" padding="8px,16px,24px,16px" backgroundImage="tabs/tab-content-panel.png"
                 imageMode="resize:6,1,6,1,6,1,6,215,6,1,6,8"/>-->
   <attributes
-    backgroundImage="Interface/Styles/Sources/panel_style_02.png"
+    backgroundImage="Interface/Textures/Panels/Panel_02/panel_style_02.png"
     imageMode="resize:22,84,22,22,22,84,22,212,22,84,22,22" />            
   </style>
 

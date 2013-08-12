@@ -4,10 +4,10 @@
   <!-- vertical -->
   <!-- ++++++++ -->
   <style id="nifty-vertical-scrollbar-my#panel">
-    <attributes childLayout="vertical" width="23px" align="center" focusable="true" />
+    <attributes childLayout="vertical" width="13px" align="center" focusable="true" />
   </style>
-  <style id="nifty-vertical-scrollbar#up">
-    <attributes filename="scrollbar/scrollbar.png" width="23px" height="23px" imageMode="sprite:23,23,3"/>
+  <style id="nifty-vertical-scrollbar-my#up">
+    <attributes filename="scrollbar/scrollbar.png" width="13px" height="13px" imageMode="sprite:23,23,3"/>
     <effect>
       <onClick name="focus" targetElement="#parent" />
       <onClick name="imageOverlay" filename="scrollbar/scrollbar.png" imageMode="sprite:23,23,5" post="true" />
@@ -18,7 +18,7 @@
     </effect>
   </style>
   <style id="nifty-vertical-scrollbar-my#down">
-    <attributes filename="scrollbar/scrollbar.png" width="23px" height="23px" imageMode="sprite:23,23,0"/>
+    <attributes filename="scrollbar/scrollbar.png" width="13px" height="13px" imageMode="sprite:23,23,0"/>
     <effect>
       <onClick name="focus" targetElement="#parent" />
       <onClick name="imageOverlay" filename="scrollbar/scrollbar.png" imageMode="sprite:23,23,2" post="true" />
@@ -29,13 +29,13 @@
     </effect>
   </style>
   <style id="nifty-vertical-scrollbar-my#background">
-    <attributes filename="scrollbar/scrollbar.png" width="23px" height="*" childLayout="absolute" imageMode="sprite:23,23,12"/>
+    <attributes filename="scrollbar/scrollbar.png" width="13px" height="*" childLayout="absolute" imageMode="sprite:23,23,12"/>
     <effect>
       <onClick name="focus" targetElement="#parent" />
     </effect>
   </style>
   <style id="nifty-vertical-scrollbar-my#position">
-    <attributes filename="scrollbar/scrollbar.png" x="0px" y="0px" width="23px" height="8px" imageMode="sprite-resize:23,23,13,4,15,4,4,4,15,4,15,4,15,4,4" childLayout="center" />
+    <attributes filename="scrollbar/scrollbar.png" x="0px" y="0px" width="13px" height="8px" imageMode="sprite-resize:23,23,13,4,15,4,4,4,15,4,15,4,15,4,4" childLayout="center" />
     <effect>
       <onActive name="imageOverlay" filename="scrollbar/scrollbar.png" width="7px" height="8px" imageMode="subImage:468,0,7,8" post="true" overlay="true" center="true" hideIfNotEnoughSpace="true" />
       <onClick name="focus" targetElement="#parent#parent" />
