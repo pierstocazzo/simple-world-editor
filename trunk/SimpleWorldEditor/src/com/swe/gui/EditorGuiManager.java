@@ -444,7 +444,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
     public void saveSceneButton() {
         if (!base.getEventManager().isActive()) {
+            base.getEventManager().setAction(true);
             base.getSceneManager().saveScene();
+            base.getEventManager().setAction(false);
         }
         screen.getFocusHandler().resetFocusElements();
     }
