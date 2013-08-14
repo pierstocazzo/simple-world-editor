@@ -187,8 +187,8 @@ public class SimpleEditorSwing {
 	Dimension scrnsize = toolkit.getScreenSize();
         
         settings.setVSync(true);
-        settings.setWidth(scrnsize.width - 200);
-        settings.setHeight(scrnsize.height - 200);
+        settings.setWidth(scrnsize.width - 800);
+        settings.setHeight(scrnsize.height - 400);
 
         try{
             Class<? extends Application> clazz = (Class<? extends Application>) Class.forName(appClass);

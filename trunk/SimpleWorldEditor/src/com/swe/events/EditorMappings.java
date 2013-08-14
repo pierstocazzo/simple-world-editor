@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.swe;
+package com.swe.events;
 
 import com.swe.camera.EditorCameraManager;
 import com.jme3.app.Application;
@@ -17,6 +17,7 @@ import com.jme3.math.Transform;
 import com.jme3.math.Vector2f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.swe.EditorBaseManager;
 import com.swe.EditorBaseManager;
 import com.swe.camera.EditorCameraManager;
 import de.lessvoid.nifty.elements.Element;
@@ -79,7 +80,7 @@ public class EditorMappings implements AnalogListener, ActionListener {
     public void removeListener() {
         app.getInputManager().removeListener(this);
     }
-    
+
     public void onAnalog(String name, float value, float tpf) {
 
         // Move Camera
@@ -93,13 +94,15 @@ public class EditorMappings implements AnalogListener, ActionListener {
         // Select or transformTool an entity
         if (name.equals("MoveOrSelect") && isPressed && !name.equals("ScaleAll")) {
 
-            if (base.getTransformManager().isIsActive() == false) {
+            if (!base.getEventManager().isActive()) {
                 base.getHistoryManager().prepareNewHistory();
                 transformResult = base.getTransformManager().activate();
+
+                if (!transformResult) {
+                    selectResult = base.getSelectionManager().activate();
+                }
             }
-            if (!transformResult && (base.getSelectionManager().isIsActive() == false)) {
-                selectResult = base.getSelectionManager().activate();
-            }
+            base.getEventManager().setAction(true);
 
         } else if (name.equals("MoveOrSelect") && !isPressed) {
             if (transformResult) {
@@ -111,18 +114,20 @@ public class EditorMappings implements AnalogListener, ActionListener {
                 selectResult = false;
             }
 
+            base.getEventManager().setAction(false);
             System.out.println("transform done");
         }
 
 
         // scaleTool
-        if (name.equals("ScaleAll") && isPressed && !name.equals("MoveOrSelect")) {
-            if (!transformResult && !selectResult && base.getSelectionManager().getSelectionList().size() > 0) {
+        if (name.equals("ScaleAll") && isPressed && !base.getEventManager().isActive()) {
+            if (base.getSelectionManager().getSelectionList().size() > 0) {
                 base.getHistoryManager().prepareNewHistory();
                 base.getTransformManager().scaleAll();
                 transformResult = true;
+                base.getEventManager().setAction(true);
             }
-        } else if (name.equals("MoveCameraHelperToSelection") && isPressed && !name.equals("MoveOrSelect")) {
+        } else if (name.equals("MoveCameraHelperToSelection") && isPressed && !base.getEventManager().isActive()) {
             if (!transformResult && !selectResult) {
                 Transform selectionCenter = base.getSelectionManager().getSelectionCenter();
                 if (selectionCenter != null) {
@@ -131,38 +136,28 @@ public class EditorMappings implements AnalogListener, ActionListener {
                 selectionCenter = null;
             }
 
-        } else if ((name.equals("MoveCameraHelperToSelection") && isPressed && !name.equals("MoveOrSelect"))) {
-            if (!transformResult && !selectResult) {
-                if (base.getSelectionManager().getSelectionList().size() > 0) {
-                    base.getSelectionManager().clearSelectionList();
-//                    base.getGuiManager().c
-                }
+        } else if ((name.equals("MoveCameraHelperToSelection") && isPressed && !base.getEventManager().isActive())) {
+            if (base.getSelectionManager().getSelectionList().size() > 0) {
+                base.getSelectionManager().clearSelectionList();
             }
         }
 
         // Undo/Redo
-        if (name.equals("HistoryUndo") && isPressed) {
-            if (!transformResult && !selectResult) {
-                base.getHistoryManager().historyUndo();
-            }
+        if (name.equals("HistoryUndo") && isPressed && !base.getEventManager().isActive()) {
+            base.getHistoryManager().historyUndo();
 
-        } else if (name.equals("HistoryRedo") && isPressed) {
-            if (!transformResult && !selectResult) {
-                base.getHistoryManager().historyRedo();
-            }
-
+        } else if (name.equals("HistoryRedo") && isPressed && !base.getEventManager().isActive()) {
+            base.getHistoryManager().historyRedo();
         }
-        if (name.equals("ShowHideRightPanel") && isPressed) {
-//            base.getGuiManager().getScreen().getFocusHandler().resetFocusElements();
+
+        if (name.equals("ShowHideRightPanel") && isPressed && !base.getEventManager().isActive()) {
+            base.getGuiManager().getScreen().getFocusHandler().resetFocusElements();
             Element rightPanel = base.getGuiManager().getRightPanel();
             if (rightPanel.isVisible()) {
                 rightPanel.hide();
-//                rightPanel.disable();
             } else {
                 rightPanel.show();
-//                rightPanel.enable();                
             }
-//            base.getGuiManager().getNifty().getScreen("start").getFocusHandler().resetFocusElements();
         }
     }
 }

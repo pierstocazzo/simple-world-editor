@@ -4,6 +4,7 @@
  */
 package com.swe;
 
+import com.swe.events.EditorMappings;
 import com.swe.camera.EditorCameraManager;
 import com.swe.othermanagers.EditorLayerManager;
 import com.swe.othermanagers.EditorDataManager;
@@ -12,25 +13,16 @@ import com.swe.history.EditorHistoryManager;
 import com.swe.scene.EditorSceneManager;
 import com.swe.gui.EditorGuiManager;
 import com.swe.transform.EditorTransformManager;
-import com.swe.entitysystem.ComponentsControl;
 import com.swe.entitysystem.EntityManager;
-import com.swe.entitysystem.EntityNameComponent;
 import com.swe.entitysystem.EntitySpatialsSystem;
-import com.swe.entitysystem.EntityTransformComponent;
 import com.jme3.app.Application;
 import com.jme3.app.FlyCamAppState;
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.plugins.FileLocator;
-import com.jme3.asset.plugins.ZipLocator;
 import com.jme3.input.FlyByCamera;
-import com.jme3.material.Material;
-import com.jme3.math.Transform;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
+import com.swe.events.EditorEventManager;
 
 /**
  *
@@ -61,6 +53,7 @@ public class EditorBaseManager {
     private EditorGuiManager gui;
     private EditorDataManager dataManager;
     private EditorHistoryManager historyManager;
+    private EditorEventManager eventManager;
 
     // Version of the Editor
     private static String editorVersion;
@@ -86,6 +79,7 @@ public class EditorBaseManager {
 
 
         // setup global tools
+        eventManager = new EditorEventManager();
         historyManager = new EditorHistoryManager(this.app, this);
         dataManager = new EditorDataManager();
         layerManager = new EditorLayerManager(this.app, this);
@@ -170,4 +164,11 @@ public class EditorBaseManager {
         return historyManager;
     }    
 
+    public EditorEventManager getEventManager() {
+        return eventManager;
+    }
+
+    public void setEventManager(EditorEventManager eventManager) {
+        this.eventManager = eventManager;
+    }
 }

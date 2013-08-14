@@ -192,7 +192,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
 
         screen.getFocusHandler().resetFocusElements();
-
     }
 
     public static Nifty getNifty() {
@@ -207,14 +206,19 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         if (event.getSelectedId().equals("constraint_none")) {
             base.getTransformManager().getConstraintTool().setConstraint(0.0f);
+            screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_0.5")) {
             base.getTransformManager().getConstraintTool().setConstraint(0.5f);
+            screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_1")) {
             base.getTransformManager().getConstraintTool().setConstraint(1.0f);
+            screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_5")) {
             base.getTransformManager().getConstraintTool().setConstraint(5.0f);
+            screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_10")) {
             base.getTransformManager().getConstraintTool().setConstraint(10.0f);
+            screen.getFocusHandler().resetFocusElements();
         }
     }
 
@@ -226,8 +230,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         if (event.getSelectedId().equals("mouse_sel")) {
             setMouseSelection();
+            screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("rectangle_sel")) {
             setRectangleSelection();
+            screen.getFocusHandler().resetFocusElements();
         }
     }
 
@@ -239,8 +245,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         if (event.getSelectedId().equals("normal_sel")) {
             setNormalSelection();
+            screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("additive_sel")) {
             setAdditiveSelection();
+            screen.getFocusHandler().resetFocusElements();
         }
     }
 
@@ -251,19 +259,19 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void setMoveManipulator() {
         System.out.println("Manipulator is changed");
         base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setRotateManipulator() {
         System.out.println("Manipulator is changed");
         base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setScaleManipulator() {
         System.out.println("Manipulator is changed");
         base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.ScaleTool);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void clearTransform(String transformType) {
@@ -284,6 +292,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         base.getHistoryManager().prepareNewHistory();
         base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
         base.getHistoryManager().getHistoryList().get(base.getHistoryManager().getHistoryCurrentNumber()).setDoTransform(true);
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void snapObjectsToGrid() {
@@ -302,6 +311,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
             base.getHistoryManager().getHistoryList().get(base.getHistoryManager().getHistoryCurrentNumber()).setDoTransform(true);
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setGrid() {
@@ -311,42 +321,42 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         } else {
             rootNode.detachChild(gridNode);
         }
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setMouseSelection() {
         base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.MouseClick);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setRectangleSelection() {
         base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setLocalCoords() {
         base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setWorldCoords() {
         base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.WorldCoords);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setViewCoords() {
         base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.ViewCoords);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setAdditiveSelection() {
         base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Additive);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void setNormalSelection() {
         base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Normal);
-//        screen.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public Element getRightPanel() {
@@ -358,84 +368,92 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     }
 
     public void newSceneButton() {
-        base.getSceneManager().newScene();
-        clearGui();
+        if (!base.getEventManager().isActive()) {
+            base.getSceneManager().newScene();
+            clearGui();
+        }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void LoadSceneButton() {
+        if (!base.getEventManager().isActive()) {
+            boolean isLoaded = base.getSceneManager().loadScene();
 
-        boolean isLoaded = base.getSceneManager().loadScene();
+            if (isLoaded == true) {
+                clearGui();
 
-        if (isLoaded == true) {
-            clearGui();
+                // reload assets lists
+                int guiAssetLine = 1;
+                for (String obj : base.getSceneManager().getAssetsList()) {
+                    // show assets at the gui
+                    if (guiAssetLine <= 7) {
+                        String strAssetLine = "scenePath" + guiAssetLine;
+                        nifty.getScreen("start").findNiftyControl(strAssetLine, TextField.class).setText((String) obj);
+                        guiAssetLine += 1;
+                    }
 
-            // reload assets lists
-            int guiAssetLine = 1;
-            for (String obj : base.getSceneManager().getAssetsList()) {
-                // show assets at the gui
-                if (guiAssetLine <= 7) {
-                    String strAssetLine = "scenePath" + guiAssetLine;
-                    nifty.getScreen("start").findNiftyControl(strAssetLine, TextField.class).setText((String) obj);
-                    guiAssetLine += 1;
                 }
 
-            }
-
-            // update list of all entities
-            ConcurrentHashMap<String, String> entList = base.getSceneManager().getEntitiesListsList();
-            entitiesListBox.clear();
-            for (String str : entList.keySet()) {
-                entitiesListBox.addItem(str);
-            }
-
-
-            // update list of objects and layers visibility
-            for (Node ndLayer : base.getLayerManager().getLayers()) {
-                // set layers vibiity
-                CheckBox cbLayer = screen.findNiftyControl(ndLayer.getName(), CheckBox.class);
-                boolean isEnabled = (Boolean) ndLayer.getUserData("isEnabled");
-                boolean isActive = (Boolean) ndLayer.getUserData("isActive");
-                if (isEnabled) {
-                    cbLayer.check();
+                // update list of all entities
+                ConcurrentHashMap<String, String> entList = base.getSceneManager().getEntitiesListsList();
+                entitiesListBox.clear();
+                for (String str : entList.keySet()) {
+                    entitiesListBox.addItem(str);
                 }
-                if (isActive) {
-                    Element newActive = screen.findElementByName(ndLayer.getName());
-                    newActive.startEffect(EffectEventId.onFocus);
+
+
+                // update list of objects and layers visibility
+                for (Node ndLayer : base.getLayerManager().getLayers()) {
+                    // set layers vibiity
+                    CheckBox cbLayer = screen.findNiftyControl(ndLayer.getName(), CheckBox.class);
+                    boolean isEnabled = (Boolean) ndLayer.getUserData("isEnabled");
+                    boolean isActive = (Boolean) ndLayer.getUserData("isActive");
+                    if (isEnabled) {
+                        cbLayer.check();
+                    }
+                    if (isActive) {
+                        Element newActive = screen.findElementByName(ndLayer.getName());
+                        newActive.startEffect(EffectEventId.onFocus);
+                    }
+                    screen.getFocusHandler().resetFocusElements();
+
+                    // update list of objects
+                    for (Spatial spEntity : ndLayer.getChildren()) {
+                        Object obj = spEntity.getUserData("EntityID");
+                        long idObj = (Long) obj;
+                        EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(idObj, EntityNameComponent.class);
+                        sceneObjectsListBox.addItem(nameComp.getName());
+                    }
                 }
-                screen.getFocusHandler().resetFocusElements();
 
-                // update list of objects
-                for (Spatial spEntity : ndLayer.getChildren()) {
-                    Object obj = spEntity.getUserData("EntityID");
-                    long idObj = (Long) obj;
-                    EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(idObj, EntityNameComponent.class);
-                    sceneObjectsListBox.addItem(nameComp.getName());
+                // savePreviewj3o checkbox
+                CheckBox cbPreview = screen.findNiftyControl("savePreviewJ3O", CheckBox.class);
+                if (base.getSceneManager().getSavePreviewJ3o()) {
+                    cbPreview.check();
+                } else {
+                    cbPreview.uncheck();
                 }
-            }
 
-            // savePreviewj3o checkbox
-            CheckBox cbPreview = screen.findNiftyControl("savePreviewJ3O", CheckBox.class);
-            if (base.getSceneManager().getSavePreviewJ3o()) {
-                cbPreview.check();
-            } else {
-                cbPreview.uncheck();
-            }
+                getEntitiesListBox().sortAllItems();
+                getSceneObjectsListBox().sortAllItems();
 
-            getEntitiesListBox().sortAllItems();
-            getSceneObjectsListBox().sortAllItems();
-            screen.getFocusHandler().resetFocusElements();
+            }
         }
-
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void saveSceneButton() {
-        base.getSceneManager().saveScene();
-//        screen.getFocusHandler().resetFocusElements();
+        if (!base.getEventManager().isActive()) {
+            base.getSceneManager().saveScene();
+        }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void saveAsNewSceneButton() {
-        base.getSceneManager().saveAsNewScene();
-//        screen.getFocusHandler().resetFocusElements();
+        if (!base.getEventManager().isActive()) {
+            base.getSceneManager().saveAsNewScene();
+        }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public ListBox getEntitiesListBox() {
@@ -447,32 +465,34 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     }
 
     public void updateAssetsButton() {
-        // update assets
-        base.getSceneManager().clearAssets();
+        if (!base.getEventManager().isActive()) {
+            // update assets
+            base.getSceneManager().clearAssets();
 
-        for (int i = 0; i < 7; i++) {
-            String strID = "scenePath" + (i + 1);
-            String str = nifty.getScreen("start").findNiftyControl(strID, TextField.class).getDisplayedText();
+            for (int i = 0; i < 7; i++) {
+                String strID = "scenePath" + (i + 1);
+                String str = nifty.getScreen("start").findNiftyControl(strID, TextField.class).getDisplayedText();
 
-//            System.out.println(str + strID);
-            if (str != null && str.length() > 0) {
-                base.getSceneManager().addAsset(str);
+                if (str != null && str.length() > 0) {
+                    base.getSceneManager().addAsset(str);
+                }
             }
-        }
 
-        // update list of all entities
-        ConcurrentHashMap<String, String> entList = base.getSceneManager().getEntitiesListsList();
-        entitiesListBox.clear();
-        for (String str : entList.keySet()) {
-            entitiesListBox.addItem(str);
+            // update list of all entities
+            ConcurrentHashMap<String, String> entList = base.getSceneManager().getEntitiesListsList();
+            entitiesListBox.clear();
+            for (String str : entList.keySet()) {
+                entitiesListBox.addItem(str);
+            }
+            entitiesListBox.sortAllItems();
         }
-
-        entitiesListBox.sortAllItems();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void addEntityToSceneButton() {
         // create entity
-        if (entitiesListBox.getSelection().size() > 0 && base.getLayerManager().getActiveLayer() != null) {
+        if (entitiesListBox.getSelection().size() > 0 && base.getLayerManager().getActiveLayer() != null
+                && !base.getEventManager().isActive()) {
             String selectedEntity = entitiesListBox.getSelection().get(0).toString();
             long id = base.getSceneManager().createEntityModel(selectedEntity, base.getSceneManager().getEntitiesListsList().get(selectedEntity), null);
             Spatial entitySp = base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
@@ -501,6 +521,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getHistoryManager().prepareNewHistory();
             base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     // This is just visual representation of selected objects
@@ -517,18 +538,15 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             String objectString = nameComp.getName();
             sceneObjectsListBox.selectItem(objectString);
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void removeClonesButton() {
-        if (entitiesListBox.getSelection().size() > 0) {
+        if (entitiesListBox.getSelection().size() > 0 && !base.getEventManager().isActive()) {
             base.getSceneManager().removeClones(entitiesListBox.getSelection().get(0).toString());
+            base.getGuiManager().getSceneObjectsListBox().sortAllItems();
         }
-        base.getGuiManager().getSceneObjectsListBox().sortAllItems();
         screen.getFocusHandler().resetFocusElements();
-
-//        // set history
-//        base.getHistoryManager().prepareNewHistory();
-//        base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
     }
 
     // select entities from the list of seceneObjectsList
@@ -563,16 +581,19 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getHistoryManager().prepareNewHistory();
             base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void showSelectedEntitiesButton() {
         setSelectedObjectsList();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void clearSelectedEntitiesButton() {
         for (Object indexDeselect : sceneObjectsListBox.getSelection()) {
             sceneObjectsListBox.deselectItem(indexDeselect);
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void removeSelectedButton() {
@@ -585,27 +606,33 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         base.getSelectionManager().getSelectionList().clear();
         base.getSelectionManager().calculateSelectionCenter();
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void selectAllButton() {
-        if (base.getSelectionManager().getSelectionList().size() > 0) {
-            base.getSelectionManager().clearSelectionList();
-        } else {
-            for (Spatial spLayer : base.getLayerManager().getSelectableNode().getChildren()) {
-                Node layerNode = (Node) spLayer;
-                for (Spatial spEntity : layerNode.getChildren()) {
-                    Node entityNode = (Node) spEntity;
-                    long ID = (Long) entityNode.getUserData("EntityID");
-                    base.getSelectionManager().selectEntity(ID, EditorSelectionManager.SelectionMode.Additive);
+        if (!base.getEventManager().isActive()) {
+
+            if (base.getSelectionManager().getSelectionList().size() > 0) {
+                base.getSelectionManager().clearSelectionList();
+            } else {
+                for (Spatial spLayer : base.getLayerManager().getSelectableNode().getChildren()) {
+                    Node layerNode = (Node) spLayer;
+                    for (Spatial spEntity : layerNode.getChildren()) {
+                        Node entityNode = (Node) spEntity;
+                        long ID = (Long) entityNode.getUserData("EntityID");
+                        base.getSelectionManager().selectEntity(ID, EditorSelectionManager.SelectionMode.Additive);
+                    }
                 }
             }
+
+            base.getSelectionManager().calculateSelectionCenter();
+
+            // set history
+            base.getHistoryManager().prepareNewHistory();
+            base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
+
         }
-
-        base.getSelectionManager().calculateSelectionCenter();
-
-        // set history
-        base.getHistoryManager().prepareNewHistory();
-        base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void cloneSelectedButton() {
@@ -615,11 +642,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 EntityNameComponent newRealName = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
                 base.getGuiManager().getSceneObjectsListBox().addItem(newRealName.getName());
             }
-
-//            // set history
-//            base.getHistoryManager().prepareNewHistory();
-//            base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void addComponentButton() {
@@ -648,6 +672,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
             componentsListBox.removeItem(strName);
         }
+        screen.getFocusHandler().resetFocusElements();
 
     }
 
@@ -672,6 +697,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 base.getEditorMappings().removeListener();
             }
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void copyComponentToSelectedEntityButton() {
@@ -686,6 +712,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 }
             }
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void removeComponentFromSelectedEntityButton() {
@@ -700,6 +727,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 }
             }
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     public void finishEditComponent(String bool) {
@@ -737,6 +765,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getSceneManager().setSavePreviewJ3o(true);
             cb.check();
         }
+        screen.getFocusHandler().resetFocusElements();
     }
 
     // not implemented as Lights are not implemented
@@ -829,7 +858,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
 
         screen.getFocusHandler().resetFocusElements();
-//        System.out.println("sel" + selectableNode.getChildren().size());
     }
 
     public void moveToLayerEnable(String bool) {
@@ -932,18 +960,17 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         return gridNode;
     }
 
-    private void createSimpleGui() {
-
-        BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-        BitmapText ch = new BitmapText(guiFont, false);
-        ch.setSize(guiFont.getCharSet().getRenderedSize());
-        ch.setText("W,A,S,D,Q,Z, MiddleMouseButton, RightMouseButton, Scroll"); // crosshairs
-        ch.setColor(new ColorRGBA(1f, 0.8f, 0.1f, 0.3f));
-        ch.setLocalTranslation(application.getCamera().getWidth() * 0.1f, application.getCamera().getHeight() * 0.1f, 0);
-        guiNode.attachChild(ch);
-
-    }
-
+//    private void createSimpleGui() {
+//
+//        BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+//        BitmapText ch = new BitmapText(guiFont, false);
+//        ch.setSize(guiFont.getCharSet().getRenderedSize());
+//        ch.setText("W,A,S,D,Q,Z, MiddleMouseButton, RightMouseButton, Scroll"); // crosshairs
+//        ch.setColor(new ColorRGBA(1f, 0.8f, 0.1f, 0.3f));
+//        ch.setLocalTranslation(application.getCamera().getWidth() * 0.1f, application.getCamera().getHeight() * 0.1f, 0);
+//        guiNode.attachChild(ch);
+//
+//    }
     @Override
     public void update(float tpf) {
         // This is for componentsList!
