@@ -780,83 +780,84 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //        }
 //    }
     public void switchLayer(String srtinG) {
-        CheckBox cb = screen.findNiftyControl("layer" + srtinG, CheckBox.class);
+        if (!base.getEventManager().isActive()) {
+            CheckBox cb = screen.findNiftyControl("layer" + srtinG, CheckBox.class);
 
-        int iInt = Integer.valueOf(srtinG);
-        Node activeLayer = base.getLayerManager().getActiveLayer(); // active layer
-        Node layerToSwitch = base.getLayerManager().getLayer(iInt); // layer to switch on/off
-        Node selectableNode = (Node) rootNode.getChild("selectableNode");
+            int iInt = Integer.valueOf(srtinG);
+            Node activeLayer = base.getLayerManager().getActiveLayer(); // active layer
+            Node layerToSwitch = base.getLayerManager().getLayer(iInt); // layer to switch on/off
+            Node selectableNode = (Node) rootNode.getChild("selectableNode");
 
-        Object isEnabledObj = layerToSwitch.getUserData("isEnabled");
-        boolean isEnabled = (Boolean) isEnabledObj;
+            Object isEnabledObj = layerToSwitch.getUserData("isEnabled");
+            boolean isEnabled = (Boolean) isEnabledObj;
 
-        // Switching off
-        if (isEnabled == true) {
-            //set checkbox effect off
-            cb.uncheck();
+            // Switching off
+            if (isEnabled == true) {
+                //set checkbox effect off
+                cb.uncheck();
 
-            // detach layer
-            selectableNode.detachChild(layerToSwitch);
-            layerToSwitch.setUserData("isEnabled", false);
+                // detach layer
+                selectableNode.detachChild(layerToSwitch);
+                layerToSwitch.setUserData("isEnabled", false);
 
-            // remove layer from selection
-            List<Long> selectionList = base.getSelectionManager().getSelectionList();
-            for (Spatial sp : layerToSwitch.getChildren()) {
-                Object idObj = sp.getUserData("EntityID");
-                long id = (Long) idObj;
-                if (selectionList.indexOf(id) > -1) {
-                    Node removeSelBox = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
-                    base.getSelectionManager().removeSelectionBox(removeSelBox);
-                    selectionList.remove(id);
+                // remove layer from selection
+                List<Long> selectionList = base.getSelectionManager().getSelectionList();
+                for (Spatial sp : layerToSwitch.getChildren()) {
+                    Object idObj = sp.getUserData("EntityID");
+                    long id = (Long) idObj;
+                    if (selectionList.indexOf(id) > -1) {
+                        Node removeSelBox = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
+                        base.getSelectionManager().removeSelectionBox(removeSelBox);
+                        selectionList.remove(id);
+                    }
                 }
-            }
-            base.getSelectionManager().calculateSelectionCenter();
+                base.getSelectionManager().calculateSelectionCenter();
 
-            // if selected layer is active
-            if (activeLayer.equals(layerToSwitch)) {
-                // deactivate active and slected layer
-                layerToSwitch.setUserData("isActive", false);
-                screen.findElementByName(layerToSwitch.getName()).stopEffect(EffectEventId.onFocus);
-                screen.getFocusHandler().resetFocusElements();
-
-                // set new active layer
-                if (selectableNode.getChildren().size() > 0) {
-                    Node nd = (Node) selectableNode.getChild(selectableNode.getChildren().size() - 1);
-                    nd.setUserData("isActive", true);
-                    base.getLayerManager().setActiveLayer(nd);
-                    Element newActive = screen.findElementByName(nd.getName());
-                    newActive.startEffect(EffectEventId.onFocus);
+                // if selected layer is active
+                if (activeLayer.equals(layerToSwitch)) {
+                    // deactivate active and slected layer
+                    layerToSwitch.setUserData("isActive", false);
+                    screen.findElementByName(layerToSwitch.getName()).stopEffect(EffectEventId.onFocus);
                     screen.getFocusHandler().resetFocusElements();
-                } else {
-                    base.getLayerManager().setActiveLayer(null);
+
+                    // set new active layer
+                    if (selectableNode.getChildren().size() > 0) {
+                        Node nd = (Node) selectableNode.getChild(selectableNode.getChildren().size() - 1);
+                        nd.setUserData("isActive", true);
+                        base.getLayerManager().setActiveLayer(nd);
+                        Element newActive = screen.findElementByName(nd.getName());
+                        newActive.startEffect(EffectEventId.onFocus);
+                        screen.getFocusHandler().resetFocusElements();
+                    } else {
+                        base.getLayerManager().setActiveLayer(null);
+                    }
                 }
-            }
-        } // switching on
-        else {
-            //set checkbox effect on
-            cb.check();
+            } // switching on
+            else {
+                //set checkbox effect on
+                cb.check();
 
-            if (activeLayer != null) {
+                if (activeLayer != null) {
 
-                Element selectActiveLayerImage = screen.findElementByName(activeLayer.getName());
-                selectActiveLayerImage.stopEffect(EffectEventId.onFocus);
-                selectActiveLayerImage.startEffect(EffectEventId.onEnabled);
-                screen.getFocusHandler().resetFocusElements();
-                activeLayer.setUserData("isActive", false);
-            }
+                    Element selectActiveLayerImage = screen.findElementByName(activeLayer.getName());
+                    selectActiveLayerImage.stopEffect(EffectEventId.onFocus);
+                    selectActiveLayerImage.startEffect(EffectEventId.onEnabled);
+                    screen.getFocusHandler().resetFocusElements();
+                    activeLayer.setUserData("isActive", false);
+                }
 
 
-            // SET THE LAYER ACTIVE (Red color)
+                // SET THE LAYER ACTIVE (Red color)
 //            CheckBox cb = screen.findNiftyControl("layer" + (iInt), CheckBox.class);
-            Element selectImage = screen.findElementByName(layerToSwitch.getName());
-            selectImage.startEffect(EffectEventId.onFocus);
-            base.getLayerManager().setActiveLayer(layerToSwitch);
+                Element selectImage = screen.findElementByName(layerToSwitch.getName());
+                selectImage.startEffect(EffectEventId.onFocus);
+                base.getLayerManager().setActiveLayer(layerToSwitch);
 
-            selectableNode.attachChild(layerToSwitch);
-            layerToSwitch.setUserData("isActive", true);
-            layerToSwitch.setUserData("isEnabled", true);
+                selectableNode.attachChild(layerToSwitch);
+                layerToSwitch.setUserData("isActive", true);
+                layerToSwitch.setUserData("isEnabled", true);
+            }
         }
-
         screen.getFocusHandler().resetFocusElements();
     }
 
