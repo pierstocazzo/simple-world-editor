@@ -188,6 +188,12 @@ public class EditorSceneManager {
                 layerNode.setUserData("isEnabled", true);
             }
 
+            // Locked Layer stats
+            Object isLockedObj = layerNode.getUserData("isLocked");
+            boolean isLocked = (Boolean) jslayer.get("isLocked");
+            if (isLocked) {
+                layerNode.setUserData("isLocked", true);
+            }
 
             // create entities
             JSONObject jsEntities = (JSONObject) jslayer.get("Entities");
@@ -314,7 +320,9 @@ public class EditorSceneManager {
             layerToSave.put("isActive", (Boolean) isActObj);
             Object isEnObj = layerNode.getUserData("isEnabled");
             layerToSave.put("isEnabled", (Boolean) isEnObj);
-
+            Object isLockedObj = layerNode.getUserData("isLocked");
+            layerToSave.put("isLocked", (Boolean) isLockedObj);
+            
             // save ID entities
             JSONObject entitiesToSave = new JSONObject();
             for (Spatial sp : layerNode.getChildren()) {

@@ -44,6 +44,7 @@ public class EditorLayerManager {
             Node layerNode = new Node("layer" + (i + 1));
             layerNode.setUserData("LayerNumber", i + 1);
             layerNode.setUserData("isEnabled", false);
+            layerNode.setUserData("isLocked", false);
             layerNode.setUserData("isActive", false);
             layersList.add(layerNode);
 
@@ -87,6 +88,7 @@ public class EditorLayerManager {
         for (Node layer : layersList) {
             layer.detachAllChildren();
             layer.setUserData("isEnabled", false);
+            layer.setUserData("isLocked", false);
             layer.setUserData("isActive", false);
         }
         selectableNode.detachAllChildren();

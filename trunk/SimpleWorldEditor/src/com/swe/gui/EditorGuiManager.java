@@ -184,6 +184,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             selectActiveLayerImage.stopEffect(EffectEventId.onFocus);
             selectActiveLayerImage.startEffect(EffectEventId.onEnabled);
         }
+        for (int i = 0; i < 20; i++) {
+            CheckBox cb = screen.findNiftyControl("layerLock" + (i + 1), CheckBox.class);
+            cb.uncheck();
+        }
 
         // clear assets
         for (int i = 0; i < 7; i++) {
@@ -405,15 +409,23 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 // update list of objects and layers visibility
                 for (Node ndLayer : base.getLayerManager().getLayers()) {
                     // set layers vibiity
-                    CheckBox cbLayer = screen.findNiftyControl(ndLayer.getName(), CheckBox.class);
+                    Object layerNumbObj = ndLayer.getUserData("LayerNumber");
+                    int layerNumb = (Integer) layerNumbObj;
+                    CheckBox cbLayer = screen.findNiftyControl("layer" + layerNumb, CheckBox.class);
+                    CheckBox cbLayerLock = screen.findNiftyControl("layerLock" + layerNumb, CheckBox.class);
+                    
                     boolean isEnabled = (Boolean) ndLayer.getUserData("isEnabled");
                     boolean isActive = (Boolean) ndLayer.getUserData("isActive");
+                    boolean isLocked = (Boolean) ndLayer.getUserData("isLocked");
                     if (isEnabled) {
                         cbLayer.check();
                     }
                     if (isActive) {
                         Element newActive = screen.findElementByName(ndLayer.getName());
                         newActive.startEffect(EffectEventId.onFocus);
+                    }
+                    if (isLocked) {
+                        cbLayerLock.check();
                     }
                     screen.getFocusHandler().resetFocusElements();
 
@@ -781,11 +793,33 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            cb.check();
 //        }
 //    }
-    public void switchLayer(String srtinG) {
+    
+    
+    public void lockLayer(String layerToLock) {
         if (!base.getEventManager().isActive()) {
-            CheckBox cb = screen.findNiftyControl("layer" + srtinG, CheckBox.class);
+            int iInt = Integer.valueOf(layerToLock);
+            CheckBox cb = screen.findNiftyControl("layerLock" + layerToLock, CheckBox.class);
+            Node layerToLockSP = base.getLayerManager().getLayer(iInt); // layer to switch on/off
 
-            int iInt = Integer.valueOf(srtinG);
+            Object isLockedObj = layerToLockSP.getUserData("isLocked");
+            boolean isLocked = (Boolean) isLockedObj;
+            
+            if (isLocked) {
+                cb.uncheck();
+                layerToLockSP.setUserData("isLocked", false);
+            } else {
+                cb.check();
+                layerToLockSP.setUserData("isLocked", true);
+            }
+        }
+    }
+    
+    
+    public void switchLayer(String layerToShow) {
+        if (!base.getEventManager().isActive()) {
+            CheckBox cb = screen.findNiftyControl("layer" + layerToShow, CheckBox.class);
+
+            int iInt = Integer.valueOf(layerToShow);
             Node activeLayer = base.getLayerManager().getActiveLayer(); // active layer
             Node layerToSwitch = base.getLayerManager().getLayer(iInt); // layer to switch on/off
             Node selectableNode = (Node) rootNode.getChild("selectableNode");
