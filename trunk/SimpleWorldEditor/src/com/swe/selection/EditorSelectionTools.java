@@ -94,35 +94,35 @@ public class EditorSelectionTools {
         selectable.collideWith(ray, results);
 
         if (results.size() > 0) {
-//            if (colResult.getGeometry().getName() == "SelectionTempMesh" && results.size() > 1) {
+
             for (CollisionResult colRes : results) {
-                // get geometry and id
-                Geometry geoCollided = colRes.getGeometry();
-                Object idObj = colRes.getGeometry().getUserData("EntityID");
-                long id = (Long) idObj;
+                if (!colRes.getGeometry().getName().equals("SelectionTempMesh")) {
+                    // get geometry and id
+                    Geometry geoCollided = colRes.getGeometry();
+                    Object idObj = colRes.getGeometry().getUserData("EntityID");
+                    long id = (Long) idObj;
 
-                // check layer's locking
-                Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
-                Object isLayerLockedObj = entityNode.getParent().getUserData("isLocked");
-                boolean isLayerLocked = (Boolean) isLayerLockedObj;
+                    // check layer's locking
+                    Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
+                    Object isLayerLockedObj = entityNode.getParent().getUserData("isLocked");
+                    boolean isLayerLocked = (Boolean) isLayerLockedObj;
 
-                if (geoCollided.getName() != "SelectionTempMesh" && !isLayerLocked) {
-                    colResult = colRes;
+                    if (!isLayerLocked) {
+                        colResult = colRes;
+                        idObj = null;
+                        geoCollided = null;
+                        entityNode = null;
+                        isLayerLockedObj = null;
+                        break;
+                    }
+
                     idObj = null;
                     geoCollided = null;
                     entityNode = null;
                     isLayerLockedObj = null;
-                    break;
                 }
-
-                idObj = null;
-                geoCollided = null;
-                entityNode = null;
-                isLayerLockedObj = null;
-
             }
-//                System.out.println("WWWWWWWWW");
-//            }
+
             //select entity
             if (colResult != null) {
                 Object idObj = colResult.getGeometry().getUserData("EntityID");
