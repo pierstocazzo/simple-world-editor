@@ -173,7 +173,6 @@ public class EditorSceneManager {
             System.out.println(strLayer + "Layer number");
 
             // get layer states
-            Object isActObj = layerNode.getUserData("isActive");
             boolean isActive = (Boolean) jslayer.get("isActive");
             if (isActive) {
                 base.getLayerManager().setActiveLayer(layerNode);
@@ -181,7 +180,6 @@ public class EditorSceneManager {
             }
 
             // don't forget to parse gui layers
-            Object isEnObj = layerNode.getUserData("isEnabled");
             boolean isEnabled = (Boolean) jslayer.get("isEnabled");
             if (isEnabled) {
                 base.getLayerManager().getSelectableNode().attachChild(layerNode);
@@ -189,7 +187,6 @@ public class EditorSceneManager {
             }
 
             // Locked Layer stats
-            Object isLockedObj = layerNode.getUserData("isLocked");
             boolean isLocked = (Boolean) jslayer.get("isLocked");
             if (isLocked) {
                 layerNode.setUserData("isLocked", true);
@@ -293,9 +290,10 @@ public class EditorSceneManager {
 
         // save assets paths
         JSONObject assetsToSave = new JSONObject();
-        for (int i = 0; i < assetsList.size(); i++) {
+        int assetIndex = 1;
+        for (String str : assetsList) {
 
-            assetsToSave.put("AssetPath" + i, assetsList.get(i));
+            assetsToSave.put("AssetPath_" + assetIndex, str);
         }
         saveSceneJson.put("AssetsPaths", assetsToSave);
 

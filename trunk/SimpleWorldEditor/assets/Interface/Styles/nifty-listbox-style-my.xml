@@ -14,7 +14,7 @@
     </effect>
   </style>
   <style id="nifty-listbox-my#bottom-right">
-    <attributes width="23px" height="23px" />
+    <attributes width="13px" height="13px" />
   </style>
   <style id="nifty-listbox-item" base="nifty-label">
     <attributes color="#fff9" width="100%" align="left" textVAlign="center" textHAlign="left" />

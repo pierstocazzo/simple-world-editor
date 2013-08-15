@@ -64,8 +64,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     private AssetManager assetManager;
     private ViewPort guiViewPort;
     private EditorBaseManager base;
-    private Element popupMoveToLayer, popupEditComponent, rightPanel;
-    private ListBox entitiesListBox, sceneObjectsListBox, componentsListBox;
+    private Element popupMoveToLayer, popupEditComponent, popupEditAsset, rightPanel;
+    private ListBox entitiesListBox, sceneObjectsListBox, componentsListBox, assetsListBox;
     private long lastIdOfComponentList, idComponentToChange;
 
     public EditorGuiManager(EditorBaseManager base) {
@@ -155,17 +155,23 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         popupEditComponent.disable();
         screen.getFocusHandler().resetFocusElements();
 
+        // set popup test
+        popupEditAsset = nifty.createPopup("popupEditAsset");
+        popupEditAsset.disable();
+        screen.getFocusHandler().resetFocusElements();
+
         // ListBoxes
         entitiesListBox = nifty.getScreen("start").findNiftyControl("entitiesListBox", ListBox.class);
         sceneObjectsListBox = nifty.getScreen("start").findNiftyControl("sceneObjectsListBox", ListBox.class);
-        componentsListBox = nifty.getScreen("start").findNiftyControl("componentsListBox", ListBox.class);
         sceneObjectsListBox.changeSelectionMode(ListBox.SelectionMode.Multiple, false);
+        componentsListBox = nifty.getScreen("start").findNiftyControl("componentsListBox", ListBox.class);
+        assetsListBox = nifty.getScreen("start").findNiftyControl("assetsListBox", ListBox.class);
 
         // rightPanel
         rightPanel = nifty.getScreen("start").findElementByName("settingsRightPanel");
 
         //Temp
-        nifty.getScreen("start").findNiftyControl("scenePath1", TextField.class).setText("/home/mifth/jMonkeyProjects/AD/ad/trunk/ADAssets/assets");
+        assetsListBox.addItem("/home/mifth/jMonkeyProjects/AD/ad/trunk/ADAssets/assets");
 
         nifty.gotoScreen("start"); // start the screen 
         screen.getFocusHandler().resetFocusElements();
@@ -191,10 +197,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
 
         // clear assets
-        for (int i = 0; i < 7; i++) {
-            String strID = "scenePath" + (i + 1);
-            nifty.getScreen("start").findNiftyControl(strID, TextField.class).setText("");
-        }
+        assetsListBox.clear();
 
         screen.getFocusHandler().resetFocusElements();
     }
@@ -389,15 +392,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
                 // reload assets lists
                 int guiAssetLine = 1;
-                for (String obj : base.getSceneManager().getAssetsList()) {
-                    // show assets at the gui
-                    if (guiAssetLine <= 7) {
-                        String strAssetLine = "scenePath" + guiAssetLine;
-                        nifty.getScreen("start").findNiftyControl(strAssetLine, TextField.class).setText((String) obj);
-                        guiAssetLine += 1;
-                    }
 
-                }
+                // show assets at the gui
+                assetsListBox.addAllItems(base.getSceneManager().getAssetsList());
+
 
                 // update list of all entities
                 ConcurrentHashMap<String, String> entList = base.getSceneManager().getEntitiesListsList();
@@ -484,11 +482,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             // update assets
             base.getSceneManager().clearAssets();
 
-            for (int i = 0; i < 7; i++) {
-                String strID = "scenePath" + (i + 1);
-                String str = nifty.getScreen("start").findNiftyControl(strID, TextField.class).getDisplayedText();
+            for (Object item : assetsListBox.getItems()) {
+                String str = (String) item;
 
-                if (str != null && str.length() > 0) {
+                if (str.length() > 0) {
                     base.getSceneManager().addAsset(str);
                 }
             }
@@ -757,18 +754,72 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             String newData = popupEditComponent.findNiftyControl("entityData", TextField.class).getDisplayedText();
             data.put(newDataName, newData);
 
-            if (base.getSelectionManager().getSelectionList().size() > 0
-                    && base.getSelectionManager().getSelectionList().get(base.getSelectionManager().getSelectionList().size() - 1) == idComponentToChange) {
-                if (componentsListBox.getItems().contains(newDataName) == false) {
-                    componentsListBox.addItem(newDataName);
-                }
+//            if (base.getSelectionManager().getSelectionList().size() > 0
+//                    && base.getSelectionManager().getSelectionList().get(base.getSelectionManager().getSelectionList().size() - 1) == idComponentToChange) {
+            if (componentsListBox.getItems().contains(newDataName) == false) {
+                componentsListBox.addItem(newDataName);
             }
+//            }
         }
 
         nifty.closePopup(popupEditComponent.getId());
         popupEditComponent.disable();
         popupEditComponent.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
         base.getEditorMappings().addListener();
+    }
+
+    public void finishEditAsset(String bool) {
+        boolean boo = Boolean.valueOf(bool);
+        // if entity is selected
+
+        if (boo) {
+
+            String newDataName = popupEditAsset.findNiftyControl("assetPathPopup", TextField.class).getDisplayedText();
+
+            if (!assetsListBox.getSelection().isEmpty()) {
+                assetsListBox.removeItem(assetsListBox.getSelection().get(0));
+            }
+            if (newDataName.length() > 0) {
+                assetsListBox.addItem(newDataName);
+            }
+        }
+
+        nifty.closePopup(popupEditAsset.getId());
+        popupEditAsset.disable();
+        popupEditAsset.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
+        base.getEditorMappings().addListener();
+    }
+
+    public void AssetButton(String value) {
+        if (value.equals("new")) {
+            if (!assetsListBox.getSelection().isEmpty()) {
+                assetsListBox.deselectItem(assetsListBox.getSelection().get(0));
+            }
+
+            screen.getFocusHandler().resetFocusElements();
+            popupEditAsset.enable();
+            nifty.showPopup(nifty.getCurrentScreen(), popupEditAsset.getId(), null);
+
+            popupEditAsset.findNiftyControl("assetPathPopup", TextField.class).setText("");
+
+            popupEditAsset.getFocusHandler().resetFocusElements();
+            base.getEditorMappings().removeListener();
+        } else if (value.equals("edit") && !assetsListBox.getSelection().isEmpty()) {
+            popupEditAsset.enable();
+            nifty.showPopup(nifty.getCurrentScreen(), popupEditAsset.getId(), null);
+
+            popupEditAsset.findNiftyControl("assetPathPopup", TextField.class).setText(assetsListBox.getSelection().get(0).toString());
+
+            popupEditAsset.getFocusHandler().resetFocusElements();
+            base.getEditorMappings().removeListener();
+        } else if (value.equals("remove") && !assetsListBox.getSelection().isEmpty()) {
+            assetsListBox.removeItem(assetsListBox.getSelection().get(0));
+            screen.getFocusHandler().resetFocusElements();
+        }
+
+
     }
 
     public void savePreviewJ3O() {
@@ -943,9 +994,11 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
 
         // clear selection if layer is inactive
-        Object boolObj = base.getLayerManager().getLayer(iInt).getUserData("isEnabled");
-        boolean bool = (Boolean) boolObj;
-        if (bool == false) {
+        Object isEnabledObj = base.getLayerManager().getLayer(iInt).getUserData("isEnabled");
+        boolean isEnabled = (Boolean) isEnabledObj;
+        Object isLockedObj = base.getLayerManager().getLayer(iInt).getUserData("isLocked");
+        boolean isLocked = (Boolean) isLockedObj;
+        if (!isEnabled || isLocked) {
             // remove selection boxes
 //            for (Long idToRemove : lst) {
 //                base.getSelectionManager().removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());

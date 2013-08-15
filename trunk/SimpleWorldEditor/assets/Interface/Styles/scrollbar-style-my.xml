@@ -32,21 +32,21 @@
     <attributes childLayout="horizontal" height="23px" align="center" focusable="true" />
   </style>
   <style id="nifty-horizontal-scrollbar-my#left">
-    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" width="23px" height="23px" imageMode="sprite:23,23,6"/>
+    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" width="13px" height="13px" imageMode="sprite:23,23,6"/>
 
   </style>
   <style id="nifty-horizontal-scrollbar-my#right">
-    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" width="23px" height="23px" imageMode="sprite:23,23,9"/>
+    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" width="13px" height="13px" imageMode="sprite:23,23,9"/>
 
   </style>
   <style id="nifty-horizontal-scrollbar-my#background">
-    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" width="*" height="23px" childLayout="absolute" imageMode="sprite-resize:23,23,16,4,15,4,4,4,15,4,15,4,15,4,4" />
+    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" width="*" height="13px" childLayout="absolute" imageMode="sprite-resize:23,23,16,4,15,4,4,4,15,4,15,4,15,4,4" />
     <effect>
       <onClick name="focus" targetElement="#parent" />
     </effect>
   </style>
   <style id="nifty-horizontal-scrollbar-my#position">
-    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" x="0px" y="0px" width="8px" height="23px" imageMode="sprite-resize:23,23,17,4,15,4,4,4,15,4,15,4,15,4,4" />
+    <attributes filename="Interface/Textures/Scrollbars/Scrollbar_01/scrollbar.png" x="0px" y="0px" width="8px" height="13px" imageMode="sprite-resize:23,23,17,4,15,4,4,4,15,4,15,4,15,4,4" />
 
   </style>
 </nifty-styles>

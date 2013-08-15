@@ -50,6 +50,35 @@
     </popup>
 
 
+    <!--Assets Popup-->
+    <popup id="popupEditAsset" childLayout="center" >
+        <panel width="300px" height="200px" align="center" valign="center" childLayout="vertical" style="panel_style_01">
+            <effect>
+                <onStartScreen  name="fade" startColor="#0000" endColor="#000f" length="500"/>
+                <onEndScreen  name="fade" startColor="#000f" endColor="#0000" length="500"/>
+            </effect>                    
+            
+            <panel align="center" width="95%" valign="center" childLayout="vertical" padding="10">
+                <control name="label" text="Asset Path" />
+                
+                <panel align="center" valign="center" childLayout="horizontal" padding="5">
+                    <control id="assetPathPopup" name="textfield" style="nifty-textfield-my"/>
+                </panel>
+            </panel>
+            
+            <panel align="center" valign="center" childLayout="horizontal" padding="5">
+                <control id="finishEditAsset" name="button" style="ma_button" label="Ok" visibleToMouse="true">
+                    <interact onRelease="finishEditAsset(true)"/>
+                </control>
+                <control id="cancelEditAsset" name="button" style="ma_button" label="Cancel" visibleToMouse="true">
+                    <interact onRelease="finishEditAsset(false)"/>
+                </control>
+            </panel>
+                        
+        </panel>        
+    </popup>
+
+
     <!--Move to another layer Popup-->
     <popup id="popupMoveToLayer" childLayout="center" >
         <!--<control id="myListBox" name="listBox" vertical="optional" horizontal="optional" displayItems="20" selection="Multiple" />-->
@@ -448,7 +477,7 @@
                                 <control name="scrollPanel-my" horizontal="false" width="100%" height="100%" padding="5" stepSizeY="100" pageSizeY="100" autoScroll="off" >
                                     <panel height="1200px" width="100%" align="center" childLayout="vertical"  >
                                 
-                                        <panel childLayout="horizontal">
+                                        <panel childLayout="horizontal" padding="3">
                                             <control id="newScene" name="button" valign="center" align="center" style="ma_button" label="New Scene" visibleToMouse="true">
                                                 <interact onClick="newSceneButton()"/>
                                             </control>
@@ -457,7 +486,7 @@
                                             </control>
                                         </panel>
                                 
-                                        <panel childLayout="horizontal">
+                                        <panel childLayout="horizontal" padding="3">
                                             <control id="saveScene" name="button" valign="center" align="center" style="ma_button" label="Save Scene" visibleToMouse="true">
                                                 <interact onClick="saveSceneButton()"/>
                                             </control>                                    
@@ -466,42 +495,55 @@
                                             </control>
                                         </panel>                                
                                 
-                                
+                                        <panel childLayout="horizontal" padding="8">
+                                            <control id="savePreviewJ3O" name="checkbox" >
+                                                <interact onClick="savePreviewJ3O()" />
+                                            </control>
+                                            <control name="label" text="Save j3o Scene" />
+                                        </panel>
+                                            
                                         <!--Assets-->
-                                            <!--Assets folder/zip/jar path-->
-                                            <panel childLayout="vertical"  width="100%" align="center">
-                                                <control name="label" text="Assets Folder" />
-                                                <control id="scenePath1" name="textfield" style="nifty-textfield-my"/>
-                                                <control id="scenePath2" name="textfield" style="nifty-textfield-my"/>
-                                                <control id="scenePath3" name="textfield" style="nifty-textfield-my"/>
-                                                <control id="scenePath4" name="textfield" style="nifty-textfield-my"/>
-                                                <control id="scenePath5" name="textfield" style="nifty-textfield-my"/>
-                                                <control id="scenePath6" name="textfield" style="nifty-textfield-my"/>
-                                                <control id="scenePath7" name="textfield" style="nifty-textfield-my"/>
-                                            </panel>
+                                        <!--Assets folder/zip/jar path-->
+                                        <panel childLayout="vertical"  width="100%" align="center">
+                                            <control name="label" text="Assets Folder" />
+                                            <control id="assetsListBox" name="listBox-my" vertical="optional" horizontal="optional" displayItems="5" selection="Single" padding="2">
+                                            </control>
+                                            <!--                                                <control id="scenePath1" name="textfield" style="nifty-textfield-my"/>
+                                            <control id="scenePath2" name="textfield" style="nifty-textfield-my"/>
+                                            <control id="scenePath3" name="textfield" style="nifty-textfield-my"/>
+                                            <control id="scenePath4" name="textfield" style="nifty-textfield-my"/>
+                                            <control id="scenePath5" name="textfield" style="nifty-textfield-my"/>
+                                            <control id="scenePath6" name="textfield" style="nifty-textfield-my"/>
+                                            <control id="scenePath7" name="textfield" style="nifty-textfield-my"/>-->
+                                        </panel>
                                 
                                    
-                                            <!--Update assets-->
+                                        <!--Update assets-->
+                                        <panel childLayout="horizontal" padding="3">
+                                            <control id="addAsset" name="button" valign="center" align="center" style="ma_button" label="Add Asset" visibleToMouse="true">
+                                                <interact onClick="AssetButton(new)"/>
+                                            </control>
+                                            <control id="editAsset" name="button" valign="center" align="center" style="ma_button" label="Edit Asset" visibleToMouse="true">
+                                                <interact onClick="AssetButton(edit)"/>
+                                            </control>
+                                        </panel>
+                                        <panel childLayout="horizontal" padding="3">
+                                            <control id="removeAsset" name="button" valign="center" align="center" style="ma_button" label="RemoveAsset" visibleToMouse="true">
+                                                <interact onClick="AssetButton(remove)"/>
+                                            </control>
                                             <control id="updateAssets" name="button" valign="center" align="center" style="ma_button" label="Update Assets" visibleToMouse="true">
                                                 <interact onClick="updateAssetsButton()"/>
                                             </control>
+                                        </panel>
                                     
-                                            <panel childLayout="horizontal">
-                                                <control id="savePreviewJ3O" name="checkbox" >
-                                                    <interact onClick="savePreviewJ3O()" />
-                                                </control>
-                                                <control name="label" text="Save j3o Scene" />
-                                            </panel>
-                                    
-                                    
-                                            <!--Not Implemented as Lights are not implemented-->
+                                        <!--Not Implemented as Lights are not implemented-->
                              
-                                            <!--                                    <panel childLayout="horizontal">
-                                                <control id="switchDefaultLighting" name="checkbox" >
-                                                    <interact onClick="switchDefaultLighting()" />
-                                                </control>
-                                                <control name="label" text="Default Ligting" />
-                                            </panel>                                    -->
+                                        <!--                                    <panel childLayout="horizontal">
+                                            <control id="switchDefaultLighting" name="checkbox" >
+                                                <interact onClick="switchDefaultLighting()" />
+                                            </control>
+                                            <control name="label" text="Default Ligting" />
+                                        </panel>                                    -->
                                     
                                         
                                         <control name="label" text="Layers Visibility" />
