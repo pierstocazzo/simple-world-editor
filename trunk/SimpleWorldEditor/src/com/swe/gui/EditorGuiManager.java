@@ -43,6 +43,7 @@ import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.ConsoleHandler;
@@ -413,7 +414,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                     int layerNumb = (Integer) layerNumbObj;
                     CheckBox cbLayer = screen.findNiftyControl("layer" + layerNumb, CheckBox.class);
                     CheckBox cbLayerLock = screen.findNiftyControl("layerLock" + layerNumb, CheckBox.class);
-                    
+
                     boolean isEnabled = (Boolean) ndLayer.getUserData("isEnabled");
                     boolean isActive = (Boolean) ndLayer.getUserData("isActive");
                     boolean isLocked = (Boolean) ndLayer.getUserData("isLocked");
@@ -578,14 +579,13 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
                 // check if entity is in selected layer
                 Node possibleLayer = (Node) entNode.getParent();
-                if (possibleLayer != null) {
-                    Object isEnabledObj = possibleLayer.getUserData("isEnabled");
-                    if (isEnabledObj != null) {
-                        boolean isEnabled = (Boolean) isEnabledObj;
-                        if (isEnabled == true) {
-                            base.getSelectionManager().selectEntity(id, EditorSelectionManager.SelectionMode.Additive);
-                        }
-                    }
+                Object isEnabledObj = possibleLayer.getUserData("isEnabled");
+                boolean isEnabled = (Boolean) isEnabledObj;
+                Object isLockedObj = possibleLayer.getUserData("isLocked");
+                boolean isLocked = (Boolean) isLockedObj;
+
+                if (isEnabled && !isLocked) {
+                    base.getSelectionManager().selectEntity(id, EditorSelectionManager.SelectionMode.Additive);
                 }
             }
             base.getSelectionManager().calculateSelectionCenter();
@@ -656,6 +656,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 EntityNameComponent newRealName = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
                 base.getGuiManager().getSceneObjectsListBox().addItem(newRealName.getName());
             }
+            list.clear();
+            list = null;
         }
         screen.getFocusHandler().resetFocusElements();
     }
@@ -793,8 +795,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            cb.check();
 //        }
 //    }
-    
-    
     public void lockLayer(String layerToLock) {
         if (!base.getEventManager().isActive()) {
             int iInt = Integer.valueOf(layerToLock);
@@ -803,18 +803,35 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
             Object isLockedObj = layerToLockSP.getUserData("isLocked");
             boolean isLocked = (Boolean) isLockedObj;
-            
+
             if (isLocked) {
                 cb.uncheck();
                 layerToLockSP.setUserData("isLocked", false);
             } else {
                 cb.check();
                 layerToLockSP.setUserData("isLocked", true);
+
+                List<Long> selList = base.getSelectionManager().getSelectionList();
+                List<Long> tempSelList = new ArrayList<Long>();
+
+                for (Long id : selList) {
+                    Node selectedModel = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
+                    Object isLockedLayerOfEntityObj = selectedModel.getParent().getUserData("isLocked");
+                    boolean isLockedLayerOfEntity = (Boolean) isLockedLayerOfEntityObj;
+
+                    if (isLockedLayerOfEntity) {
+                        tempSelList.add(id);
+                    }
+                }
+                for (Long idToRemove : tempSelList) {
+                    selList.remove(idToRemove);
+                    base.getSelectionManager().removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
+                }
+                base.getSelectionManager().calculateSelectionCenter();
             }
         }
     }
-    
-    
+
     public void switchLayer(String layerToShow) {
         if (!base.getEventManager().isActive()) {
             CheckBox cb = screen.findNiftyControl("layer" + layerToShow, CheckBox.class);

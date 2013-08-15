@@ -108,31 +108,32 @@ public class EditorSelectionManager extends AbstractControl {
     }
 
     public void selectEntity(long ID, SelectionMode mode) {
-        Node nodeToSelect = (Node) base.getSpatialSystem().getSpatialControl(ID).getGeneralNode();
+        Node entityToSelect = (Node) base.getSpatialSystem().getSpatialControl(ID).getGeneralNode();
+        Object isLayerLockedObj = entityToSelect.getParent().getUserData("isLocked");
+        boolean isLayerLocked = (Boolean) isLayerLockedObj;
 
-        if (mode == SelectionMode.Normal) {
-            // remove selection boxes
-            for (Long idToRemove : selectionList) {
-                removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
-            }
-            selectionList.clear();
+        if (!isLayerLocked) {
+            if (mode == SelectionMode.Normal) {
+                // remove selection boxes
+                for (Long idToRemove : selectionList) {
+                    removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
+                }
+                selectionList.clear();
 
-            // add to selection
-            selectionList.add(ID);
-            createSelectionBox(nodeToSelect);
-
-        } else if (mode == SelectionMode.Additive) {
-            if (selectionList.contains(ID)) {
-                selectionList.remove(ID);
-                removeSelectionBox(nodeToSelect); // remove selection mesh
-            } else {
+                // add to selection
                 selectionList.add(ID);
-                createSelectionBox(nodeToSelect);
+                createSelectionBox(entityToSelect);
+
+            } else if (mode == SelectionMode.Additive) {
+                if (selectionList.contains(ID)) {
+                    selectionList.remove(ID);
+                    removeSelectionBox(entityToSelect); // remove selection mesh
+                } else {
+                    selectionList.add(ID);
+                    createSelectionBox(entityToSelect);
+                }
             }
         }
-        // Substractive is not implemented        
-
-//        base.getGuiManager().setSelectedObjectsList();
     }
 
     public void selectEntities() {
@@ -155,9 +156,11 @@ public class EditorSelectionManager extends AbstractControl {
         for (Node layer : lst) {
             // check if layer is enabled
             Object boolObj = layer.getUserData("isEnabled");
-            boolean bool = (Boolean) boolObj;
+            boolean boolEnabled = (Boolean) boolObj;
+            Object boolLockedObj = layer.getUserData("isLocked");
+            boolean boolLocked = (Boolean) boolLockedObj;
 
-            if (bool == true) {
+            if (boolEnabled && !boolLocked) {
                 for (Spatial sp : layer.getChildren()) {
 
                     Vector3f spScreenPos = app.getCamera().getScreenCoordinates(sp.getWorldTranslation());
@@ -189,10 +192,6 @@ public class EditorSelectionManager extends AbstractControl {
                     }
                 }
             }
-        }
-        // select item in the objectslist        
-        if (selectionMode == SelectionMode.Normal) {
-//            base.getGuiManager().setSelectedObjectsList();
         }
     }
 
