@@ -828,6 +828,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                     base.getSelectionManager().removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
                 }
                 base.getSelectionManager().calculateSelectionCenter();
+                tempSelList.clear();
+                tempSelList = null;
             }
         }
     }
