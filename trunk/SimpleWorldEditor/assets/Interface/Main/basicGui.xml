@@ -15,7 +15,7 @@
   
     
             
-    <screen id="null" controller="com.swe.gui.EditorGuiManager">
+    <screen id="null" controller="com.swe.managers.EditorGuiManager">
         <layer id="emptyLayer" childLayout="center">
         </layer>
     </screen>  
@@ -177,7 +177,7 @@
         </panel>
     </popup>   
 
-    <screen id="start" controller="com.swe.gui.EditorGuiManager">
+    <screen id="start" controller="com.swe.managers.EditorGuiManager">
 
         <layer id="layer" childLayout="center">
                 

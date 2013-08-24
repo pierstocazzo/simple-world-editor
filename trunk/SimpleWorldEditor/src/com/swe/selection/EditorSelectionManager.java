@@ -21,6 +21,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.debug.WireBox;
 import com.swe.EditorBaseManager;
+import com.swe.scene.EditorLayersGroup;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,56 +138,63 @@ public class EditorSelectionManager extends AbstractControl {
     }
 
     public void selectEntities() {
-
-        List<Node> lst = base.getLayerManager().getLayers();
         Vector2f centerCam = new Vector2f(app.getCamera().getWidth() * 0.5f, app.getCamera().getHeight() * 0.5f);
         Node rectangle = selectionTools.getRectangleSelection();
         Vector3f rectanglePosition = rectangle.getLocalTranslation();
 
+        // Remove old selection
         if (selectionMode == SelectionMode.Normal) {
             // remove selection boxes
             for (Long idToRemove : selectionList) {
                 removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
             }
 
-            // clear selectionList
-            selectionList.clear();
+            selectionList.clear();  // clear selectionList
         }
 
-        for (Node layer : lst) {
-            // check if layer is enabled
-            Object boolObj = layer.getUserData("isEnabled");
-            boolean boolEnabled = (Boolean) boolObj;
-            Object boolLockedObj = layer.getUserData("isLocked");
-            boolean boolLocked = (Boolean) boolLockedObj;
+        for (EditorLayersGroup layersGroup : base.getSceneManager().getActiveScene().getLayerGroupsList().values()) {
+            boolean isEnabledLayerGroup = (Boolean) layersGroup.getLayersGroupNode().getUserData("isEnabled");
+            
+            // if LayersGroup is Enabled
+            if (isEnabledLayerGroup) {
+                List<Node> lst = layersGroup.getLayers();
 
-            if (boolEnabled && !boolLocked) {
-                for (Spatial sp : layer.getChildren()) {
+                for (Node layer : lst) {
+                    // check if layer is enabled
+                    Object boolObj = layer.getUserData("isEnabled");
+                    boolean boolEnabled = (Boolean) boolObj;
+                    Object boolLockedObj = layer.getUserData("isLocked");
+                    boolean boolLocked = (Boolean) boolLockedObj;
 
-                    Vector3f spScreenPos = app.getCamera().getScreenCoordinates(sp.getWorldTranslation());
-                    float spScreenDistance = centerCam.distance(new Vector2f(spScreenPos.getX(), spScreenPos.getY()));
+                    if (boolEnabled && !boolLocked) {
+                        for (Spatial sp : layer.getChildren()) {
 
-                    if (spScreenPos.getZ() < 1f) {
+                            Vector3f spScreenPos = app.getCamera().getScreenCoordinates(sp.getWorldTranslation());
+                            float spScreenDistance = centerCam.distance(new Vector2f(spScreenPos.getX(), spScreenPos.getY()));
 
-                        float pointMinX = Math.min(rectanglePosition.getX(), spScreenPos.getX());
-                        float pointMaxX = Math.max(rectanglePosition.getX(), spScreenPos.getX());
-                        float pointMinY = Math.min(rectanglePosition.getY(), spScreenPos.getY());
-                        float pointMaxY = Math.max(rectanglePosition.getY(), spScreenPos.getY());
+                            if (spScreenPos.getZ() < 1f) {
 
-                        float distX = pointMaxX - pointMinX;
-                        float distY = pointMaxY - pointMinY;
+                                float pointMinX = Math.min(rectanglePosition.getX(), spScreenPos.getX());
+                                float pointMaxX = Math.max(rectanglePosition.getX(), spScreenPos.getX());
+                                float pointMinY = Math.min(rectanglePosition.getY(), spScreenPos.getY());
+                                float pointMaxY = Math.max(rectanglePosition.getY(), spScreenPos.getY());
 
-                        //add to selection the spatial which is in the rectangle area
-                        if (distX <= rectangle.getLocalScale().getX() * 0.5f
-                                && distY <= rectangle.getLocalScale().getY() * 0.5f) {
-                            Object spIdObj = sp.getUserData("EntityID");
-                            long spId = (Long) spIdObj;
-                            if (selectionMode == SelectionMode.Additive) {
-                                selectEntity(spId, selectionMode);
-                            } else if (selectionMode == SelectionMode.Normal) {
-                                selectionList.add(spId);
-                                Node nodeToSelect = (Node) base.getSpatialSystem().getSpatialControl(spId).getGeneralNode();
-                                createSelectionBox(nodeToSelect);
+                                float distX = pointMaxX - pointMinX;
+                                float distY = pointMaxY - pointMinY;
+
+                                //add to selection the spatial which is in the rectangle area
+                                if (distX <= rectangle.getLocalScale().getX() * 0.5f
+                                        && distY <= rectangle.getLocalScale().getY() * 0.5f) {
+                                    Object spIdObj = sp.getUserData("EntityID");
+                                    long spId = (Long) spIdObj;
+                                    if (selectionMode == SelectionMode.Additive) {
+                                        selectEntity(spId, selectionMode);
+                                    } else if (selectionMode == SelectionMode.Normal) {
+                                        selectionList.add(spId);
+                                        Node nodeToSelect = (Node) base.getSpatialSystem().getSpatialControl(spId).getGeneralNode();
+                                        createSelectionBox(nodeToSelect);
+                                    }
+                                }
                             }
                         }
                     }

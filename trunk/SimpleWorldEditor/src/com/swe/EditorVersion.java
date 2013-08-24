@@ -8,6 +8,6 @@ package com.swe;
  *
  * @author mifth
  */
-public class EditorVerion {
-    public static String editorVersion = "0.14";
+public class EditorVersion {
+    public static String editorVersion = "0.15";
 }

@@ -6,12 +6,12 @@ package com.swe;
 
 import com.swe.events.EditorMappings;
 import com.swe.camera.EditorCameraManager;
-import com.swe.othermanagers.EditorLayerManager;
-import com.swe.othermanagers.EditorDataManager;
+import com.swe.scene.EditorLayersGroup;
+import com.swe.managers.EditorDataManager;
 import com.swe.selection.EditorSelectionManager;
 import com.swe.history.EditorHistoryManager;
 import com.swe.scene.EditorSceneManager;
-import com.swe.gui.EditorGuiManager;
+import com.swe.managers.EditorGuiManager;
 import com.swe.transform.EditorTransformManager;
 import com.swe.entitysystem.EntityManager;
 import com.swe.entitysystem.EntitySpatialsSystem;
@@ -38,7 +38,6 @@ public class EditorBaseManager {
     
     // Global Nodes
     private Node rootNode, guiNode;
-    private Node selectableNode, hidedNode;
     private Node camTrackHelper;
     
     // Tools
@@ -46,7 +45,7 @@ public class EditorBaseManager {
     private EditorTransformManager transformManager;
     private EditorMappings mappings;
     private EditorSelectionManager selectionManager;
-    private EditorLayerManager layerManager;
+    private EditorLayersGroup layerManager;
     private EntityManager entityManager;
     private EntitySpatialsSystem spatialSystem;
     private EditorSceneManager sceneManager;
@@ -65,7 +64,7 @@ public class EditorBaseManager {
         viewPort = this.app.getViewPort();
         assetManager = this.app.getAssetManager();
         
-        editorVersion = EditorVerion.editorVersion;
+        editorVersion = EditorVersion.editorVersion;
 
         flyCam = this.app.getStateManager().getState(FlyCamAppState.class).getCamera();
         flyCam.setEnabled(false);
@@ -77,16 +76,16 @@ public class EditorBaseManager {
         mappings = new EditorMappings(this.app, this);
 
 
-
+        Node tempNode = new Node();
+        rootNode.attachChild(tempNode);
         // setup global tools
         eventManager = new EditorEventManager();
         historyManager = new EditorHistoryManager(this.app, this);
         dataManager = new EditorDataManager();
-        layerManager = new EditorLayerManager(this.app, this);
         selectionManager = new EditorSelectionManager(this.app, this);
-        selectableNode.addControl(selectionManager);
+        tempNode.addControl(selectionManager);
         transformManager = new EditorTransformManager(this.app, this);
-        selectableNode.addControl(transformManager);   
+        tempNode.addControl(transformManager);   
         spatialSystem = new EntitySpatialsSystem();
         entityManager = new EntityManager();
         sceneManager = new EditorSceneManager(this.app, this);
@@ -105,11 +104,7 @@ public class EditorBaseManager {
         
         camTrackHelper = new Node("camTrackHelper");
         rootNode.attachChild(camTrackHelper);                
-        
-        selectableNode = new Node("selectableNode");
-        rootNode.attachChild(selectableNode);
-
-        hidedNode = new Node("hidedNode");
+       
     }
 
     public static String getEditorVersion() {
@@ -140,9 +135,9 @@ public class EditorBaseManager {
         return spatialSystem;
     }
 
-    public EditorLayerManager getLayerManager() {
-        return layerManager;
-    }    
+//    public EditorSceneLayers getLayerManager() {
+//        return layerManager;
+//    }    
     
     public EditorSceneManager getSceneManager() {
         return sceneManager;

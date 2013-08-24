@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.swe.gui;
+package com.swe.managers;
 
 import com.swe.transform.EditorTransformConstraint;
 import com.swe.transform.EditorTransformManager;
@@ -13,10 +13,6 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
-import com.jme3.font.BitmapFont;
-import com.jme3.font.BitmapText;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
@@ -31,6 +27,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Line;
 import com.swe.EditorBaseManager;
+import com.swe.scene.EditorLayersGroup;
 import com.swe.selection.EditorSelectionManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -38,7 +35,6 @@ import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.scrollbar.ScrollbarControl;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -118,7 +114,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         CheckBox lastEnabled = null;
         for (int i = 0; i < 20; i++) {
             CheckBox cb = nifty.getScreen("start").findNiftyControl("layer" + (i + 1), CheckBox.class);
-            Node layer = base.getLayerManager().getLayer(i + 1);
+            Node layer = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(i + 1);
             Object isEnabledObj = layer.getUserData("isEnabled");
             boolean isEnabled = (Boolean) isEnabledObj;
             if (isEnabled) {
@@ -132,10 +128,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
 
         // SET THE LAYER ACTIVE (Red color)
-        Node activeLayer = base.getLayerManager().getActiveLayer();
+        Node activeLayer = base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer();
         if (activeLayer != null) {
             nifty.getScreen("start").getFocusHandler().resetFocusElements();
-            Element selectImage = nifty.getScreen("start").findElementByName(base.getLayerManager().getActiveLayer().getName());
+            Element selectImage = nifty.getScreen("start").findElementByName(base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer().getName());
             selectImage.startEffect(EffectEventId.onFocus);
         } // SET LAST SELECTED LAYER (IF IT PARSES NOT SO GOOD)
         else if (activeLayer == null && lastEnabled != null) {
@@ -193,8 +189,11 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
         for (int i = 0; i < 20; i++) {
             CheckBox cb = screen.findNiftyControl("layerLock" + (i + 1), CheckBox.class);
-            cb.uncheck();
+            if (cb.isChecked()) {
+                cb.uncheck();
+            }
         }
+
 
         // clear assets
         assetsListBox.clear();
@@ -379,6 +378,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         if (!base.getEventManager().isActive()) {
             base.getSceneManager().newScene();
             clearGui();
+            base.getSceneManager().getActiveScene().getActivelayersGroup().enableLayer(1);
+            CheckBox cb = screen.findNiftyControl("layer1", CheckBox.class);
+            cb.check();
         }
         screen.getFocusHandler().resetFocusElements();
     }
@@ -406,7 +408,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
 
                 // update list of objects and layers visibility
-                for (Node ndLayer : base.getLayerManager().getLayers()) {
+                for (Node ndLayer : base.getSceneManager().getActiveScene().getActivelayersGroup().getLayers()) {
                     // set layers vibiity
                     Object layerNumbObj = ndLayer.getUserData("LayerNumber");
                     int layerNumb = (Integer) layerNumbObj;
@@ -503,12 +505,12 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
     public void addEntityToSceneButton() {
         // create entity
-        if (entitiesListBox.getSelection().size() > 0 && base.getLayerManager().getActiveLayer() != null
+        if (entitiesListBox.getSelection().size() > 0 && base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer() != null
                 && !base.getEventManager().isActive()) {
             String selectedEntity = entitiesListBox.getSelection().get(0).toString();
             long id = base.getSceneManager().createEntityModel(selectedEntity, base.getSceneManager().getEntitiesListsList().get(selectedEntity), null);
             Spatial entitySp = base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
-            base.getLayerManager().getActiveLayer().attachChild(entitySp);
+            base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer().attachChild(entitySp);
             EditorTransformConstraint constraintTool = base.getTransformManager().getConstraintTool();
 
             if (constraintTool.getConstraint() > 0) {
@@ -626,12 +628,24 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             if (base.getSelectionManager().getSelectionList().size() > 0) {
                 base.getSelectionManager().clearSelectionList();
             } else {
-                for (Spatial spLayer : base.getLayerManager().getSelectableNode().getChildren()) {
-                    Node layerNode = (Node) spLayer;
-                    for (Spatial spEntity : layerNode.getChildren()) {
-                        Node entityNode = (Node) spEntity;
-                        long ID = (Long) entityNode.getUserData("EntityID");
-                        base.getSelectionManager().selectEntity(ID, EditorSelectionManager.SelectionMode.Additive);
+                for (EditorLayersGroup layersGroup : base.getSceneManager().getActiveScene().getLayerGroupsList().values()) {
+                    boolean isEnabledLayerGroup = layersGroup.getLayersGroupNode().getUserData("isEnabled");
+                    
+                    // if LayerGroup is enabled - loop layers
+                    if (isEnabledLayerGroup) {
+                        for (Spatial spLayer : base.getSceneManager().getActiveScene().getActivelayersGroup().getLayers()) {
+                            Node layerNode = (Node) spLayer;
+                            boolean isLayerEnabled = (Boolean) layerNode.getUserData("isEnabled");
+                            
+                            // if layer is enabled - select entities
+                            if (isLayerEnabled) {
+                                for (Spatial spEntity : layerNode.getChildren()) {
+                                    Node entityNode = (Node) spEntity;
+                                    long ID = (Long) entityNode.getUserData("EntityID");
+                                    base.getSelectionManager().selectEntity(ID, EditorSelectionManager.SelectionMode.Additive);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -850,7 +864,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         if (!base.getEventManager().isActive()) {
             int iInt = Integer.valueOf(layerToLock);
             CheckBox cb = screen.findNiftyControl("layerLock" + layerToLock, CheckBox.class);
-            Node layerToLockSP = base.getLayerManager().getLayer(iInt); // layer to switch on/off
+            Node layerToLockSP = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt); // layer to switch on/off
 
             Object isLockedObj = layerToLockSP.getUserData("isLocked");
             boolean isLocked = (Boolean) isLockedObj;
@@ -890,9 +904,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             CheckBox cb = screen.findNiftyControl("layer" + layerToShow, CheckBox.class);
 
             int iInt = Integer.valueOf(layerToShow);
-            Node activeLayer = base.getLayerManager().getActiveLayer(); // active layer
-            Node layerToSwitch = base.getLayerManager().getLayer(iInt); // layer to switch on/off
-            Node selectableNode = (Node) rootNode.getChild("selectableNode");
+            Node activeLayer = base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer(); // active layer
+            Node layerToSwitch = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt); // layer to switch on/off
+            Node activeLayersGroup = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode();
 
             Object isEnabledObj = layerToSwitch.getUserData("isEnabled");
             boolean isEnabled = (Boolean) isEnabledObj;
@@ -903,7 +917,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 cb.uncheck();
 
                 // detach layer
-                selectableNode.detachChild(layerToSwitch);
+                activeLayersGroup.detachChild(layerToSwitch);
                 layerToSwitch.setUserData("isEnabled", false);
 
                 // remove layer from selection
@@ -922,20 +936,21 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 // if selected layer is active
                 if (activeLayer.equals(layerToSwitch)) {
                     // deactivate active and slected layer
-                    layerToSwitch.setUserData("isActive", false);
+//                    layerToSwitch.setUserData("isActive", false);
+                    base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(null);
                     screen.findElementByName(layerToSwitch.getName()).stopEffect(EffectEventId.onFocus);
                     screen.getFocusHandler().resetFocusElements();
 
                     // set new active layer
-                    if (selectableNode.getChildren().size() > 0) {
-                        Node nd = (Node) selectableNode.getChild(selectableNode.getChildren().size() - 1);
-                        nd.setUserData("isActive", true);
-                        base.getLayerManager().setActiveLayer(nd);
+                    if (activeLayersGroup.getChildren().size() > 0) {
+                        Node nd = (Node) activeLayersGroup.getChild(activeLayersGroup.getChildren().size() - 1);
+//                        nd.setUserData("isActive", true);
+                        base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(nd);
                         Element newActive = screen.findElementByName(nd.getName());
                         newActive.startEffect(EffectEventId.onFocus);
                         screen.getFocusHandler().resetFocusElements();
                     } else {
-                        base.getLayerManager().setActiveLayer(null);
+                        base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(null);
                     }
                 }
             } // switching on
@@ -957,10 +972,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            CheckBox cb = screen.findNiftyControl("layer" + (iInt), CheckBox.class);
                 Element selectImage = screen.findElementByName(layerToSwitch.getName());
                 selectImage.startEffect(EffectEventId.onFocus);
-                base.getLayerManager().setActiveLayer(layerToSwitch);
-
-                selectableNode.attachChild(layerToSwitch);
-                layerToSwitch.setUserData("isActive", true);
+                
+                base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(layerToSwitch);
+                activeLayersGroup.attachChild(layerToSwitch);
+//                layerToSwitch.setUserData("isActive", true);
                 layerToSwitch.setUserData("isEnabled", true);
             }
         }
@@ -990,13 +1005,13 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         List<Long> lst = base.getSelectionManager().getSelectionList();
         for (Long lng : lst) {
             Node moveNode = (Node) base.getSpatialSystem().getSpatialControl(lng).getGeneralNode();
-            base.getLayerManager().addToLayer(moveNode, iInt);
+            base.getSceneManager().getActiveScene().getActivelayersGroup().addToLayer(moveNode, iInt);
         }
 
         // clear selection if layer is inactive
-        Object isEnabledObj = base.getLayerManager().getLayer(iInt).getUserData("isEnabled");
+        Object isEnabledObj = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt).getUserData("isEnabled");
         boolean isEnabled = (Boolean) isEnabledObj;
-        Object isLockedObj = base.getLayerManager().getLayer(iInt).getUserData("isLocked");
+        Object isLockedObj = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt).getUserData("isLocked");
         boolean isLocked = (Boolean) isLockedObj;
         if (!isEnabled || isLocked) {
             // remove selection boxes

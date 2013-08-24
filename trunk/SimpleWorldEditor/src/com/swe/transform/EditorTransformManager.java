@@ -88,7 +88,7 @@ public class EditorTransformManager extends AbstractControl {
 
         createManipulators();
         tranformParentNode = new Node("tranformParentNode");
-        Node selectableNode = (Node) root.getChild("selectableNode");
+//        Node selectableNode = (Node) root.getChild("selectableNode");
         root.attachChild(tranformParentNode);
 
         pickedAxis = PickedAxis.None;
@@ -329,6 +329,8 @@ public class EditorTransformManager extends AbstractControl {
 
         Vector3f moveDeltaVec = new Vector3f().subtract(tranformParentNode.getLocalTranslation());
         List selectedList = base.getSelectionManager().getSelectionList();
+        
+        // Loop selected List
         for (Object ID : selectedList) {
             long id = (Long) ID;
             Spatial sp = base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
@@ -336,11 +338,16 @@ public class EditorTransformManager extends AbstractControl {
             Object layerObj = sp.getParent().getUserData("LayerNumber");
             int layerNumb = (Integer) layerObj;
 
+            String layersGroupName = (String) sp.getParent().getUserData("LayersGroupName");
+            String sceneName = (String) sp.getParent().getUserData("SceneName");
+            
             ndParent2.attachChild(sp);
-//            sp.setLocalTransform(tr);
 
-//            sp.getLocalTranslation().addLocal(tr.getTranslation().subtract(sp.getWorldTranslation()));
-            sp.setUserData("LayerSelected", layerNumb); //get layer number
+            sp.setUserData("entityLayerNumber", layerNumb); //set entity's layer number
+            sp.setUserData("entityLayersGroupName", layersGroupName); //set entity's layerGroup
+            sp.setUserData("entitySceneName", sceneName); //set entity's scene
+            
+            // make transform magic
             sp.getLocalTranslation().addLocal(moveDeltaVec);
             ndParent1.setLocalRotation(new Quaternion());
             Transform tr = sp.getWorldTransform().clone();
@@ -353,8 +360,6 @@ public class EditorTransformManager extends AbstractControl {
 
         ndParent2.setLocalRotation(new Quaternion());
         ndParent1.setLocalRotation(new Quaternion());
-
-//        System.out.println("parents" + rotNdParent2 + ndParent2.getLocalRotation());
     }
 
     private void detachSelectedFromTransformParent() {
@@ -364,13 +369,15 @@ public class EditorTransformManager extends AbstractControl {
             long id = (Long) ID;
             Spatial sp = base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
             Transform tr = sp.getWorldTransform();
-            Object layerObj = sp.getUserData("LayerSelected");
+            Object layerObj = sp.getUserData("entityLayerNumber");
             int layerNumb = (Integer) layerObj;
-            Node layer = base.getLayerManager().getLayer(layerNumb);
+            String layerGroup = (String) sp.getUserData("entityLayersGroupName");
+            String sceneName = (String) sp.getUserData("entitySceneName");
+            Node layer = base.getSceneManager().getScenesList().get(sceneName).getLayerGroupsList().get(layerGroup).getLayer(layerNumb); // get the layer
             layer.attachChild(sp);
             sp.setLocalTransform(tr);
 
-            sp.setUserData("LayerSelected", null);
+            sp.setUserData("entityLayerNumber", null);
         }
     }
 

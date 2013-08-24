@@ -33,7 +33,7 @@ public class EditorSelectionTools {
     private Application app;
     private EditorBaseManager base;
     private EditorSelectionManager selManager;
-    private Node selectable;
+//    private Node selectable;
     private Vector2f rectanglePointA, rectanglePointB, rectanglePosition;
     private Node rectangleSelection = new Node("rectangleSelection");
 
@@ -44,7 +44,7 @@ public class EditorSelectionTools {
         assetMan = this.app.getAssetManager();
         root = (Node) this.app.getViewPort().getScenes().get(0);
         guiNode = (Node) this.app.getGuiViewPort().getScenes().get(0);
-        selectable = (Node) root.getChild("selectableNode");
+//        selectable = (Node) root.getChild("selectableNode");
 
         createRectangle();
     }
@@ -91,7 +91,9 @@ public class EditorSelectionTools {
         dir.subtractLocal(pos).normalizeLocal();
         ray.setOrigin(pos);
         ray.setDirection(dir);
-        selectable.collideWith(ray, results);
+        
+        // Collide with activeLayersGroup
+        base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().collideWith(ray, results);
 
         if (results.size() > 0) {
 
