@@ -196,7 +196,7 @@ public class EditorSceneManager {
                 }
 
                 // load layers
-                JSONObject jsLayers = (JSONObject) loadSWEJson.get("Layers");
+                JSONObject jsLayers = (JSONObject) jsLayersGroup.get("Layers");
                 for (Object layerStrObj : jsLayers.keySet()) {
                     JSONObject jslayer = (JSONObject) jsLayers.get(layerStrObj);
                     // get layer
