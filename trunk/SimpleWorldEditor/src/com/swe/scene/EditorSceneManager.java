@@ -92,10 +92,15 @@ public class EditorSceneManager {
         savePreviewJ3o = false;
 
         // create new scene
-        EditorSceneObject newScene = new EditorSceneObject(root, "Scene_1");
+        createSceneObject("Scene1");
+
+    }
+    
+    public void createSceneObject(String sceneName) {
+        EditorSceneObject newScene = new EditorSceneObject(root, sceneName);
         newScene.setSceneEnabled(true);
         setActiveScene(newScene);
-        scenesList.put("Scene_1", newScene);
+        scenesList.put(sceneName, newScene);
         newScene.createLayersGroup("LayersGroup_1");
     }
 
@@ -446,6 +451,7 @@ public class EditorSceneManager {
             scene.clearScene();
         }
         scenesList.clear();
+        activeScene = null;
 
 
         // clear history
@@ -512,7 +518,7 @@ public class EditorSceneManager {
             // save Data of a Scene
             sceneToSave.setUserData("isActive", sceneNode.getUserData("isActive"));
             sceneToSave.setUserData("isEnabled", sceneNode.getUserData("isEnabled"));
-            if ((Boolean) sceneNode.getUserData("isEnabled")) {
+            if ((Boolean) sceneNode.getUserData("isEnabled") == false) {
                 sceneToSave.setCullHint(Spatial.CullHint.Always);
             }
 
@@ -526,7 +532,7 @@ public class EditorSceneManager {
                 // save Data of a layerGroup
                 layersGroupToSave.setUserData("isActive", layersGroupNode.getUserData("isActive"));
                 layersGroupToSave.setUserData("isEnabled", layersGroupNode.getUserData("isEnabled"));
-                if ((Boolean) layersGroupNode.getUserData("isEnabled")) {
+                if ((Boolean) layersGroupNode.getUserData("isEnabled") == false) {
                     layersGroupToSave.setCullHint(Spatial.CullHint.Always);
                 }
 
@@ -542,7 +548,7 @@ public class EditorSceneManager {
                         layerToSave.setUserData("isActive", layerNode.getUserData("isActive"));
                         layerToSave.setUserData("isLocked", layerNode.getUserData("isLocked"));
                         layerToSave.setUserData("isEnabled", layerNode.getUserData("isEnabled"));
-                        if ((Boolean) layerNode.getUserData("isEnabled")) {
+                        if ((Boolean) layerNode.getUserData("isEnabled") == false) {
                             layerToSave.setCullHint(Spatial.CullHint.Always);
                         }
 

@@ -118,11 +118,12 @@ public class EditorLayersGroup {
     public void clearLayersGroup() {
         for (Node layer : layersList) {
             layer.detachAllChildren();
-            layer.setUserData("isEnabled", false);
-            layer.setUserData("isLocked", false);
-            layer.setUserData("isActive", false);
+            layer.setUserData("isEnabled", null);
+            layer.setUserData("isLocked", null);
+            layer.setUserData("isActive", null);
         }
         layersGroupNode.detachAllChildren();
+        activeLayer = null;
     }
 
     public Node getLayersGroupNode() {

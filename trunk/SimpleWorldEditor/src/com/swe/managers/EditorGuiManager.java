@@ -34,7 +34,9 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
+import de.lessvoid.nifty.controls.TabGroup;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.controls.nullobjects.CheckBoxNull;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
@@ -187,6 +189,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             selectActiveLayerImage.stopEffect(EffectEventId.onFocus);
             selectActiveLayerImage.startEffect(EffectEventId.onEnabled);
         }
+        // clear layers locks
         for (int i = 0; i < 20; i++) {
             CheckBox cb = screen.findNiftyControl("layerLock" + (i + 1), CheckBox.class);
             if (cb.isChecked()) {
@@ -378,7 +381,11 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         if (!base.getEventManager().isActive()) {
             base.getSceneManager().newScene();
             clearGui();
-            base.getSceneManager().getActiveScene().getActivelayersGroup().enableLayer(1);
+
+            // create new scene
+            base.getSceneManager().createSceneObject("Scene1");
+
+            // set default layer1 (as it's set in the LayersGroup)
             CheckBox cb = screen.findNiftyControl("layer1", CheckBox.class);
             cb.check();
         }
@@ -630,13 +637,13 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             } else {
                 for (EditorLayersGroup layersGroup : base.getSceneManager().getActiveScene().getLayerGroupsList().values()) {
                     boolean isEnabledLayerGroup = layersGroup.getLayersGroupNode().getUserData("isEnabled");
-                    
+
                     // if LayerGroup is enabled - loop layers
                     if (isEnabledLayerGroup) {
                         for (Spatial spLayer : base.getSceneManager().getActiveScene().getActivelayersGroup().getLayers()) {
                             Node layerNode = (Node) spLayer;
                             boolean isLayerEnabled = (Boolean) layerNode.getUserData("isEnabled");
-                            
+
                             // if layer is enabled - select entities
                             if (isLayerEnabled) {
                                 for (Spatial spEntity : layerNode.getChildren()) {
@@ -972,7 +979,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            CheckBox cb = screen.findNiftyControl("layer" + (iInt), CheckBox.class);
                 Element selectImage = screen.findElementByName(layerToSwitch.getName());
                 selectImage.startEffect(EffectEventId.onFocus);
-                
+
                 base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(layerToSwitch);
                 activeLayersGroup.attachChild(layerToSwitch);
 //                layerToSwitch.setUserData("isActive", true);
@@ -997,6 +1004,60 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getEditorMappings().addListener();
         }
 
+    }
+
+    public void updateTabs() {
+        if (!base.getEventManager().isActive()) {
+
+            TabGroup tabGroup = screen.findNiftyControl("settingsTabsGroup", TabGroup.class);
+            String selectedTabID = tabGroup.getSelectedTab().getId();
+            updateCheckBoxes(tabGroup.getSelectedTab().getElement());
+
+
+//            if (selectedTabID.equals("PropsTab")) {
+//
+//                // Layers Visibility checkboxes
+//                for (Node layerNode : base.getSceneManager().getActiveScene().getActivelayersGroup().getLayers()) {
+//                    CheckBox cb = screen.findNiftyControl("layer" + (Integer) layerNode.getUserData("LayerNumber"), CheckBox.class);
+//
+//                    Object isEnabledObj = layerNode.getUserData("isEnabled");
+//                    boolean isEnabled = (Boolean) isEnabledObj;
+//
+//                    // partial fix for checkboxes
+//                    cb.getElement().resetAllEffects();
+//                    if (cb.isChecked()) {
+//                        cb.uncheck();
+//                        cb.check();
+//                    }
+//
+                    System.out.println("Checkboxes are updated!");
+//                }
+//                screen.getFocusHandler().resetFocusElements();
+//            }
+        }
+
+    }
+    
+    private void updateCheckBoxes(Element mainElement) {
+            for (Element childElement : mainElement.getElements()) {
+                
+                if (!childElement.getNiftyControl(CheckBox.class).getClass().equals(CheckBoxNull.class)) {
+                    // partial fix for checkboxes
+                    CheckBox cb = childElement.getNiftyControl(CheckBox.class);
+                    System.out.println(cb);
+                    cb.getElement().resetAllEffects();
+                    if (cb.isChecked()) {
+                        cb.uncheck();
+                        cb.check();
+                    }
+                    System.out.println("Found!" + cb);
+                }
+                
+                // recourse function
+                if (childElement.getElements().size() > 0) {
+                    updateCheckBoxes(childElement);
+                }
+            }
     }
 
     public void moveToLayer(String srtinG) {

@@ -104,5 +104,6 @@ public class EditorSceneObject {
         }
         layersGroupsList.clear();
         sceneNode.detachAllChildren();
+        activelayerGroup = null;
     }
 }
