@@ -6,7 +6,7 @@ package com.swe;
 
 import com.swe.events.EditorMappings;
 import com.swe.camera.EditorCameraManager;
-import com.swe.scene.EditorLayersGroup;
+import com.swe.scene.EditorLayersGroupObject;
 import com.swe.managers.EditorDataManager;
 import com.swe.selection.EditorSelectionManager;
 import com.swe.history.EditorHistoryManager;
@@ -45,7 +45,7 @@ public class EditorBaseManager {
     private EditorTransformManager transformManager;
     private EditorMappings mappings;
     private EditorSelectionManager selectionManager;
-    private EditorLayersGroup layerManager;
+    private EditorLayersGroupObject layerManager;
     private EntityManager entityManager;
     private EntitySpatialsSystem spatialSystem;
     private EditorSceneManager sceneManager;

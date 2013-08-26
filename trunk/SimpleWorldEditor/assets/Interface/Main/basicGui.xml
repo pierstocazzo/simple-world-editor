@@ -508,13 +508,6 @@
                                             <control name="label" text="Assets Folder" />
                                             <control id="assetsListBox" name="listBox-my" vertical="optional" horizontal="optional" displayItems="5" selection="Single" padding="2">
                                             </control>
-                                            <!--                                                <control id="scenePath1" name="textfield" style="nifty-textfield-my"/>
-                                            <control id="scenePath2" name="textfield" style="nifty-textfield-my"/>
-                                            <control id="scenePath3" name="textfield" style="nifty-textfield-my"/>
-                                            <control id="scenePath4" name="textfield" style="nifty-textfield-my"/>
-                                            <control id="scenePath5" name="textfield" style="nifty-textfield-my"/>
-                                            <control id="scenePath6" name="textfield" style="nifty-textfield-my"/>
-                                            <control id="scenePath7" name="textfield" style="nifty-textfield-my"/>-->
                                         </panel>
                                 
                                    
@@ -536,16 +529,16 @@
                                             </control>
                                         </panel>
                                     
-                                        <!--Not Implemented as Lights are not implemented-->
-                             
-                                        <!--                                    <panel childLayout="horizontal">
-                                            <control id="switchDefaultLighting" name="checkbox" >
-                                                <interact onClick="switchDefaultLighting()" />
-                                            </control>
-                                            <control name="label" text="Default Ligting" />
-                                        </panel>                                    -->
-                                    
+                                        <control name="label" text="Scenes List" />
+                                        <control id="scenesListBox" name="listBox-scene" vertical="optional" horizontal="optional" displayItems="5" selection="Single">
+                                        </control>
                                         
+                                        
+                                        <!--Scenes, LayersGroups, Layers-->
+                                        <control name="label" text="LayersGroups List" />
+                                        <control id="layersGroupsListBox" name="listBox-layersGroup" vertical="optional" horizontal="optional" displayItems="5" selection="Single">
+                                        </control>
+                                                                            
                                         <control name="label" text="Layers Visibility" />
                                         <panel width="200px" height="50px" valign="bottom" align="center" childLayout="vertical">
                             

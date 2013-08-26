@@ -7,24 +7,16 @@ import com.jme3.system.JmeCanvasContext;
 import com.jme3.util.JmeFormatter;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 
 public class SimpleEditorSwing {
     

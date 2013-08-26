@@ -12,15 +12,15 @@ public class EditorSceneObject {
 
     private Node rootNode, allGroupsNode;
     private String sceneName;
-    private ConcurrentHashMap<String, EditorLayersGroup> layersGroupsList;
+    private ConcurrentHashMap<String, EditorLayersGroupObject> layersGroupsList;
     private Node sceneNode;
-    private EditorLayersGroup activelayerGroup;
+    private EditorLayersGroupObject activelayerGroup;
 
     public EditorSceneObject(Node rootNode, String sceneName) {
         this.rootNode = rootNode;
         this.sceneName = sceneName;
         
-        layersGroupsList = new ConcurrentHashMap<String, EditorLayersGroup>();
+        layersGroupsList = new ConcurrentHashMap<String, EditorLayersGroupObject>();
         
         createScenNode(sceneName);
     }
@@ -53,7 +53,7 @@ public class EditorSceneObject {
 
     public void createLayersGroup(String layersGroupName) {
         // First Layer Group
-        EditorLayersGroup layersGroup = new EditorLayersGroup(allGroupsNode, layersGroupName, sceneName);
+        EditorLayersGroupObject layersGroup = new EditorLayersGroupObject(allGroupsNode, layersGroupName, sceneName);
         layersGroupsList.put(layersGroupName, layersGroup);
         setActivelayersGroup(layersGroup);
     }
@@ -67,11 +67,11 @@ public class EditorSceneObject {
         return sceneNode;
     }
 
-    public EditorLayersGroup getActivelayersGroup() {
+    public EditorLayersGroupObject getActivelayersGroup() {
         return activelayerGroup;
     }
 
-    public void setActivelayersGroup(EditorLayersGroup activelayerGroup) {
+    public void setActivelayersGroup(EditorLayersGroupObject activelayerGroup) {
 
         if (this.activelayerGroup != null) {
             this.activelayerGroup.getLayersGroupNode().setUserData("isActive", false); // old active
@@ -90,7 +90,7 @@ public class EditorSceneObject {
         return allGroupsNode;
     }
 
-    public ConcurrentHashMap<String, EditorLayersGroup> getLayerGroupsList() {
+    public ConcurrentHashMap<String, EditorLayersGroupObject> getLayerGroupsList() {
         return layersGroupsList;
     }
 
@@ -99,7 +99,7 @@ public class EditorSceneObject {
     }
 
     public void clearScene() {
-        for (EditorLayersGroup layersGroup : layersGroupsList.values()) {
+        for (EditorLayersGroupObject layersGroup : layersGroupsList.values()) {
             layersGroup.clearLayersGroup();
         }
         layersGroupsList.clear();

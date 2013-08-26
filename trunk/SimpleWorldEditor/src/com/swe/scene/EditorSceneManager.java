@@ -93,15 +93,18 @@ public class EditorSceneManager {
 
         // create new scene
         createSceneObject("Scene1");
+        scenesList.get("Scene1").createLayersGroup("LayersGroup1");
+        createSceneObject("Scene2");
+        scenesList.get("Scene2").createLayersGroup("LayersGroup1");
+        scenesList.get("Scene2").createLayersGroup("LayersGroup2");
 
     }
-    
+
     public void createSceneObject(String sceneName) {
         EditorSceneObject newScene = new EditorSceneObject(root, sceneName);
         newScene.setSceneEnabled(true);
         setActiveScene(newScene);
         scenesList.put(sceneName, newScene);
-        newScene.createLayersGroup("LayersGroup_1");
     }
 
     public boolean loadScene() {
@@ -191,7 +194,7 @@ public class EditorSceneManager {
                 JSONObject jsLayersGroup = (JSONObject) jsAllLayersGroups.get(layersGroupStrObj);
 
                 newSceneObj.createLayersGroup((String) layersGroupStrObj);
-                EditorLayersGroup newLayersGroup = newSceneObj.getLayerGroupsList().get((String) layersGroupStrObj);
+                EditorLayersGroupObject newLayersGroup = newSceneObj.getLayerGroupsList().get((String) layersGroupStrObj);
                 newLayersGroup.setLayersGroupEnabled((Boolean) jsLayersGroup.get("isEnabled"));
 
                 // set LayersGroup active
@@ -361,7 +364,7 @@ public class EditorSceneManager {
 
             //save LayerGroups
             JSONObject allLayersGroups = new JSONObject();
-            for (EditorLayersGroup layersGroup : scenesList.get(sceneName).getLayerGroupsList().values()) {
+            for (EditorLayersGroupObject layersGroup : scenesList.get(sceneName).getLayerGroupsList().values()) {
                 JSONObject layersGroupToSave = new JSONObject();
 
                 // save layerGroup states
@@ -474,6 +477,9 @@ public class EditorSceneManager {
 
         // clear assets list
         clearAssets();
+
+        //clear prevew boolean
+        savePreviewJ3o = false;
     }
 
     public void clearAssets() {
@@ -525,7 +531,7 @@ public class EditorSceneManager {
             sceneSavePreview.attachChild(sceneToSave);
 
             // get layersGroups of a Scene
-            for (EditorLayersGroup layersGroupObj : sceneObj.getLayerGroupsList().values()) {
+            for (EditorLayersGroupObject layersGroupObj : sceneObj.getLayerGroupsList().values()) {
                 Node layersGroupToSave = new Node(layersGroupObj.getLayersGroupName());
                 Node layersGroupNode = layersGroupObj.getLayersGroupNode();
 

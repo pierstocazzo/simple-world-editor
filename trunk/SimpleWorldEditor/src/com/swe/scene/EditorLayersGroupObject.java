@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author mifth
  */
-public class EditorLayersGroup {
+public class EditorLayersGroupObject {
 
     private Node allGroupsNode;
     private Application app;
@@ -23,7 +23,7 @@ public class EditorLayersGroup {
     private Node layersGroupNode;
     private String sceneName, layersGroupName;
 
-    public EditorLayersGroup(Node allGroupsNode, String layersGroupName, String sceneName) {
+    public EditorLayersGroupObject(Node allGroupsNode, String layersGroupName, String sceneName) {
         this.allGroupsNode = allGroupsNode;
         this.layersGroupName = layersGroupName;
         this.sceneName = sceneName;

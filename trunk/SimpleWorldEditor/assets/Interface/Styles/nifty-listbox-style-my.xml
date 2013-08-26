@@ -16,13 +16,14 @@
   <style id="nifty-listbox-my#bottom-right">
     <attributes width="13px" height="13px" />
   </style>
-  <style id="nifty-listbox-item" base="nifty-label">
+  <style id="nifty-listbox-item-my" base="nifty-label">
     <attributes color="#fff9" width="100%" align="left" textVAlign="center" textHAlign="left" />
     <interact onClick="listBoxItemClicked()" />
     <effect>
       <onCustom customKey="focus" name="colorBar" post="false" color="#4445" neverStopRendering="true" timeType="infinite" />
       <onCustom customKey="select" name="colorBar" post="false" color="#4445" neverStopRendering="true" timeType="infinite" />
-      <onCustom customKey="select" name="textColor" post="false" color="#f91" neverStopRendering="true" timeType="infinite" />      <onHover name="colorBar" color="#4443" post="false" neverStopRendering="true" timeType="infinite" inset="1px"/>
+      <onCustom customKey="select" name="textColor" post="false" color="#f91" neverStopRendering="true" timeType="infinite" />      
+      <onHover name="colorBar" color="#4443" post="false" neverStopRendering="true" timeType="infinite" inset="1px"/>
       <onClick name="focus" targetElement="#parent#parent"/>
     </effect>
   </style>

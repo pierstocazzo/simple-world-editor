@@ -21,7 +21,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.debug.WireBox;
 import com.swe.EditorBaseManager;
-import com.swe.scene.EditorLayersGroup;
+import com.swe.scene.EditorLayersGroupObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,7 +152,7 @@ public class EditorSelectionManager extends AbstractControl {
             selectionList.clear();  // clear selectionList
         }
 
-        for (EditorLayersGroup layersGroup : base.getSceneManager().getActiveScene().getLayerGroupsList().values()) {
+        for (EditorLayersGroupObject layersGroup : base.getSceneManager().getActiveScene().getLayerGroupsList().values()) {
             boolean isEnabledLayerGroup = (Boolean) layersGroup.getLayersGroupNode().getUserData("isEnabled");
             
             // if LayersGroup is Enabled
