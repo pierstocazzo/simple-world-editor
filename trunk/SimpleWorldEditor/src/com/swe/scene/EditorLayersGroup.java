@@ -100,7 +100,6 @@ public class EditorLayersGroup {
     }
 
     public void setActiveLayer(Node activeLayer) {
-        this.activeLayer = activeLayer;
 
         if (this.activeLayer != null) {
             this.activeLayer.setUserData("isActive", false); // old active

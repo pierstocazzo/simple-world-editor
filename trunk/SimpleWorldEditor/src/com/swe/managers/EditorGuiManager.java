@@ -115,7 +115,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         // set checkboxes for layers
         CheckBox lastEnabled = null;
         for (int i = 0; i < 20; i++) {
-            CheckBox cb = nifty.getScreen("start").findNiftyControl("layer" + (i + 1), CheckBox.class);
+            CheckBox cb = nifty.getScreen("start").findNiftyControl("layerVisibility" + (i + 1), CheckBox.class);
             Node layer = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(i + 1);
             Object isEnabledObj = layer.getUserData("isEnabled");
             boolean isEnabled = (Boolean) isEnabledObj;
@@ -133,7 +133,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         Node activeLayer = base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer();
         if (activeLayer != null) {
             nifty.getScreen("start").getFocusHandler().resetFocusElements();
-            Element selectImage = nifty.getScreen("start").findElementByName(base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer().getName());
+            int activeLayerNumb = (Integer) base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer().getUserData("LayerNumber");
+            Element selectImage = nifty.getScreen("start").findElementByName("layerVisibility" + activeLayerNumb);
             selectImage.startEffect(EffectEventId.onFocus);
         } // SET LAST SELECTED LAYER (IF IT PARSES NOT SO GOOD)
         else if (activeLayer == null && lastEnabled != null) {
@@ -183,9 +184,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         // clear layers
         for (int i = 0; i < 20; i++) {
-            CheckBox cb = screen.findNiftyControl("layer" + (i + 1), CheckBox.class);
+            CheckBox cb = screen.findNiftyControl("layerVisibility" + (i + 1), CheckBox.class);
             cb.uncheck();
-            Element selectActiveLayerImage = screen.findElementByName("layer" + (i + 1));
+            Element selectActiveLayerImage = screen.findElementByName("layerVisibility" + (i + 1));
             selectActiveLayerImage.stopEffect(EffectEventId.onFocus);
             selectActiveLayerImage.startEffect(EffectEventId.onEnabled);
         }
@@ -386,7 +387,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getSceneManager().createSceneObject("Scene1");
 
             // set default layer1 (as it's set in the LayersGroup)
-            CheckBox cb = screen.findNiftyControl("layer1", CheckBox.class);
+            CheckBox cb = screen.findNiftyControl("layerVisibility1", CheckBox.class);
             cb.check();
         }
         screen.getFocusHandler().resetFocusElements();
@@ -419,7 +420,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                     // set layers vibiity
                     Object layerNumbObj = ndLayer.getUserData("LayerNumber");
                     int layerNumb = (Integer) layerNumbObj;
-                    CheckBox cbLayer = screen.findNiftyControl("layer" + layerNumb, CheckBox.class);
+                    CheckBox cbLayer = screen.findNiftyControl("layerVisibility" + layerNumb, CheckBox.class);
                     CheckBox cbLayerLock = screen.findNiftyControl("layerLock" + layerNumb, CheckBox.class);
 
                     boolean isEnabled = (Boolean) ndLayer.getUserData("isEnabled");
@@ -429,7 +430,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                         cbLayer.check();
                     }
                     if (isActive) {
-                        Element newActive = screen.findElementByName(ndLayer.getName());
+                        Element newActive = screen.findElementByName("layerVisibility" + layerNumb);
                         newActive.startEffect(EffectEventId.onFocus);
                     }
                     if (isLocked) {
@@ -908,7 +909,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
     public void switchLayer(String layerToShow) {
         if (!base.getEventManager().isActive()) {
-            CheckBox cb = screen.findNiftyControl("layer" + layerToShow, CheckBox.class);
+            CheckBox cb = screen.findNiftyControl("layerVisibility" + layerToShow, CheckBox.class);
 
             int iInt = Integer.valueOf(layerToShow);
             Node activeLayer = base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer(); // active layer
@@ -945,7 +946,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                     // deactivate active and slected layer
 //                    layerToSwitch.setUserData("isActive", false);
                     base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(null);
-                    screen.findElementByName(layerToSwitch.getName()).stopEffect(EffectEventId.onFocus);
+                    int numbAct1 = (Integer) layerToSwitch.getUserData("LayerNumber");
+                    screen.findElementByName("layerVisibility" + numbAct1).stopEffect(EffectEventId.onFocus);
                     screen.getFocusHandler().resetFocusElements();
 
                     // set new active layer
@@ -953,7 +955,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                         Node nd = (Node) activeLayersGroup.getChild(activeLayersGroup.getChildren().size() - 1);
 //                        nd.setUserData("isActive", true);
                         base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(nd);
-                        Element newActive = screen.findElementByName(nd.getName());
+                        int numbAct2 = (Integer) nd.getUserData("LayerNumber");
+                        Element newActive = screen.findElementByName("layerVisibility" + numbAct2);
                         newActive.startEffect(EffectEventId.onFocus);
                         screen.getFocusHandler().resetFocusElements();
                     } else {
@@ -966,8 +969,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 cb.check();
 
                 if (activeLayer != null) {
-
-                    Element selectActiveLayerImage = screen.findElementByName(activeLayer.getName());
+                    int numbAct3 = (Integer) activeLayer.getUserData("LayerNumber");
+                    Element selectActiveLayerImage = screen.findElementByName("layerVisibility" + numbAct3);
                     selectActiveLayerImage.stopEffect(EffectEventId.onFocus);
                     selectActiveLayerImage.startEffect(EffectEventId.onEnabled);
                     screen.getFocusHandler().resetFocusElements();
@@ -977,7 +980,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
                 // SET THE LAYER ACTIVE (Red color)
 //            CheckBox cb = screen.findNiftyControl("layer" + (iInt), CheckBox.class);
-                Element selectImage = screen.findElementByName(layerToSwitch.getName());
+                int numbAct4 = (Integer) layerToSwitch.getUserData("LayerNumber");
+                Element selectImage = screen.findElementByName("layerVisibility" + numbAct4);
                 selectImage.startEffect(EffectEventId.onFocus);
 
                 base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(layerToSwitch);
@@ -1006,6 +1010,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
     }
 
+    // This is a temporary fix for updating checkboxes for tabs 
+    // this function is used in the Interface/Styles/nifty-tabs-my.xml
     public void updateTabs() {
         if (!base.getEventManager().isActive()) {
 
@@ -1013,27 +1019,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             String selectedTabID = tabGroup.getSelectedTab().getId();
             updateCheckBoxes(tabGroup.getSelectedTab().getElement());
 
+            System.out.println("Checkboxes are updated!");
 
-//            if (selectedTabID.equals("PropsTab")) {
-//
-//                // Layers Visibility checkboxes
-//                for (Node layerNode : base.getSceneManager().getActiveScene().getActivelayersGroup().getLayers()) {
-//                    CheckBox cb = screen.findNiftyControl("layer" + (Integer) layerNode.getUserData("LayerNumber"), CheckBox.class);
-//
-//                    Object isEnabledObj = layerNode.getUserData("isEnabled");
-//                    boolean isEnabled = (Boolean) isEnabledObj;
-//
-//                    // partial fix for checkboxes
-//                    cb.getElement().resetAllEffects();
-//                    if (cb.isChecked()) {
-//                        cb.uncheck();
-//                        cb.check();
-//                    }
-//
-                    System.out.println("Checkboxes are updated!");
-//                }
-//                screen.getFocusHandler().resetFocusElements();
-//            }
         }
 
     }
@@ -1044,7 +1031,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 if (!childElement.getNiftyControl(CheckBox.class).getClass().equals(CheckBoxNull.class)) {
                     // partial fix for checkboxes
                     CheckBox cb = childElement.getNiftyControl(CheckBox.class);
-                    System.out.println(cb);
                     cb.getElement().resetAllEffects();
                     if (cb.isChecked()) {
                         cb.uncheck();
