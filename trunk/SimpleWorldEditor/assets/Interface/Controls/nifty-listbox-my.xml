@@ -28,7 +28,7 @@
             <interact onMouseWheel="mouseWheel()" />
             <!-- this is the template element used for the listbox items --> 
             <text text="Template" style="nifty-listbox-item-my" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
-                <interact onRelease="temp()" />
+                <interact onRelease="changeScene(changeScene)" />
                 </text>
           </panel>
         </panel>
@@ -49,7 +49,7 @@
             <interact onMouseWheel="mouseWheel()" />
             <!-- this is the template element used for the listbox items --> 
             <text text="Template" style="nifty-listbox-item-my" controller="de.lessvoid.nifty.controls.listbox.ListBoxItemController" inputMapping="de.lessvoid.nifty.input.mapping.MenuInputMapping">
-                <interact onRelease="temp()" />
+                <interact onRelease="changeScene(changeLayersGroup)" />
                 </text>
           </panel>
         </panel>
