@@ -11,6 +11,7 @@
     
     <useControls filename="nifty-default-controls.xml" />
     <useControls filename="Interface/Controls/nifty-scrollpanel-my.xml" />
+    <!--<useControls filename="Interface/Controls/nifty-treebox-my.xml" />-->
     <useControls filename="Interface/Controls/nifty-listbox-my.xml" />
   
     
@@ -475,8 +476,12 @@
                             <control id="SceneTab" name="tab" caption="Scene" group="settingsTabsGroup"  style="nifty-tabs-my">
                                     
                                 <control name="scrollPanel-my" horizontal="false" width="100%" height="100%" padding="5" stepSizeY="100" pageSizeY="100" autoScroll="off" >
-                                    <panel height="1200px" width="100%" align="center" childLayout="vertical"  >
+                                    <panel height="2000px" width="100%" align="center" childLayout="vertical"  >
                                 
+<!--                                        <panel childLayout="horizontal" padding="3" >
+                                        <control id="researchTree" name="nifty-tree-box-my" padding="3"/>
+                                        </panel>-->
+                                                                                
                                         <panel childLayout="horizontal" padding="3">
                                             <control id="newScene" name="button" valign="center" align="center" style="ma_button" label="New Scene" visibleToMouse="true">
                                                 <interact onClick="newSceneButton()"/>
