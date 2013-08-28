@@ -476,9 +476,9 @@
                             <control id="SceneTab" name="tab" caption="Scene" group="settingsTabsGroup"  style="nifty-tabs-my">
                                     
                                 <control name="scrollPanel-my" horizontal="false" width="100%" height="100%" padding="5" stepSizeY="100" pageSizeY="100" autoScroll="off" >
-                                    <panel height="2000px" width="100%" align="center" childLayout="vertical"  >
+                                    <panel height="1500px" width="100%" align="center" childLayout="vertical"  >
                                 
-<!--                                        <panel childLayout="horizontal" padding="3" >
+                                        <!--                                        <panel childLayout="horizontal" padding="3" >
                                         <control id="researchTree" name="nifty-tree-box-my" padding="3"/>
                                         </panel>-->
                                                                                 
@@ -498,9 +498,9 @@
                                             <control id="saveAsNewScene" name="button" valign="center" align="center" style="ma_button" label="Save as New" visibleToMouse="true">
                                                 <interact onClick="saveAsNewSceneButton()"/>
                                             </control>
-                                        </panel>                                
+                                        </panel>
                                 
-                                        <panel childLayout="horizontal" padding="8">
+                                        <panel childLayout="horizontal" padding="5">
                                             <control id="savePreviewJ3O" name="checkbox" >
                                                 <interact onClick="savePreviewJ3O()" />
                                             </control>
@@ -508,174 +508,227 @@
                                         </panel>
                                             
                                         <!--Scenes, LayersGroups, Layers-->
-                                        <control name="label" text="Scenes List" />
-                                        <control id="scenesListBox" name="listBox-scene" vertical="optional" horizontal="optional" displayItems="5" selection="Single">
-                                        </control>
+                                        <panel childLayout="vertical" padding="3">
+                                            <!--Scenes-->
+                                            <control name="label" text="Scenes List" />
+                                            <control id="scenesListBox" name="listBox-scene" vertical="optional" horizontal="optional" displayItems="5" selection="Single">
+                                            </control>
 
-                                        <control name="label" text="LayersGroups List" />
-                                        <control id="layersGroupsListBox" name="listBox-layersGroup" vertical="optional" horizontal="optional" displayItems="5" selection="Single">
-                                        </control>
-                                                                            
-                                        <control name="label" text="Layers Visibility" />
-                                        <panel width="200px" height="50px" valign="bottom" align="center" childLayout="vertical">
+                                            <panel childLayout="horizontal" padding="5">
+                                                <control id="isSceneEnabled" name="checkbox" >
+                                                    <interact onClick="enableSceneCheckbox(isSceneEnabled)" />
+                                                </control>
+                                                <panel width="5px" height="0px" />
+                                                <control name="label" text="Is Scene Enabled" />
+                                            </panel>
+                                            
+                                            <panel childLayout="horizontal" padding="3">
+                                                <control width="50px" id="addSceneObject" name="button" valign="center" align="center" style="ma_button" label="Add" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                                <control width="50px" id="editSceneObject" name="button" valign="center" align="center" style="ma_button" label="Edit" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                                <control width="50px" id="deleteSceneObject" name="button" valign="center" align="center" style="ma_button" label="Del" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                                <control width="50px" id="cloneSceneObject" name="button" valign="center" align="center" style="ma_button" label="Clone" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                            </panel>
+                                            
+
+                                            <!--LayersGroups-->
+                                            <control name="label" text="LayersGroups List" />
+                                            <control id="layersGroupsListBox" name="listBox-layersGroup" vertical="optional" horizontal="optional" displayItems="5" selection="Single">
+                                            </control>
+                                            
+                                            <panel childLayout="horizontal" padding="5">
+                                                <control id="isLayersGroupEnabled" name="checkbox" >
+                                                    <interact onClick="enableSceneCheckbox(isLayersGroupEnabled)" />
+                                                </control>
+                                                <panel width="5px" height="0px" />
+                                                <control name="label" text="Is LayersGroup Enabled" />
+                                            </panel>
+                                            
+                                            <panel childLayout="horizontal" padding="3">
+                                                <control width="50px" id="addLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Add" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                                <control width="50px" id="editLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Edit" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                                <control width="50px" id="deleteLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Del" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                                <control width="50px" id="cloneLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Clone" visibleToMouse="true">
+                                                    <!--<interact onClick="saveSceneButton()"/>-->
+                                                </control>
+                                            </panel>
+                                            
+                                            
+                                            <!--Layers-->
+                                            <control name="label" text="Layers Visibility" />
+                                            <panel width="200px" height="50px" valign="bottom" align="center" childLayout="vertical">
                             
-                                            <panel width="100%" height="50%" align="center" childLayout="horizontal" >
+                                                <panel width="100%" height="50%" align="center" childLayout="horizontal" >
                                 
-                                                <control id="layerVisibility1" name="checkbox"   >
-                                                    <interact onClick="switchLayer(1)"   />
-                                                </control>
+                                                    <control id="layerVisibility1" name="checkbox"   >
+                                                        <interact onClick="switchLayer(1)"   />
+                                                    </control>
 
-                                                <control id="layerVisibility2" name="checkbox"    >
-                                                    <interact onClick="switchLayer(2)" />
-                                                </control>
+                                                    <control id="layerVisibility2" name="checkbox"    >
+                                                        <interact onClick="switchLayer(2)" />
+                                                    </control>
 
-                                                <control id="layerVisibility3" name="checkbox"    >
-                                                    <interact onClick="switchLayer(3)" />
-                                                </control>
+                                                    <control id="layerVisibility3" name="checkbox"    >
+                                                        <interact onClick="switchLayer(3)" />
+                                                    </control>
 
-                                                <control id="layerVisibility4" name="checkbox"    >
-                                                    <interact onClick="switchLayer(4)" />
-                                                </control>
+                                                    <control id="layerVisibility4" name="checkbox"    >
+                                                        <interact onClick="switchLayer(4)" />
+                                                    </control>
 
-                                                <control id="layerVisibility5" name="checkbox"    >
-                                                    <interact onClick="switchLayer(5)" />
-                                                </control>
+                                                    <control id="layerVisibility5" name="checkbox"    >
+                                                        <interact onClick="switchLayer(5)" />
+                                                    </control>
 
-                                                <control id="layerVisibility6" name="checkbox"    >
-                                                    <interact onClick="switchLayer(6)" />
-                                                </control>
+                                                    <control id="layerVisibility6" name="checkbox"    >
+                                                        <interact onClick="switchLayer(6)" />
+                                                    </control>
 
-                                                <control id="layerVisibility7" name="checkbox"    >
-                                                    <interact onClick="switchLayer(7)" />
-                                                </control>
+                                                    <control id="layerVisibility7" name="checkbox"    >
+                                                        <interact onClick="switchLayer(7)" />
+                                                    </control>
 
-                                                <control id="layerVisibility8" name="checkbox"    >
-                                                    <interact onClick="switchLayer(8)" />
-                                                </control>
+                                                    <control id="layerVisibility8" name="checkbox"    >
+                                                        <interact onClick="switchLayer(8)" />
+                                                    </control>
 
-                                                <control id="layerVisibility9" name="checkbox"    >
-                                                    <interact onClick="switchLayer(9)" />
-                                                </control>
+                                                    <control id="layerVisibility9" name="checkbox"    >
+                                                        <interact onClick="switchLayer(9)" />
+                                                    </control>
 
-                                                <control id="layerVisibility10" name="checkbox"    >
-                                                    <interact onClick="switchLayer(10)" />
-                                                </control>
+                                                    <control id="layerVisibility10" name="checkbox"    >
+                                                        <interact onClick="switchLayer(10)" />
+                                                    </control>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-                                            </panel> 
+                                                </panel> 
                             
-                                            <panel width="100%" height="50%" align="center" childLayout="horizontal" >
-                                                <control id="layerVisibility11" name="checkbox"    >
-                                                    <interact onClick="switchLayer(11)" />
-                                                </control>
-                                                <control id="layerVisibility12" name="checkbox"    >
-                                                    <interact onClick="switchLayer(12)" />
-                                                </control>
-                                                <control id="layerVisibility13" name="checkbox"    >
-                                                    <interact onClick="switchLayer(13)" />
-                                                </control>
-                                                <control id="layerVisibility14" name="checkbox"    >
-                                                    <interact onClick="switchLayer(14)" />
-                                                </control>
-                                                <control id="layerVisibility15" name="checkbox"    >
-                                                    <interact onClick="switchLayer(15)" />
-                                                </control>
-                                                <control id="layerVisibility16" name="checkbox"    >
-                                                    <interact onClick="switchLayer(16)" />
-                                                </control>
-                                                <control id="layerVisibility17" name="checkbox"    >
-                                                    <interact onClick="switchLayer(17)" />
-                                                </control>
-                                                <control id="layerVisibility18" name="checkbox"    >
-                                                    <interact onClick="switchLayer(18)" />
-                                                </control>
-                                                <control id="layerVisibility19" name="checkbox"    >
-                                                    <interact onClick="switchLayer(19)" />
-                                                </control>
-                                                <control id="layerVisibility20" name="checkbox"    >
-                                                    <interact onClick="switchLayer(20)" />
-                                                </control>                                                                                                                                                                                                                                                                                                                                    
-                                            </panel> 
-                                        </panel>
+                                                <panel width="100%" height="50%" align="center" childLayout="horizontal" >
+                                                    <control id="layerVisibility11" name="checkbox"    >
+                                                        <interact onClick="switchLayer(11)" />
+                                                    </control>
+                                                    <control id="layerVisibility12" name="checkbox"    >
+                                                        <interact onClick="switchLayer(12)" />
+                                                    </control>
+                                                    <control id="layerVisibility13" name="checkbox"    >
+                                                        <interact onClick="switchLayer(13)" />
+                                                    </control>
+                                                    <control id="layerVisibility14" name="checkbox"    >
+                                                        <interact onClick="switchLayer(14)" />
+                                                    </control>
+                                                    <control id="layerVisibility15" name="checkbox"    >
+                                                        <interact onClick="switchLayer(15)" />
+                                                    </control>
+                                                    <control id="layerVisibility16" name="checkbox"    >
+                                                        <interact onClick="switchLayer(16)" />
+                                                    </control>
+                                                    <control id="layerVisibility17" name="checkbox"    >
+                                                        <interact onClick="switchLayer(17)" />
+                                                    </control>
+                                                    <control id="layerVisibility18" name="checkbox"    >
+                                                        <interact onClick="switchLayer(18)" />
+                                                    </control>
+                                                    <control id="layerVisibility19" name="checkbox"    >
+                                                        <interact onClick="switchLayer(19)" />
+                                                    </control>
+                                                    <control id="layerVisibility20" name="checkbox"    >
+                                                        <interact onClick="switchLayer(20)" />
+                                                    </control>                                                                                                                                                                                                                                                                                                                                    
+                                                </panel> 
+                                            </panel>
 
-                                        <control name="label" text="Layers Locks" />
-                                        <panel width="200px" height="50px" valign="bottom" align="center" childLayout="vertical">
+                                            <control name="label" text="Layers Locks" />
+                                            <panel width="200px" height="50px" valign="bottom" align="center" childLayout="vertical">
                             
-                                            <panel width="100%" height="50%" align="center" childLayout="horizontal" >
+                                                <panel width="100%" height="50%" align="center" childLayout="horizontal" >
                                 
-                                                <control id="layerLock1" name="checkbox"   >
-                                                    <interact onClick="lockLayer(1)"   />
-                                                </control>
+                                                    <control id="layerLock1" name="checkbox"   >
+                                                        <interact onClick="lockLayer(1)"   />
+                                                    </control>
 
-                                                <control id="layerLock2" name="checkbox"    >
-                                                    <interact onClick="lockLayer(2)" />
-                                                </control>
+                                                    <control id="layerLock2" name="checkbox"    >
+                                                        <interact onClick="lockLayer(2)" />
+                                                    </control>
 
-                                                <control id="layerLock3" name="checkbox"    >
-                                                    <interact onClick="lockLayer(3)" />
-                                                </control>
+                                                    <control id="layerLock3" name="checkbox"    >
+                                                        <interact onClick="lockLayer(3)" />
+                                                    </control>
 
-                                                <control id="layerLock4" name="checkbox"    >
-                                                    <interact onClick="lockLayer(4)" />
-                                                </control>
+                                                    <control id="layerLock4" name="checkbox"    >
+                                                        <interact onClick="lockLayer(4)" />
+                                                    </control>
 
-                                                <control id="layerLock5" name="checkbox"    >
-                                                    <interact onClick="lockLayer(5)" />
-                                                </control>
+                                                    <control id="layerLock5" name="checkbox"    >
+                                                        <interact onClick="lockLayer(5)" />
+                                                    </control>
 
-                                                <control id="layerLock6" name="checkbox"    >
-                                                    <interact onClick="lockLayer(6)" />
-                                                </control>
+                                                    <control id="layerLock6" name="checkbox"    >
+                                                        <interact onClick="lockLayer(6)" />
+                                                    </control>
 
-                                                <control id="layerLock7" name="checkbox"    >
-                                                    <interact onClick="lockLayer(7)" />
-                                                </control>
+                                                    <control id="layerLock7" name="checkbox"    >
+                                                        <interact onClick="lockLayer(7)" />
+                                                    </control>
 
-                                                <control id="layerLock8" name="checkbox"    >
-                                                    <interact onClick="lockLayer(8)" />
-                                                </control>
+                                                    <control id="layerLock8" name="checkbox"    >
+                                                        <interact onClick="lockLayer(8)" />
+                                                    </control>
 
-                                                <control id="layerLock9" name="checkbox"    >
-                                                    <interact onClick="lockLayer(9)" />
-                                                </control>
+                                                    <control id="layerLock9" name="checkbox"    >
+                                                        <interact onClick="lockLayer(9)" />
+                                                    </control>
 
-                                                <control id="layerLock10" name="checkbox"    >
-                                                    <interact onClick="lockLayer(10)" />
-                                                </control>
+                                                    <control id="layerLock10" name="checkbox"    >
+                                                        <interact onClick="lockLayer(10)" />
+                                                    </control>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-                                            </panel> 
+                                                </panel> 
                             
-                                            <panel width="100%" height="50%" align="center" childLayout="horizontal" >
-                                                <control id="layerLock11" name="checkbox"    >
-                                                    <interact onClick="lockLayer(11)" />
-                                                </control>
-                                                <control id="layerLock12" name="checkbox"    >
-                                                    <interact onClick="lockLayer(12)" />
-                                                </control>
-                                                <control id="layerLock13" name="checkbox"    >
-                                                    <interact onClick="lockLayer(13)" />
-                                                </control>
-                                                <control id="layerLock14" name="checkbox"    >
-                                                    <interact onClick="lockLayer(14)" />
-                                                </control>
-                                                <control id="layerLock15" name="checkbox"    >
-                                                    <interact onClick="lockLayer(15)" />
-                                                </control>
-                                                <control id="layerLock16" name="checkbox"    >
-                                                    <interact onClick="lockLayer(16)" />
-                                                </control>
-                                                <control id="layerLock17" name="checkbox"    >
-                                                    <interact onClick="lockLayer(17)" />
-                                                </control>
-                                                <control id="layerLock18" name="checkbox"    >
-                                                    <interact onClick="lockLayer(18)" />
-                                                </control>
-                                                <control id="layerLock19" name="checkbox"    >
-                                                    <interact onClick="lockLayer(19)" />
-                                                </control>
-                                                <control id="layerLock20" name="checkbox"    >
-                                                    <interact onClick="lockLayer(20)" />
-                                                </control>                                                                                                                                                                                                                                                                                                                                    
-                                            </panel> 
+                                                <panel width="100%" height="50%" align="center" childLayout="horizontal" >
+                                                    <control id="layerLock11" name="checkbox"    >
+                                                        <interact onClick="lockLayer(11)" />
+                                                    </control>
+                                                    <control id="layerLock12" name="checkbox"    >
+                                                        <interact onClick="lockLayer(12)" />
+                                                    </control>
+                                                    <control id="layerLock13" name="checkbox"    >
+                                                        <interact onClick="lockLayer(13)" />
+                                                    </control>
+                                                    <control id="layerLock14" name="checkbox"    >
+                                                        <interact onClick="lockLayer(14)" />
+                                                    </control>
+                                                    <control id="layerLock15" name="checkbox"    >
+                                                        <interact onClick="lockLayer(15)" />
+                                                    </control>
+                                                    <control id="layerLock16" name="checkbox"    >
+                                                        <interact onClick="lockLayer(16)" />
+                                                    </control>
+                                                    <control id="layerLock17" name="checkbox"    >
+                                                        <interact onClick="lockLayer(17)" />
+                                                    </control>
+                                                    <control id="layerLock18" name="checkbox"    >
+                                                        <interact onClick="lockLayer(18)" />
+                                                    </control>
+                                                    <control id="layerLock19" name="checkbox"    >
+                                                        <interact onClick="lockLayer(19)" />
+                                                    </control>
+                                                    <control id="layerLock20" name="checkbox"    >
+                                                        <interact onClick="lockLayer(20)" />
+                                                    </control>                                                                                                                                                                                                                                                                                                                                    
+                                                </panel> 
+                                            </panel>
                                         </panel>
                                        
                                     </panel> 

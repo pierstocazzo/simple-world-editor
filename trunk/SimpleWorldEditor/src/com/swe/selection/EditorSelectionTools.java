@@ -91,63 +91,62 @@ public class EditorSelectionTools {
         dir.subtractLocal(pos).normalizeLocal();
         ray.setOrigin(pos);
         ray.setDirection(dir);
-        
-        // Collide with activeLayersGroup
-        base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().collideWith(ray, results);
 
-        if (results.size() > 0) {
+        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
-            for (CollisionResult colRes : results) {
-                if (!colRes.getGeometry().getName().equals("SelectionTempMesh")) {
-                    // get geometry and id
-                    Geometry geoCollided = colRes.getGeometry();
-                    Object idObj = colRes.getGeometry().getUserData("EntityID");
-                    long id = (Long) idObj;
+        // if scene and layersGroup are enabled
+        if (isLayersGoupEnabled && isSceneEnabled) {
+            
+            // Collide with activeLayersGroup
+            base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().collideWith(ray, results);
 
-                    // check layer's locking
-                    Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
-                    Object isLayerLockedObj = entityNode.getParent().getUserData("isLocked");
-                    boolean isLayerLocked = (Boolean) isLayerLockedObj;
+            if (results.size() > 0) {
 
-                    if (!isLayerLocked) {
-                        colResult = colRes;
+                for (CollisionResult colRes : results) {
+                    if (!colRes.getGeometry().getName().equals("SelectionTempMesh")) {
+                        // get geometry and id
+                        Geometry geoCollided = colRes.getGeometry();
+                        Object idObj = colRes.getGeometry().getUserData("EntityID");
+                        long id = (Long) idObj;
+
+                        // check layer's locking
+                        Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
+                        Object isLayerLockedObj = entityNode.getParent().getUserData("isLocked");
+                        boolean isLayerLocked = (Boolean) isLayerLockedObj;
+
+                        if (!isLayerLocked) {
+                            colResult = colRes;
+                            idObj = null;
+                            geoCollided = null;
+                            entityNode = null;
+                            isLayerLockedObj = null;
+                            break;
+                        }
+
                         idObj = null;
                         geoCollided = null;
                         entityNode = null;
                         isLayerLockedObj = null;
-                        break;
                     }
-
-                    idObj = null;
-                    geoCollided = null;
-                    entityNode = null;
-                    isLayerLockedObj = null;
                 }
-            }
 
-            //select entity
-            if (colResult != null) {
-                Object idObj = colResult.getGeometry().getUserData("EntityID");
-                long id = (Long) idObj;
-                selManager.selectEntity(id, selManager.getSelectionMode());
-                selManager.calculateSelectionCenter();
+                //select entity
+                if (colResult != null) {
+                    Object idObj = colResult.getGeometry().getUserData("EntityID");
+                    long id = (Long) idObj;
+                    selManager.selectEntity(id, selManager.getSelectionMode());
+                    selManager.calculateSelectionCenter();
+                } else {
+                    if (selManager.getSelectionMode() == EditorSelectionManager.SelectionMode.Normal) {
+                        base.getSelectionManager().clearSelectionList();
+                    }
+                }
+
             } else {
                 if (selManager.getSelectionMode() == EditorSelectionManager.SelectionMode.Normal) {
-//                    // remove selection boxes
-//                    for (Long idToRemove : base.getSelectionManager().getSelectionList()) {
-//                        selManager.removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
-//                    }
                     base.getSelectionManager().clearSelectionList();
                 }
-            }
-
-        } else {
-            if (selManager.getSelectionMode() == EditorSelectionManager.SelectionMode.Normal) {
-//                // remove selection boxes
-//                for (Long idToRemove : base.getSelectionManager().getSelectionList()) {
-//                    selManager.removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
-//                }
-                base.getSelectionManager().clearSelectionList();
             }
         }
     }

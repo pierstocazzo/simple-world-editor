@@ -93,9 +93,15 @@ public class EditorSelectionManager extends AbstractControl {
 
         // SELECT ENTITIES OF THE RECTANGLE TOOL
         if (selectionToolType == SelectionToolType.Rectangle && isActive) {
-            selectEntities();
+            boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+            boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+
+            // if scene and layersGroup are enabled
+            if (isLayersGoupEnabled && isSceneEnabled) {
+                rectangleSelectEntities();
+            }
             selectionTools.clearRectangle();
-            System.out.println("deact");
+            System.out.println("Deactivate Rectangle");
         }
 
         isActive = false;
@@ -137,7 +143,7 @@ public class EditorSelectionManager extends AbstractControl {
         }
     }
 
-    public void selectEntities() {
+    public void rectangleSelectEntities() {
         Vector2f centerCam = new Vector2f(app.getCamera().getWidth() * 0.5f, app.getCamera().getHeight() * 0.5f);
         Node rectangle = selectionTools.getRectangleSelection();
         Vector3f rectanglePosition = rectangle.getLocalTranslation();
@@ -154,7 +160,7 @@ public class EditorSelectionManager extends AbstractControl {
 
         for (EditorLayersGroupObject layersGroup : base.getSceneManager().getActiveScene().getLayerGroupsList().values()) {
             boolean isEnabledLayerGroup = (Boolean) layersGroup.getLayersGroupNode().getUserData("isEnabled");
-            
+
             // if LayersGroup is Enabled
             if (isEnabledLayerGroup) {
                 List<Node> lst = layersGroup.getLayers();

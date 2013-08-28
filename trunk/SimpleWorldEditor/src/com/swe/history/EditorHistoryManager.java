@@ -70,16 +70,21 @@ public class EditorHistoryManager {
 
                 for (Long id : previousSelectionlist.keySet()) {
                     if (base.getEntityManager().containsID(id)) {
-                        Node layer = base.getSpatialSystem().getSpatialControl(id).getGeneralNode().getParent();
-                        boolean isEnabledLayer = (Boolean)layer.getUserData("isEnabled");
-                        boolean isLockedLayer = (Boolean)layer.getUserData("isLocked");
-                        if (isEnabledLayer && !isLockedLayer) {
-                            if (doTransform) {
-                                base.getSpatialSystem().getSpatialControl(id).getGeneralNode().setLocalTransform(previousSelectionlist.get(id));
-                            }
-                            base.getSelectionManager().selectEntity(id, EditorSelectionManager.SelectionMode.Additive);
-                        }
+                        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+                        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
+                        // if scene and layersGroup are enabled
+                        if (isLayersGoupEnabled && isSceneEnabled) {
+                            Node layer = base.getSpatialSystem().getSpatialControl(id).getGeneralNode().getParent();
+                            boolean isEnabledLayer = (Boolean) layer.getUserData("isEnabled");
+                            boolean isLockedLayer = (Boolean) layer.getUserData("isLocked");
+                            if (isEnabledLayer && !isLockedLayer) {
+                                if (doTransform) {
+                                    base.getSpatialSystem().getSpatialControl(id).getGeneralNode().setLocalTransform(previousSelectionlist.get(id));
+                                }
+                                base.getSelectionManager().selectEntity(id, EditorSelectionManager.SelectionMode.Additive);
+                            }
+                        }
                     }
                 }
                 base.getSelectionManager().calculateSelectionCenter();
@@ -105,14 +110,20 @@ public class EditorHistoryManager {
                 boolean doTransform = historyList.get(historycurrentNumber).isDoTransform();
                 for (Long id : reversedSelectionlist.keySet()) {
                     if (base.getEntityManager().containsID(id)) {
-                        Node layer = base.getSpatialSystem().getSpatialControl(id).getGeneralNode().getParent();
-                        boolean isEnabledLayer = (Boolean)layer.getUserData("isEnabled");
-                        boolean isLockedLayer = (Boolean)layer.getUserData("isLocked");
-                        if (isEnabledLayer && !isLockedLayer) {
-                            if (doTransform) {
-                                base.getSpatialSystem().getSpatialControl(id).getGeneralNode().setLocalTransform(reversedSelectionlist.get(id));
+                        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+                        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+
+                        // if scene and layersGroup are enabled
+                        if (isLayersGoupEnabled && isSceneEnabled) {
+                            Node layer = base.getSpatialSystem().getSpatialControl(id).getGeneralNode().getParent();
+                            boolean isEnabledLayer = (Boolean) layer.getUserData("isEnabled");
+                            boolean isLockedLayer = (Boolean) layer.getUserData("isLocked");
+                            if (isEnabledLayer && !isLockedLayer) {
+                                if (doTransform) {
+                                    base.getSpatialSystem().getSpatialControl(id).getGeneralNode().setLocalTransform(reversedSelectionlist.get(id));
+                                }
+                                base.getSelectionManager().selectEntity(id, EditorSelectionManager.SelectionMode.Additive);
                             }
-                            base.getSelectionManager().selectEntity(id, EditorSelectionManager.SelectionMode.Additive);
                         }
                     }
                 }

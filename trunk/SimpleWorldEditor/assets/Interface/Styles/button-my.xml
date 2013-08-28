@@ -6,9 +6,9 @@
   <style id="ma_button#panel">
     <attributes backgroundImage="Interface/Textures/Buttons/Button_01/button_01_1.png" imageMode="resize:20,10,20,10,20,10,20,4,20,10,20,10" paddingLeft="7px" paddingRight="7px" width="100px" height="24px" childLayout="center" visibleToMouse="true" />
     <effect>
-      <onHover name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_2.png" imageMode="resize:20,10,20,10,20,10,20,4,20,10,20,10" post="true"/>
+      <onHover name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_3.png" imageMode="resize:20,10,20,10,20,10,20,4,20,10,20,10" post="true"/>
       <onFocus name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_1.png" imageMode="resize:20,10,20,10,20,10,20,4,20,10,20,10" post="true" />
-      <onClick name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_3.png" imageMode="resize:20,10,20,10,20,10,20,4,20,10,20,10" post="true" />
+      <onClick name="imageOverlay" filename="Interface/Textures/Buttons/Button_01/button_01_2.png" imageMode="resize:20,10,20,10,20,10,20,4,20,10,20,10" post="true" />
       <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
       <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
     </effect>
