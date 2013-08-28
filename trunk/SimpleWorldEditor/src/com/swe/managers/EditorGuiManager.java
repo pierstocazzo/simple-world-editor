@@ -1068,7 +1068,11 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             TabGroup tabGroup = screen.findNiftyControl("settingsTabsGroup", TabGroup.class);
             String selectedTabID = tabGroup.getSelectedTab().getId();
             updateCheckBoxes(tabGroup.getSelectedTab().getElement());
-
+            
+            // fix for selected layer red color
+            if (selectedTabID.equals("SceneTab")) updateLayersGUI();
+            
+            screen.getFocusHandler().resetFocusElements();
             System.out.println("Checkboxes are updated!");
 
         }
