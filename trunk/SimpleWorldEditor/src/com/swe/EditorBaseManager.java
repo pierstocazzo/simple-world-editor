@@ -11,7 +11,7 @@ import com.swe.managers.EditorDataManager;
 import com.swe.selection.EditorSelectionManager;
 import com.swe.history.EditorHistoryManager;
 import com.swe.scene.EditorSceneManager;
-import com.swe.managers.EditorGuiManager;
+import com.swe.gui.EditorGuiManager;
 import com.swe.transform.EditorTransformManager;
 import com.swe.entitysystem.EntityManager;
 import com.swe.entitysystem.EntitySpatialsSystem;
