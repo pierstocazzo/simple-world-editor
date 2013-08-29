@@ -92,8 +92,8 @@ public class EditorSelectionTools {
         ray.setOrigin(pos);
         ray.setDirection(dir);
 
-        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
         // if scene and layersGroup are enabled
         if (isLayersGoupEnabled && isSceneEnabled) {

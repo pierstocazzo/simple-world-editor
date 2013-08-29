@@ -70,8 +70,8 @@ public class EditorHistoryManager {
 
                 for (Long id : previousSelectionlist.keySet()) {
                     if (base.getEntityManager().containsID(id)) {
-                        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-                        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+                        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+                        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
                         // if scene and layersGroup are enabled
                         if (isLayersGoupEnabled && isSceneEnabled) {
@@ -110,8 +110,8 @@ public class EditorHistoryManager {
                 boolean doTransform = historyList.get(historycurrentNumber).isDoTransform();
                 for (Long id : reversedSelectionlist.keySet()) {
                     if (base.getEntityManager().containsID(id)) {
-                        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-                        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+                        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+                        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
                         // if scene and layersGroup are enabled
                         if (isLayersGoupEnabled && isSceneEnabled) {

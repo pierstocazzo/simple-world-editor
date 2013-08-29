@@ -93,8 +93,8 @@ public class EditorSelectionManager extends AbstractControl {
 
         // SELECT ENTITIES OF THE RECTANGLE TOOL
         if (selectionToolType == SelectionToolType.Rectangle && isActive) {
-            boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-            boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+            boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+            boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
             // if scene and layersGroup are enabled
             if (isLayersGoupEnabled && isSceneEnabled) {
@@ -157,49 +157,50 @@ public class EditorSelectionManager extends AbstractControl {
 
             selectionList.clear();  // clear selectionList
         }
+        
+        
+        EditorLayersGroupObject activelayersGroup = base.getSceneManager().getActiveScene().getActivelayersGroup();
+        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
+        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
-        for (EditorLayersGroupObject layersGroup : base.getSceneManager().getActiveScene().getLayerGroupsList().values()) {
-            boolean isEnabledLayerGroup = (Boolean) layersGroup.getLayersGroupNode().getUserData("isEnabled");
+        // if scene and layersGroup are enabled
+        if (isLayersGoupEnabled && isSceneEnabled) {
+            List<Node> lst = activelayersGroup.getLayers();
 
-            // if LayersGroup is Enabled
-            if (isEnabledLayerGroup) {
-                List<Node> lst = layersGroup.getLayers();
+            for (Node layer : lst) {
+                // check if layer is enabled
+                Object boolObj = layer.getUserData("isEnabled");
+                boolean boolEnabled = (Boolean) boolObj;
+                Object boolLockedObj = layer.getUserData("isLocked");
+                boolean boolLocked = (Boolean) boolLockedObj;
 
-                for (Node layer : lst) {
-                    // check if layer is enabled
-                    Object boolObj = layer.getUserData("isEnabled");
-                    boolean boolEnabled = (Boolean) boolObj;
-                    Object boolLockedObj = layer.getUserData("isLocked");
-                    boolean boolLocked = (Boolean) boolLockedObj;
+                if (boolEnabled && !boolLocked) {
+                    for (Spatial sp : layer.getChildren()) {
 
-                    if (boolEnabled && !boolLocked) {
-                        for (Spatial sp : layer.getChildren()) {
+                        Vector3f spScreenPos = app.getCamera().getScreenCoordinates(sp.getWorldTranslation());
+                        float spScreenDistance = centerCam.distance(new Vector2f(spScreenPos.getX(), spScreenPos.getY()));
 
-                            Vector3f spScreenPos = app.getCamera().getScreenCoordinates(sp.getWorldTranslation());
-                            float spScreenDistance = centerCam.distance(new Vector2f(spScreenPos.getX(), spScreenPos.getY()));
+                        if (spScreenPos.getZ() < 1f) {
 
-                            if (spScreenPos.getZ() < 1f) {
+                            float pointMinX = Math.min(rectanglePosition.getX(), spScreenPos.getX());
+                            float pointMaxX = Math.max(rectanglePosition.getX(), spScreenPos.getX());
+                            float pointMinY = Math.min(rectanglePosition.getY(), spScreenPos.getY());
+                            float pointMaxY = Math.max(rectanglePosition.getY(), spScreenPos.getY());
 
-                                float pointMinX = Math.min(rectanglePosition.getX(), spScreenPos.getX());
-                                float pointMaxX = Math.max(rectanglePosition.getX(), spScreenPos.getX());
-                                float pointMinY = Math.min(rectanglePosition.getY(), spScreenPos.getY());
-                                float pointMaxY = Math.max(rectanglePosition.getY(), spScreenPos.getY());
+                            float distX = pointMaxX - pointMinX;
+                            float distY = pointMaxY - pointMinY;
 
-                                float distX = pointMaxX - pointMinX;
-                                float distY = pointMaxY - pointMinY;
-
-                                //add to selection the spatial which is in the rectangle area
-                                if (distX <= rectangle.getLocalScale().getX() * 0.5f
-                                        && distY <= rectangle.getLocalScale().getY() * 0.5f) {
-                                    Object spIdObj = sp.getUserData("EntityID");
-                                    long spId = (Long) spIdObj;
-                                    if (selectionMode == SelectionMode.Additive) {
-                                        selectEntity(spId, selectionMode);
-                                    } else if (selectionMode == SelectionMode.Normal) {
-                                        selectionList.add(spId);
-                                        Node nodeToSelect = (Node) base.getSpatialSystem().getSpatialControl(spId).getGeneralNode();
-                                        createSelectionBox(nodeToSelect);
-                                    }
+                            //add to selection the spatial which is in the rectangle area
+                            if (distX <= rectangle.getLocalScale().getX() * 0.5f
+                                    && distY <= rectangle.getLocalScale().getY() * 0.5f) {
+                                Object spIdObj = sp.getUserData("EntityID");
+                                long spId = (Long) spIdObj;
+                                if (selectionMode == SelectionMode.Additive) {
+                                    selectEntity(spId, selectionMode);
+                                } else if (selectionMode == SelectionMode.Normal) {
+                                    selectionList.add(spId);
+                                    Node nodeToSelect = (Node) base.getSpatialSystem().getSpatialControl(spId).getGeneralNode();
+                                    createSelectionBox(nodeToSelect);
                                 }
                             }
                         }
@@ -207,6 +208,7 @@ public class EditorSelectionManager extends AbstractControl {
                 }
             }
         }
+
     }
 
     public void createSelectionBox(Node nodeSelect) {
