@@ -1068,17 +1068,21 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     @Override
     public void update(float tpf) {
         // This is for componentsList!
-        List<Long> selList = base.getSelectionManager().getSelectionList();
-        if (selList.size() == 0) {
-            componentsListBox.clear();
-            lastIdOfComponentList = -1; // just for the case if user will select the same entity
-        } else if (selList.get(selList.size() - 1) != lastIdOfComponentList) {
-            componentsListBox.clear();
-            lastIdOfComponentList = selList.get(selList.size() - 1);
-            ConcurrentHashMap<String, String> data = base.getDataManager().getEntityData(lastIdOfComponentList);
-            for (String key : data.keySet()) {
-                componentsListBox.addItem(key);
+        String selectedTabName = screen.findNiftyControl("settingsTabsGroup", TabGroup.class).getSelectedTab().getId();
+        if (screen.isRunning() && selectedTabName.equals("ComponentsTab")) {
+            List<Long> selList = base.getSelectionManager().getSelectionList();
+            if (selList.size() == 0) {
+                componentsListBox.clear();
+                lastIdOfComponentList = -1; // just for the case if user will select the same entity
+            } else if (selList.get(selList.size() - 1) != lastIdOfComponentList) {
+                componentsListBox.clear();
+                lastIdOfComponentList = selList.get(selList.size() - 1);
+                ConcurrentHashMap<String, String> data = base.getDataManager().getEntityData(lastIdOfComponentList);
+                for (String key : data.keySet()) {
+                    componentsListBox.addItem(key);
+                }
             }
+            selList = null; // clear this object                    
         }
     }
 
