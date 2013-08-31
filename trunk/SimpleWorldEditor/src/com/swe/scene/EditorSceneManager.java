@@ -97,14 +97,8 @@ public class EditorSceneManager {
         createSceneObject("Scene2");
         scenesList.get("Scene2").createLayersGroup("LayersGroup1");
         scenesList.get("Scene2").createLayersGroup("LayersGroup2");
+        getActiveSceneObject().getActivelayersGroup().enableLayer(1); // set 1 layer enabled
 
-    }
-
-    public void createSceneObject(String sceneName) {
-        EditorSceneObject newScene = new EditorSceneObject(root, sceneName);
-        newScene.setSceneEnabled(true);
-        setActiveScene(newScene);
-        scenesList.put(sceneName, newScene);
     }
 
     public boolean loadScene() {
@@ -183,7 +177,7 @@ public class EditorSceneManager {
             Node newSceneNode = newSceneObj.getSceneNode();
             newSceneNode.setUserData("isActive", (Boolean) jsScene.get("isActive"));
             if ((Boolean) jsScene.get("isActive")) {
-                setActiveScene(newSceneObj);
+                setActiveSceneObject(newSceneObj);
             }
 
             scenesList.put(strScene, newSceneObj); // add a scene to the list
@@ -194,7 +188,7 @@ public class EditorSceneManager {
                 JSONObject jsLayersGroup = (JSONObject) jsAllLayersGroups.get(layersGroupStrObj);
 
                 newSceneObj.createLayersGroup((String) layersGroupStrObj);
-                EditorLayersGroupObject newLayersGroup = newSceneObj.getLayerGroupsList().get((String) layersGroupStrObj);
+                EditorLayersGroupObject newLayersGroup = newSceneObj.getLayersGroupsList().get((String) layersGroupStrObj);
                 newLayersGroup.setLayersGroupEnabled((Boolean) jsLayersGroup.get("isEnabled"));
 
                 // set LayersGroup active
@@ -364,7 +358,7 @@ public class EditorSceneManager {
 
             //save LayerGroups
             JSONObject allLayersGroups = new JSONObject();
-            for (EditorLayersGroupObject layersGroup : scenesList.get(sceneName).getLayerGroupsList().values()) {
+            for (EditorLayersGroupObject layersGroup : scenesList.get(sceneName).getLayersGroupsList().values()) {
                 JSONObject layersGroupToSave = new JSONObject();
 
                 // save layerGroup states
@@ -451,7 +445,7 @@ public class EditorSceneManager {
 
         // clear all scenes, layersGoups, layers
         for (EditorSceneObject scene : scenesList.values()) {
-            scene.clearScene();
+            scene.clearScene(this);
         }
         scenesList.clear();
         activeScene = null;
@@ -464,7 +458,7 @@ public class EditorSceneManager {
         base.getDataManager().clearEntityData();
 
         // clear entities
-        ConcurrentHashMap<Long, ComponentsControl> allControls = base.getEntityManager().getAllControls();
+        ConcurrentHashMap<Long, ComponentsControl> allControls = base.getEntityManager().getAllEntities();
         for (Long ID : allControls.keySet()) {
             base.getEntityManager().removeEntity(ID);
             base.getSpatialSystem().removeSpatialControl(ID);
@@ -531,7 +525,7 @@ public class EditorSceneManager {
             sceneSavePreview.attachChild(sceneToSave);
 
             // get layersGroups of a Scene
-            for (EditorLayersGroupObject layersGroupObj : sceneObj.getLayerGroupsList().values()) {
+            for (EditorLayersGroupObject layersGroupObj : sceneObj.getLayersGroupsList().values()) {
                 Node layersGroupToSave = new Node(layersGroupObj.getLayersGroupName());
                 Node layersGroupNode = layersGroupObj.getLayersGroupNode();
 
@@ -683,15 +677,15 @@ public class EditorSceneManager {
         base.getSelectionManager().calculateSelectionCenter();
     }
 
-    public List<Long> cloneSelectedEntities() {
-        List<Long> selectionList = base.getSelectionManager().getSelectionList();
-        List<Long> tempList = new ArrayList<Long>();
-        for (Long idOfSelected : selectionList) {
+    public long cloneEntity(long idToClone, Node layerToClone) {
+//        List<Long> selectionList = base.getSelectionManager().getSelectionList();
+//        List<Long> tempList = new ArrayList<Long>();
+//        for (Long idOfSelected : listOfEntities) {
             // selected entity's components
-            ComponentsControl compControlSelected = base.getEntityManager().getComponentControl(idOfSelected);
+            ComponentsControl compControlSelected = base.getEntityManager().getComponentControl(idToClone);
             EntityModelPathComponent modelPathSelected = (EntityModelPathComponent) compControlSelected.getComponent(EntityModelPathComponent.class);
-            Node selectedModel = (Node) base.getSpatialSystem().getSpatialControl(idOfSelected).getGeneralNode();
-            Node layerToClone = selectedModel.getParent();
+            Node selectedModel = (Node) base.getSpatialSystem().getSpatialControl(idToClone).getGeneralNode();
+//            Node layerToClone = selectedModel.getParent();
             EntityNameComponent modelNameSelected = (EntityNameComponent) compControlSelected.getComponent(EntityNameComponent.class);
 
             // new entity
@@ -701,17 +695,17 @@ public class EditorSceneManager {
             newModel.setLocalTransform(selectedModel.getWorldTransform());
 
             // Clone data
-            ConcurrentHashMap<String, String> dataOfSelected = base.getDataManager().getEntityData(idOfSelected);
+            ConcurrentHashMap<String, String> dataOfSelected = base.getDataManager().getEntityData(idToClone);
             ConcurrentHashMap<String, String> dataNew = base.getDataManager().getEntityData(newID);
             for (String key : dataOfSelected.keySet()) {
                 dataNew.put(key, dataOfSelected.get(key));
             }
 
-            tempList.add(newID);
+//            tempList.add(newID);
             layerToClone.attachChild(newModel);
-        }
+//        }
 
-        return tempList;
+        return newID;
     }
 
     public void removeEntityObject(long id) {
@@ -862,15 +856,25 @@ public class EditorSceneManager {
         System.out.println(savePreviewJ3o);
     }
 
+    
+    
+    
     public static ConcurrentHashMap<String, EditorSceneObject> getScenesList() {
         return scenesList;
     }
-
-    public EditorSceneObject getActiveScene() {
+    
+    public void createSceneObject(String sceneName) {
+        EditorSceneObject newScene = new EditorSceneObject(root, sceneName);
+        newScene.setSceneEnabled(true);
+        setActiveSceneObject(newScene);
+        scenesList.put(sceneName, newScene);
+    }
+    
+    public EditorSceneObject getActiveSceneObject() {
         return activeScene;
     }
 
-    public void setActiveScene(EditorSceneObject activeScene) {
+    public void setActiveSceneObject(EditorSceneObject activeScene) {
         if (this.activeScene != null) {
             this.activeScene.getSceneNode().setUserData("isActive", false); // old active
         }
@@ -882,5 +886,26 @@ public class EditorSceneManager {
             this.activeScene = null;
         }
 
+    }
+    
+    public EditorSceneObject cloneSceneObject(String newName, EditorSceneObject sceneToClone) {
+
+        // CLONE SCENE
+        createSceneObject(newName);
+        EditorSceneObject newActiveClonedScene = getActiveSceneObject();
+        newActiveClonedScene.setSceneEnabled((Boolean) sceneToClone.getSceneNode().getUserData("isEnabled"));
+
+        // parse LayersGroups
+        for (EditorLayersGroupObject layersGroupToClone : sceneToClone.getLayersGroupsList().values()) {
+            newActiveClonedScene.cloneLayersGroup(layersGroupToClone.getLayersGroupName(), layersGroupToClone, this);
+        }
+
+        // set the same active layer and layersgroup
+        newActiveClonedScene.setActivelayersGroup(newActiveClonedScene.getLayersGroupsList().get(sceneToClone.getActivelayersGroup().getLayersGroupName()));
+        int oldActiveLayer = (Integer) sceneToClone.getActivelayersGroup().getActiveLayer().getUserData("LayerNumber");
+        newActiveClonedScene.getActivelayersGroup().setActiveLayer(newActiveClonedScene.getActivelayersGroup().getLayer(oldActiveLayer));
+
+
+        return newActiveClonedScene;
     }
 }

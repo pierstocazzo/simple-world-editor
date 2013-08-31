@@ -7,6 +7,7 @@ package com.swe.scene;
 import com.jme3.app.Application;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.swe.EditorBaseManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,24 +22,24 @@ public class EditorLayersGroupObject {
     private List<Node> layersList;
     private Node activeLayer;
     private Node layersGroupNode;
-    private String sceneName, layersGroupName;
+    private String layersGroupName;
 
     public EditorLayersGroupObject(Node allGroupsNode, String layersGroupName, String sceneName) {
         this.allGroupsNode = allGroupsNode;
         this.layersGroupName = layersGroupName;
-        this.sceneName = sceneName;
 
         layersList = new ArrayList<Node>();
         layersGroupNode = new Node(this.layersGroupName); // new layerGroup node
-        createLayers();
-        enableLayer(1);
+        createLayers(sceneName);
+//        enableLayer(1);
 
         layersGroupNode.setUserData("isEnabled", true);
         layersGroupNode.setUserData("isActive", false);
+        layersGroupNode.setUserData("SceneName", sceneName);
         allGroupsNode.attachChild(layersGroupNode);
     }
 
-    private void createLayers() {
+    private void createLayers(String sceneName) {
         for (int i = 0; i < 20; i++) {
             Node layerNode = new Node("layer" + (i + 1));
             layerNode.setUserData("LayerNumber", i + 1);
@@ -114,9 +115,16 @@ public class EditorLayersGroupObject {
 
     }
 
-    public void clearLayersGroup() {
+    public void clearLayersGroup(EditorSceneManager sceneManager) {
         for (Node layer : layersList) {
-            layer.detachAllChildren();
+            
+            for (Spatial sp : layer.getChildren()) {
+                long id = (Long) sp.getUserData("EntityID");
+                sceneManager.removeEntityObject(id);
+            }
+            
+            layer.detachAllChildren(); // just for a case if something is left
+            
             layer.setUserData("isEnabled", null);
             layer.setUserData("isLocked", null);
             layer.setUserData("isActive", null);
@@ -131,5 +139,14 @@ public class EditorLayersGroupObject {
 
     public String getLayersGroupName() {
         return layersGroupName;
+    }
+    
+    public void renameLayersGroup(String newLayersGroupName) {
+        layersGroupName = newLayersGroupName;
+            layersGroupNode.setUserData("LayersGroupName", newLayersGroupName);
+
+            for (Node layerToChange : layersList) {
+                layerToChange.setUserData("LayersGroupName", newLayersGroupName);
+            }
     }
 }

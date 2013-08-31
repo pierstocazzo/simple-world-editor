@@ -27,12 +27,14 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Line;
 import com.swe.EditorBaseManager;
+import com.swe.entitysystem.ComponentsControl;
 import com.swe.scene.EditorLayersGroupObject;
 import com.swe.scene.EditorSceneObject;
 import com.swe.selection.EditorSelectionManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
+import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TabGroup;
@@ -60,10 +62,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     private AssetManager assetManager;
     private ViewPort guiViewPort;
     private EditorBaseManager base;
-    private Element popupMoveToLayer, popupEditComponent, popupEditAsset, rightPanel;
-    private ListBox entitiesListBox, sceneObjectsListBox, componentsListBox, assetsListBox, scenesListbox, layersGroupsListbox;
+    private static Element popupMoveToLayer, popupEditComponent, popupEditAsset, popupEditSeneLg, rightPanel;
+    private static ListBox entitiesListBox, layersGroupObjectsListBox, componentsListBox, assetsListBox, scenesListbox, layersGroupsListbox;
     private ConcurrentHashMap<String, ListBox> listBoxesList;
-    private long lastIdOfComponentList, idComponentToChange;
+    protected long lastIdOfComponentList, idComponentToChange;
     private EditorGuiWorkers workers;
 
     public EditorGuiManager(EditorBaseManager base) {
@@ -88,6 +90,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 guiViewPort);
 
         nifty = niftyDisplay.getNifty();
+        nifty.fromXmlWithoutStartScreen("Interface/Main/basicPopups.xml");
         nifty.fromXml("Interface/Main/basicGui.xml", "start", this);
 
         // attach the nifty display to the gui view port as a processor
@@ -118,6 +121,12 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         popupEditAsset.disable();
         screen.getFocusHandler().resetFocusElements();
 
+        // set popup SceneLayersGoup
+        popupEditSeneLg = nifty.createPopup("popupEditSeneLg");
+        popupEditSeneLg.disable();
+        screen.getFocusHandler().resetFocusElements();
+
+
         // ListBoxes
         listBoxesList = new ConcurrentHashMap<String, ListBox>();
         scenesListbox = screen.findNiftyControl("scenesListBox", ListBox.class);
@@ -126,9 +135,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         listBoxesList.put("layersGroupsListBox", layersGroupsListbox);
         entitiesListBox = screen.findNiftyControl("entitiesListBox", ListBox.class);
         listBoxesList.put("entitiesListBox", entitiesListBox);
-        sceneObjectsListBox = screen.findNiftyControl("sceneObjectsListBox", ListBox.class);
-        listBoxesList.put("sceneObjectsListBox", sceneObjectsListBox);
-        sceneObjectsListBox.changeSelectionMode(ListBox.SelectionMode.Multiple, false);
+        layersGroupObjectsListBox = screen.findNiftyControl("layersGroupObjectsListBox", ListBox.class);
+        listBoxesList.put("layersGroupObjectsListBox", layersGroupObjectsListBox);
+        layersGroupObjectsListBox.changeSelectionMode(ListBox.SelectionMode.Multiple, false);
         componentsListBox = screen.findNiftyControl("componentsListBox", ListBox.class);
         listBoxesList.put("componentsListBox", componentsListBox);
         assetsListBox = screen.findNiftyControl("assetsListBox", ListBox.class);
@@ -143,32 +152,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         nifty.gotoScreen("start"); // start the screen 
 
         workers = new EditorGuiWorkers(base);
-        workers.updateSceneGUI();
-
-
-//        // test for treebox
-//        NiftyImage folder = nifty.createImage("Interface/Textures/closed.png", true);
-//        NiftyImage folderOpen = nifty.createImage("Interface/Textures/opened.png", true);
-//        NiftyImage item = nifty.createImage("Interface/Textures/closed.png", true);
-//
-//        TreeItem<String> treeRoot = new TreeItem<String>();
-//        TreeItem<String> branch1 = new TreeItem<String>(treeRoot, "branch 1", "branche 1", folder, folderOpen, true);
-//        TreeItem<String> branch11 = new TreeItem<String>(treeRoot, "branch 1 1", "branche 1 1", item);
-//        TreeItem<String> branch12 = new TreeItem<String>(treeRoot, "branch 1 2", "branche 1 2", item);
-//        branch1.addTreeItem(branch11);
-//        branch1.addTreeItem(branch12);
-//        TreeItem<String> branch2 = new TreeItem<String>(treeRoot, "branch 2", "branche 2", folder, folderOpen, true);
-//        TreeItem<String> branch21 = new TreeItem<String>(treeRoot, "branch 2 1", "branche 2 1", folder, folderOpen, true);
-//        TreeItem<String> branch211 = new TreeItem<String>(treeRoot, "branch 2 1 1", "branche 2 1 1", item);
-//        branch2.addTreeItem(branch21);
-//        branch21.addTreeItem(branch211);
-//        treeRoot.addTreeItem(branch1);
-//        treeRoot.addTreeItem(branch2);
-//        branch1.setExpanded(false);
-//
-//        screen.findNiftyControl("researchTree", TreeBox.class).setTree(treeRoot);
-
-
+        workers.updateSceneGUI(true, true);
 
         screen.getFocusHandler().resetFocusElements();
     }
@@ -177,14 +161,18 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         return listBoxesList;
     }
 
-//    public void temp() {
-//        TreeBox treeBox = screen.findNiftyControl("researchTree", TreeBox.class);
-//        ListBox listboxOfTreebox = treeBox.getElement().findNiftyControl("#listbox", ListBox.class);
-//        if (listboxOfTreebox.getSelection().size() > 0) {
-//            System.out.println(listboxOfTreebox.getSelection().get(0));
-//        }
-//        
-//    }
+    protected Element getPopup(String str) {
+        if (str.equals("popupMoveToLayer")) {
+            return popupMoveToLayer;
+        } else if (str.equals("popupEditComponent")) {
+            return popupEditComponent;
+        } else if (str.equals("popupEditAsset")) {
+            return popupEditAsset;
+        } else {
+            return null;
+        }
+    }
+
     public static Nifty getNifty() {
         return nifty;
     }
@@ -361,9 +349,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             // create new scene
             base.getSceneManager().createSceneObject("Scene1");
             base.getSceneManager().getScenesList().get("Scene1").createLayersGroup("LayersGroup1");
+            base.getSceneManager().getActiveSceneObject().getActivelayersGroup().enableLayer(1);
 
             workers.clearGui();
-            workers.updateSceneGUI();
+            workers.updateSceneGUI(true, true);
 
 //            // set default layer1 (as it's set in the LayersGroup)
 //            CheckBox cb = screen.findNiftyControl("layerVisibility1", CheckBox.class);
@@ -392,14 +381,11 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 for (String str : entList.keySet()) {
                     entitiesListBox.addItem(str);
                 }
+                
+                workers.updateSceneGUI(true, true);
 
-
-                workers.updateSceneGUI();
-
-                getEntitiesListBox().sortAllItems();
-                getEntitiesListBox().refresh();
-                getSceneObjectsListBox().sortAllItems();
-                getSceneObjectsListBox().refresh();
+                entitiesListBox.sortAllItems();
+                entitiesListBox.refresh();
 
             }
         }
@@ -427,7 +413,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     }
 
     public ListBox getSceneObjectsListBox() {
-        return sceneObjectsListBox;
+        return layersGroupObjectsListBox;
     }
 
     public void updateAssetsButton() {
@@ -457,12 +443,12 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
     public void addEntityToSceneButton() {
         // create entity
-        if (entitiesListBox.getSelection().size() > 0 && base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer() != null
+        if (entitiesListBox.getSelection().size() > 0 && base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer() != null
                 && !base.getEventManager().isActive()) {
             String selectedEntity = entitiesListBox.getSelection().get(0).toString();
             long id = base.getSceneManager().createEntityModel(selectedEntity, base.getSceneManager().getEntitiesListsList().get(selectedEntity), null);
             Spatial entitySp = base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
-            base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer().attachChild(entitySp);
+            base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer().attachChild(entitySp);
             EditorTransformConstraint constraintTool = base.getTransformManager().getConstraintTool();
 
             if (constraintTool.getConstraint() > 0) {
@@ -480,9 +466,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
             // add entty to sceneList
             EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
-            sceneObjectsListBox.addItem(nameComp.getName());
-            sceneObjectsListBox.sortAllItems();
-            sceneObjectsListBox.refresh();
+            layersGroupObjectsListBox.addItem(nameComp.getName());
+            layersGroupObjectsListBox.sortAllItems();
+            layersGroupObjectsListBox.refresh();
 
             // set history
             base.getHistoryManager().prepareNewHistory();
@@ -496,23 +482,41 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         List<Long> selList = base.getSelectionManager().getSelectionList();
 
-        for (Object indexDeselect : sceneObjectsListBox.getSelection()) {
-            sceneObjectsListBox.deselectItem(indexDeselect);
+        for (Object indexDeselect : layersGroupObjectsListBox.getSelection()) {
+            layersGroupObjectsListBox.deselectItem(indexDeselect);
         }
 
         for (Long id : selList) {
             EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
             String objectString = nameComp.getName();
-            sceneObjectsListBox.selectItem(objectString);
+            layersGroupObjectsListBox.selectItem(objectString);
         }
         screen.getFocusHandler().resetFocusElements();
     }
 
     public void removeClonesButton() {
         if (entitiesListBox.getSelection().size() > 0 && !base.getEventManager().isActive()) {
-            base.getSceneManager().removeClones(entitiesListBox.getSelection().get(0).toString());
-            base.getGuiManager().getSceneObjectsListBox().sortAllItems();
-            base.getGuiManager().getSceneObjectsListBox().refresh();
+            String entityName = entitiesListBox.getSelection().get(0).toString();
+            base.getSceneManager().removeClones(entityName);
+            
+//            // clear duplicates of clones for sceneObjectsListBox
+//            List<String> itemsToRemove = new ArrayList<String>();
+//            for ( int i=0; i < sceneObjectsListBox.getItems().size(); i++) {
+//                String item = (String) sceneObjectsListBox.getItems().get(0);
+//                if (item.substring(0, item.indexOf("_IDX")).equals(entityName)) {
+//                    itemsToRemove.add(item);
+//                }                
+//            }
+//            
+//            for (String str : itemsToRemove) {
+//                sceneObjectsListBox.removeItem(str);
+//            }
+//            
+//            itemsToRemove.clear();
+//            itemsToRemove = null;
+            
+            layersGroupObjectsListBox.sortAllItems();
+            layersGroupObjectsListBox.refresh();
         }
         screen.getFocusHandler().resetFocusElements();
     }
@@ -521,10 +525,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void selectEntitiesButton() {
 //        List<Long> lectlList = base.getSelectionManager().getSelectionList();
 
-        if (sceneObjectsListBox.getSelection().size() > 0) {
+        if (layersGroupObjectsListBox.getSelection().size() > 0) {
 
             base.getSelectionManager().clearSelectionList();
-            for (Object obj : sceneObjectsListBox.getSelection()) {
+            for (Object obj : layersGroupObjectsListBox.getSelection()) {
                 String objStr = (String) obj;
                 long id = Long.valueOf(objStr.substring(objStr.indexOf("_IDX") + 4, objStr.length()));
                 Node entNode = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
@@ -557,8 +561,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     }
 
     public void clearSelectedEntitiesButton() {
-        for (Object indexDeselect : sceneObjectsListBox.getSelection()) {
-            sceneObjectsListBox.deselectItem(indexDeselect);
+        for (Object indexDeselect : layersGroupObjectsListBox.getSelection()) {
+            layersGroupObjectsListBox.deselectItem(indexDeselect);
         }
         screen.getFocusHandler().resetFocusElements();
     }
@@ -566,7 +570,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void removeSelectedButton() {
         for (long id : base.getSelectionManager().getSelectionList()) {
             EntityNameComponent nameComponent = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
-            sceneObjectsListBox.removeItem(nameComponent.getName());
+            layersGroupObjectsListBox.removeItem(nameComponent.getName());
 
             base.getSceneManager().removeEntityObject(id);
         }
@@ -583,12 +587,12 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 base.getSelectionManager().clearSelectionList();
             } else {
 
-                boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-                boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+                boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getSceneNode().getUserData("isEnabled");
+                boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
                 // if scene and layersGroup are enabled
                 if (isLayersGoupEnabled && isSceneEnabled) {
-                    for (Node spLayer : base.getSceneManager().getActiveScene().getActivelayersGroup().getLayers()) {
+                    for (Node spLayer : base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayers()) {
 
                         Node layerNode = (Node) spLayer;
                         boolean isLayerEnabled = (Boolean) layerNode.getUserData("isEnabled");
@@ -618,15 +622,41 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     }
 
     public void cloneSelectedButton() {
-        if (base.getSelectionManager().getSelectionList().size() > 0) {
-            List<Long> list = base.getSceneManager().cloneSelectedEntities();
-            for (Long id : list) {
-                EntityNameComponent newRealName = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
-                base.getGuiManager().getSceneObjectsListBox().addItem(newRealName.getName());
+        if (!base.getEventManager().isActive()) {
+            base.getEventManager().setAction(true); // set it only for cloning
+
+            if (base.getSelectionManager().getSelectionList().size() > 0) {
+                List<Long> listOfClonedEntities = new ArrayList<Long>();
+
+                // clone entities
+                for (Long id : base.getSelectionManager().getSelectionList()) {
+                    Node layerToClone = base.getSpatialSystem().getSpatialControl(id).getGeneralNode().getParent();
+
+                    long clonedID = base.getSceneManager().cloneEntity(id, layerToClone);
+                    EntityNameComponent newRealName = (EntityNameComponent) base.getEntityManager().getComponent(clonedID, EntityNameComponent.class);
+                    base.getGuiManager().getSceneObjectsListBox().addItem(newRealName.getName());
+
+                    listOfClonedEntities.add(clonedID);
+                }
+
+                // select cloned
+                base.getSelectionManager().clearSelectionList();
+                for (long clonedID : listOfClonedEntities) {
+                    base.getSelectionManager().selectEntity(clonedID, EditorSelectionManager.SelectionMode.Additive);
+                }
+
+                base.getSelectionManager().calculateSelectionCenter();
+
+                // set history
+                base.getHistoryManager().prepareNewHistory();
+                base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
+
+                listOfClonedEntities.clear();
+                listOfClonedEntities = null;
             }
-            list.clear();
-            list = null;
+            base.getEventManager().setAction(false); // remove activation
         }
+
         screen.getFocusHandler().resetFocusElements();
     }
 
@@ -763,6 +793,99 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         base.getEditorMappings().addListener();
     }
 
+    public void finishEditSceneLG(String bool) {
+        boolean boo = Boolean.valueOf(bool);
+        // if entity is selected
+
+        if (boo) {
+            Label label = popupEditSeneLg.findNiftyControl("sceneLGName", Label.class);
+            TextField text = popupEditSeneLg.findNiftyControl("sceneLgString", TextField.class);
+
+            // if text is unique
+            if (!text.getDisplayedText().equals("")) {
+
+                // SCENE
+                if (label.getText().equals("Edit Scene")
+                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+                    base.getSceneManager().getScenesList().remove(base.getSceneManager().getActiveSceneObject().getSceneName()); // remove scene from the list
+                    base.getSceneManager().getActiveSceneObject().renameScene(text.getDisplayedText()); // rename the scene
+                    base.getSceneManager().getScenesList().put(base.getSceneManager().getActiveSceneObject().getSceneName(), base.getSceneManager().getActiveSceneObject()); // ad the scene but with a ne name                    
+
+
+                } else if (label.getText().equals("Add Scene")
+                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+                    base.getSceneManager().createSceneObject(text.getDisplayedText());
+                    base.getSceneManager().getActiveSceneObject().createLayersGroup("LayersGroup1");
+                    base.getSceneManager().getActiveSceneObject().getActivelayersGroup().enableLayer(1);
+                } else if (label.getText().equals("Clone Scene")
+                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+
+                    // CLONE SCENE
+                    base.getSceneManager().cloneSceneObject(text.getDisplayedText(), base.getSceneManager().getActiveSceneObject());
+
+                    base.getSelectionManager().clearSelectionList();
+                    base.getSelectionManager().calculateSelectionCenter();
+                } // LAYERSGROUP
+                else if (label.getText().equals("Edit LayersGroup")
+                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+                    base.getSceneManager().getActiveSceneObject().getLayersGroupsList().remove(base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupName()); // remove scene from the list
+                    base.getSceneManager().getActiveSceneObject().getActivelayersGroup().renameLayersGroup(text.getDisplayedText()); // rename the scene
+                    base.getSceneManager().getActiveSceneObject().getLayersGroupsList().put(base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupName(), base.getSceneManager().getActiveSceneObject().getActivelayersGroup()); // ad the scene but with a ne name                    
+                } else if (label.getText().equals("Add LayersGroup")
+                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+                    base.getSceneManager().getActiveSceneObject().createLayersGroup(text.getDisplayedText());
+                    base.getSceneManager().getActiveSceneObject().getActivelayersGroup().enableLayer(1);
+
+                } else if (label.getText().equals("Clone LayersGroup")
+                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+                    // CLONE SCENE
+                    base.getSceneManager().getActiveSceneObject().cloneLayersGroup(text.getDisplayedText(), base.getSceneManager().getActiveSceneObject().getActivelayersGroup(), base.getSceneManager());
+
+                    base.getSelectionManager().clearSelectionList();
+                    base.getSelectionManager().calculateSelectionCenter();
+                }
+
+                workers.checkSelectionList();
+                workers.updateSceneGUI(true, true);
+            }
+        }
+
+        nifty.closePopup(popupEditSeneLg.getId());
+        popupEditSeneLg.disable();
+        popupEditSeneLg.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
+        base.getEditorMappings().addListener();
+    }
+
+    public void changeSceneObjectButton(String str) {
+        if (!base.getEventManager().isActive()) {
+            if (str.equals("Edit Scene") || str.equals("Add Scene") || str.equals("Clone Scene")
+                    || str.equals("Edit LayersGroup") || str.equals("Add LayersGroup") || str.equals("Clone LayersGroup")) {
+                popupEditSeneLg.enable();
+                nifty.showPopup(nifty.getCurrentScreen(), popupEditSeneLg.getId(), null);
+                popupEditSeneLg.findNiftyControl("sceneLGName", Label.class).setText(str);
+                popupEditSeneLg.findNiftyControl("sceneLgString", TextField.class).setText("");
+                base.getEditorMappings().removeListener();
+            } else if (str.equals("Delete Scene") && base.getSceneManager().getScenesList().size() > 1) {
+                EditorSceneObject scene = base.getSceneManager().getActiveSceneObject();
+                base.getSceneManager().getScenesList().remove(scene.getSceneName());
+                scene.clearScene(base.getSceneManager());
+                base.getSceneManager().setActiveSceneObject(base.getSceneManager().getScenesList().values().iterator().next());
+                
+                workers.updateSceneGUI(true, true);
+                base.getSelectionManager().calculateSelectionCenter();
+            } else if (str.equals("Delete LayersGroup") && base.getSceneManager().getActiveSceneObject().getLayersGroupsList().size() > 1) {
+                EditorSceneObject scene = base.getSceneManager().getActiveSceneObject();
+                scene.removeLayersGroup(scene.getActivelayersGroup().getLayersGroupName(), base.getSceneManager());
+                base.getSceneManager().getActiveSceneObject().setActivelayersGroup(base.getSceneManager().getActiveSceneObject().getLayersGroupsList().values().iterator().next());
+
+                workers.updateSceneGUI(false, true);
+                base.getSelectionManager().calculateSelectionCenter();
+            }
+        }
+        screen.getFocusHandler().resetFocusElements();
+    }
+
     public void AssetButton(String value) {
         if (value.equals("new")) {
             if (!assetsListBox.getSelection().isEmpty()) {
@@ -810,7 +933,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         if (!base.getEventManager().isActive()) {
             int iInt = Integer.valueOf(layerToLock);
             CheckBox cb = screen.findNiftyControl("layerLock" + layerToLock, CheckBox.class);
-            Node layerToLockSP = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt); // layer to switch on/off
+            Node layerToLockSP = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayer(iInt); // layer to switch on/off
 
             Object isLockedObj = layerToLockSP.getUserData("isLocked");
             boolean isLocked = (Boolean) isLockedObj;
@@ -832,9 +955,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         if (!base.getEventManager().isActive()) {
 
             int iInt = Integer.valueOf(layerToShow);
-            Node activeLayer = base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer(); // active layer
-            Node layerToSwitch = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt); // layer to switch on/off
-            Node activeLayersGroup = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode();
+            Node activeLayer = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer(); // active layer
+            Node layerToSwitch = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayer(iInt); // layer to switch on/off
+            Node activeLayersGroup = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode();
 
             Object isEnabledObj = layerToSwitch.getUserData("isEnabled");
             boolean isEnabled = (Boolean) isEnabledObj;
@@ -852,20 +975,20 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 // if selected layer is active
                 if (activeLayer.equals(layerToSwitch)) {
                     // deactivate active and slected layer
-                    base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(null);
+                    base.getSceneManager().getActiveSceneObject().getActivelayersGroup().setActiveLayer(null);
 
                     // set new active layer
                     if (activeLayersGroup.getChildren().size() > 0) {
                         Node nd = (Node) activeLayersGroup.getChild(activeLayersGroup.getChildren().size() - 1);
-                        base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(nd);
+                        base.getSceneManager().getActiveSceneObject().getActivelayersGroup().setActiveLayer(nd);
                     } else {
-                        base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(null);
+                        base.getSceneManager().getActiveSceneObject().getActivelayersGroup().setActiveLayer(null);
                     }
                 }
             } // switching on
             else {
                 //set active layer and enable it
-                base.getSceneManager().getActiveScene().getActivelayersGroup().setActiveLayer(layerToSwitch);
+                base.getSceneManager().getActiveSceneObject().getActivelayersGroup().setActiveLayer(layerToSwitch);
                 activeLayersGroup.attachChild(layerToSwitch);
                 layerToSwitch.setUserData("isEnabled", true);
             }
@@ -900,20 +1023,26 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 List scenesList = scenesListbox.getSelection();
                 if (scenesList.size() > 0) {
                     String sceneName = (String) scenesList.get(0);
-                    base.getSceneManager().setActiveScene(base.getSceneManager().getScenesList().get(sceneName));
+                    base.getSceneManager().setActiveSceneObject(base.getSceneManager().getScenesList().get(sceneName));
                     workers.checkSelectionList();
+                } else {
+                    scenesListbox.selectItem(base.getSceneManager().getActiveSceneObject().getSceneName());
                 }
+                workers.updateSceneGUI(false, true);
             } // set new active layersGroup
             else if (str.equals("changeLayersGroup")) {
                 List layersGroupsList = layersGroupsListbox.getSelection();
                 if (layersGroupsList.size() > 0) {
                     String sceneName = (String) layersGroupsList.get(0);
-                    base.getSceneManager().getActiveScene().setActivelayersGroup(base.getSceneManager().getActiveScene().getLayerGroupsList().get(sceneName));
+                    base.getSceneManager().getActiveSceneObject().setActivelayersGroup(base.getSceneManager().getActiveSceneObject().getLayersGroupsList().get(sceneName));
                     workers.checkSelectionList();
+                } else {
+                    layersGroupsListbox.selectItem(base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupName());
                 }
+                workers.updateSceneGUI(false, false);
             }
 
-            workers.updateSceneGUI();
+            
             System.out.println("SceneGUI Updated!");
         }
     }
@@ -923,7 +1052,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
             // Scene
             if (str.equals("isSceneEnabled")) {
-                EditorSceneObject activeScene = base.getSceneManager().getActiveScene();
+                EditorSceneObject activeScene = base.getSceneManager().getActiveSceneObject();
                 boolean sceneIsEnabled = (Boolean) activeScene.getSceneNode().getUserData("isEnabled");
                 if (sceneIsEnabled) {
                     activeScene.setSceneEnabled(false);
@@ -934,7 +1063,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 }
             } // LayersGroup
             else if (str.equals("isLayersGroupEnabled")) {
-                EditorLayersGroupObject activelayersGroup = base.getSceneManager().getActiveScene().getActivelayersGroup();
+                EditorLayersGroupObject activelayersGroup = base.getSceneManager().getActiveSceneObject().getActivelayersGroup();
                 boolean sceneIsEnabled = (Boolean) activelayersGroup.getLayersGroupNode().getUserData("isEnabled");
                 if (sceneIsEnabled) {
                     activelayersGroup.setLayersGroupEnabled(false);
@@ -977,13 +1106,13 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         List<Long> lst = base.getSelectionManager().getSelectionList();
         for (Long lng : lst) {
             Node moveNode = (Node) base.getSpatialSystem().getSpatialControl(lng).getGeneralNode();
-            base.getSceneManager().getActiveScene().getActivelayersGroup().addToLayer(moveNode, iInt);
+            base.getSceneManager().getActiveSceneObject().getActivelayersGroup().addToLayer(moveNode, iInt);
         }
 
         // clear selection if layer is inactive
-        Object isEnabledObj = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt).getUserData("isEnabled");
+        Object isEnabledObj = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayer(iInt).getUserData("isEnabled");
         boolean isEnabled = (Boolean) isEnabledObj;
-        Object isLockedObj = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(iInt).getUserData("isLocked");
+        Object isLockedObj = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayer(iInt).getUserData("isLocked");
         boolean isLocked = (Boolean) isLockedObj;
 
         // remove from selection

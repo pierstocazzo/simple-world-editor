@@ -93,8 +93,8 @@ public class EditorSelectionManager extends AbstractControl {
 
         // SELECT ENTITIES OF THE RECTANGLE TOOL
         if (selectionToolType == SelectionToolType.Rectangle && isActive) {
-            boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-            boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+            boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getSceneNode().getUserData("isEnabled");
+            boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
             // if scene and layersGroup are enabled
             if (isLayersGoupEnabled && isSceneEnabled) {
@@ -159,9 +159,9 @@ public class EditorSelectionManager extends AbstractControl {
         }
         
         
-        EditorLayersGroupObject activelayersGroup = base.getSceneManager().getActiveScene().getActivelayersGroup();
-        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+        EditorLayersGroupObject activelayersGroup = base.getSceneManager().getActiveSceneObject().getActivelayersGroup();
+        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getSceneNode().getUserData("isEnabled");
+        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
         // if scene and layersGroup are enabled
         if (isLayersGoupEnabled && isSceneEnabled) {

@@ -51,7 +51,7 @@ public final class EntityManager {
         EntityManager.idx = idx;
     }
 
-    public static ConcurrentHashMap<Long, ComponentsControl> getAllControls() {
+    public static ConcurrentHashMap<Long, ComponentsControl> getAllEntities() {
         return componentControl;
     }
 

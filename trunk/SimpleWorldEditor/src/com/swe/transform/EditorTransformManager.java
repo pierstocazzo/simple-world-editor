@@ -373,7 +373,7 @@ public class EditorTransformManager extends AbstractControl {
             int layerNumb = (Integer) layerObj;
             String layerGroup = (String) sp.getUserData("entityLayersGroupName");
             String sceneName = (String) sp.getUserData("entitySceneName");
-            Node layer = base.getSceneManager().getScenesList().get(sceneName).getLayerGroupsList().get(layerGroup).getLayer(layerNumb); // get the layer
+            Node layer = base.getSceneManager().getScenesList().get(sceneName).getLayersGroupsList().get(layerGroup).getLayer(layerNumb); // get the layer
             layer.attachChild(sp);
             sp.setLocalTransform(tr);
 

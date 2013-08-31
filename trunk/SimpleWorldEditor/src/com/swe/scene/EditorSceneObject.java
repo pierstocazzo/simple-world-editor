@@ -19,9 +19,9 @@ public class EditorSceneObject {
     public EditorSceneObject(Node rootNode, String sceneName) {
         this.rootNode = rootNode;
         this.sceneName = sceneName;
-        
+
         layersGroupsList = new ConcurrentHashMap<String, EditorLayersGroupObject>();
-        
+
         createScenNode(sceneName);
     }
 
@@ -58,8 +58,8 @@ public class EditorSceneObject {
         setActivelayersGroup(layersGroup);
     }
 
-    public void removeLayersGroup(String layersGroupName) {
-        layersGroupsList.get(layersGroupName).clearLayersGroup();
+    public void removeLayersGroup(String layersGroupName, EditorSceneManager sceneManager) {
+        layersGroupsList.get(layersGroupName).clearLayersGroup(sceneManager);
         layersGroupsList.remove(layersGroupName);
     }
 
@@ -90,7 +90,7 @@ public class EditorSceneObject {
         return allGroupsNode;
     }
 
-    public ConcurrentHashMap<String, EditorLayersGroupObject> getLayerGroupsList() {
+    public ConcurrentHashMap<String, EditorLayersGroupObject> getLayersGroupsList() {
         return layersGroupsList;
     }
 
@@ -98,12 +98,60 @@ public class EditorSceneObject {
         return sceneName;
     }
 
-    public void clearScene() {
+    public void setSceneName(String sceneName) {
+        this.sceneName = sceneName;
+        sceneNode.setName(this.sceneName);
+    }
+
+    public void renameScene(String newName) {
+        setSceneName(newName);
+        for (EditorLayersGroupObject layersGroupToChange : layersGroupsList.values()) {
+            layersGroupToChange.getLayersGroupNode().setUserData("SceneName", newName);
+
+            for (Node layerToChange : activelayerGroup.getLayers()) {
+                layerToChange.setUserData("SceneName", newName);
+            }
+        }
+    }
+
+    public void clearScene(EditorSceneManager sceneManager) {
         for (EditorLayersGroupObject layersGroup : layersGroupsList.values()) {
-            layersGroup.clearLayersGroup();
+            layersGroup.clearLayersGroup(sceneManager);
         }
         layersGroupsList.clear();
         sceneNode.detachAllChildren();
         activelayerGroup = null;
     }
+
+    public EditorLayersGroupObject cloneLayersGroup(String newLayersGroupName, EditorLayersGroupObject layersGroupToClone, EditorSceneManager sceneManager) {
+            createLayersGroup(newLayersGroupName);
+            EditorLayersGroupObject newActiveLayersGroup = getActivelayersGroup();
+            newActiveLayersGroup.setLayersGroupEnabled((Boolean) layersGroupToClone.getLayersGroupNode().getUserData("isEnabled"));
+
+            // parse Layers
+            for (Node layerNodeToClone : layersGroupToClone.getLayers()) {
+                int layerNumb = (Integer) layerNodeToClone.getUserData("LayerNumber");
+
+                Node newLayer = newActiveLayersGroup.getLayer(layerNumb);
+                newLayer.setUserData("isLocked", (Boolean) layerNodeToClone.getUserData("isLocked"));
+                boolean isClonedLayerEnabled = (Boolean) layerNodeToClone.getUserData("isEnabled");
+                if (isClonedLayerEnabled) {
+                    newActiveLayersGroup.enableLayer(layerNumb);
+                }
+
+
+                // parse the layer's children
+                for (Spatial childSp : layerNodeToClone.getChildren()) {
+
+                    long idToClone = (Long) childSp.getUserData("EntityID");
+                    sceneManager.cloneEntity(idToClone, newLayer);
+
+                }
+            }
+        
+        return newActiveLayersGroup;
+        
+    }
+    
+
 }

@@ -92,14 +92,14 @@ public class EditorSelectionTools {
         ray.setOrigin(pos);
         ray.setDirection(dir);
 
-        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveScene().getSceneNode().getUserData("isEnabled");
-        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
+        boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getSceneNode().getUserData("isEnabled");
+        boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
         // if scene and layersGroup are enabled
         if (isLayersGoupEnabled && isSceneEnabled) {
             
             // Collide with activeLayersGroup
-            base.getSceneManager().getActiveScene().getActivelayersGroup().getLayersGroupNode().collideWith(ray, results);
+            base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode().collideWith(ray, results);
 
             if (results.size() > 0) {
 

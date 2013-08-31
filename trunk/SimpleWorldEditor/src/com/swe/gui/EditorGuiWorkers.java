@@ -5,6 +5,7 @@
 package com.swe.gui;
 
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.swe.EditorBaseManager;
 import com.swe.scene.EditorLayersGroupObject;
 import com.swe.scene.EditorSceneObject;
@@ -21,75 +22,74 @@ import java.util.List;
  *
  * @author mifth
  */
-public class EditorGuiWorkers {
+public class EditorGuiWorkers extends EditorGuiAbstractChild {
 
-    private EditorBaseManager base;
-    private Screen screen;
-    private EditorGuiManager guiManager;
-    private ListBox entitiesListBox, sceneObjectsListBox, componentsListBox, assetsListBox, scenesListbox, layersGroupsListbox;
-    
     public EditorGuiWorkers(EditorBaseManager base) {
-        this.base = base;
-        guiManager = base.getGuiManager();
-        screen = guiManager.getScreen();
-        entitiesListBox = guiManager.getListBoxesList().get("entitiesListBox");
-        sceneObjectsListBox = guiManager.getListBoxesList().get("sceneObjectsListBox");
-        componentsListBox = guiManager.getListBoxesList().get("componentsListBox");
-        assetsListBox = guiManager.getListBoxesList().get("assetsListBox");
-        scenesListbox = guiManager.getListBoxesList().get("scenesListbox");
-        layersGroupsListbox = guiManager.getListBoxesList().get("layersGroupsListBox");
+        super(base);
     }
-    
-    
-    
-    
-    protected void updateSceneGUI() {
+
+    protected void updateSceneGUI(boolean updateScenesListbox, boolean updateLayersGroupsListbox) {
+        EditorSceneObject activeScene = base.getSceneManager().getActiveSceneObject();
+        EditorLayersGroupObject activeLayersGroup = base.getSceneManager().getActiveSceneObject().getActivelayersGroup();
 
         // savePreviewj3o checkbox
         CheckBox cbPreview = screen.findNiftyControl("savePreviewJ3O", CheckBox.class);
         updateCheckbox(base.getSceneManager().getSavePreviewJ3o(), "savePreviewJ3O");
 
         // set Scenes ListBox
-        scenesListbox.clear();
-        EditorSceneObject activeScene = base.getSceneManager().getActiveScene();
-        String activeSceneName = activeScene.getSceneName();
-        for (String sceneName : base.getSceneManager().getScenesList().keySet()) {
-            scenesListbox.addItem(sceneName);
-            if (sceneName.equals(activeSceneName)) {
-                scenesListbox.selectItem(sceneName);
+        if (updateScenesListbox) {
+            scenesListbox.clear();
+            String activeSceneName = activeScene.getSceneName();
+            for (String sceneName : base.getSceneManager().getScenesList().keySet()) {
+                scenesListbox.addItem(sceneName);
+                if (sceneName.equals(activeSceneName)) {
+                    scenesListbox.selectItem(sceneName);
+                }
             }
+            scenesListbox.sortAllItems();
+            scenesListbox.refresh();
         }
-        scenesListbox.sortAllItems();
-        scenesListbox.refresh();
 
         // set checkbox isEnabled scene
         boolean isSceneEnabled = (Boolean) activeScene.getSceneNode().getUserData("isEnabled");
         updateCheckbox(isSceneEnabled, "isSceneEnabled");
 
         // set LayersGroups ListBox
-        layersGroupsListbox.clear();
-        EditorLayersGroupObject activeLayersGroup = base.getSceneManager().getActiveScene().getActivelayersGroup();
-        String activeLayerGroupName = activeLayersGroup.getLayersGroupName();
-        for (String layerGroupName : base.getSceneManager().getActiveScene().getLayerGroupsList().keySet()) {
-            layersGroupsListbox.addItem(layerGroupName);
-            if (layerGroupName.equals(activeLayerGroupName)) {
-                layersGroupsListbox.selectItem(layerGroupName);
+        if (updateLayersGroupsListbox) {
+            layersGroupsListbox.clear();
+            String activeLayerGroupName = activeLayersGroup.getLayersGroupName();
+            for (String layerGroupName : base.getSceneManager().getActiveSceneObject().getLayersGroupsList().keySet()) {
+                layersGroupsListbox.addItem(layerGroupName);
+                if (layerGroupName.equals(activeLayerGroupName)) {
+                    layersGroupsListbox.selectItem(layerGroupName);
+                }
             }
+            layersGroupsListbox.sortAllItems();
+            layersGroupsListbox.refresh();
         }
-        layersGroupsListbox.sortAllItems();
-        layersGroupsListbox.refresh();
 
         // set checkbox LayersGroup 
         boolean isLayersGroupEnabled = (Boolean) activeLayersGroup.getLayersGroupNode().getUserData("isEnabled");
         updateCheckbox(isLayersGroupEnabled, "isLayersGroupEnabled");
 
         updateLayersGUI();
+
+        // update list of layers group
+        layersGroupsObjectsListBox.clear();
+        for (Node layers : base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayers()) {
+            for (Spatial sp : layers.getChildren()) {
+                layersGroupsObjectsListBox.addItem(sp.getName());
+            }
+        }
+        layersGroupsObjectsListBox.sortAllItems();
+        layersGroupsObjectsListBox.refresh();
+
     }
 
     protected void updateLayersGUI() {
         // set checkboxes for layers
         for (int i = 0; i < 20; i++) {
-            Node layer = base.getSceneManager().getActiveScene().getActivelayersGroup().getLayer(i + 1);
+            Node layer = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayer(i + 1);
 
             // LAYERS VISIBILITY
             CheckBox cbVisible = screen.findNiftyControl("layerVisibility" + (i + 1), CheckBox.class);
@@ -123,10 +123,10 @@ public class EditorGuiWorkers {
         }
 
         // SET THE LAYER ACTIVE (Red color)
-        Node activeLayer = base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer();
+        Node activeLayer = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer();
         if (activeLayer != null) {
             screen.getFocusHandler().resetFocusElements();
-            int activeLayerNumb = (Integer) base.getSceneManager().getActiveScene().getActivelayersGroup().getActiveLayer().getUserData("LayerNumber");
+            int activeLayerNumb = (Integer) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer().getUserData("LayerNumber");
             Element selectImage = screen.findElementByName("layerVisibility" + activeLayerNumb);
             selectImage.startEffect(EffectEventId.onFocus);
         }
@@ -148,7 +148,7 @@ public class EditorGuiWorkers {
         scenesListbox.clear();
         layersGroupsListbox.clear();
         entitiesListBox.clear();
-        sceneObjectsListBox.clear();
+        layersGroupsObjectsListBox.clear();
         componentsListBox.clear();
 
         // clear layers
@@ -173,8 +173,7 @@ public class EditorGuiWorkers {
 
         screen.getFocusHandler().resetFocusElements();
     }
-    
-    
+
     // This function is for removing of entities from the selectionList
     // if scene settings were changed
     protected void checkSelectionList() {
@@ -186,19 +185,19 @@ public class EditorGuiWorkers {
             String isActiveSceneOfEntity = (String) selectedModel.getParent().getUserData("SceneName");
             String isActiveLayersGroupOfEntity = (String) selectedModel.getParent().getUserData("LayersGroupName");
             // if entity is on active scene and layersGroup - check entity's layer
-            EditorLayersGroupObject activeLayerGroup = base.getSceneManager().getActiveScene().getActivelayersGroup();
-            EditorSceneObject activeScene = base.getSceneManager().getActiveScene();
+            EditorLayersGroupObject activeLayerGroup = base.getSceneManager().getActiveSceneObject().getActivelayersGroup();
+            EditorSceneObject activeScene = base.getSceneManager().getActiveSceneObject();
 
             if (activeScene.getSceneName().equals(isActiveSceneOfEntity)
                     && activeLayerGroup.getLayersGroupName().equals(isActiveLayersGroupOfEntity)) {
 
                 boolean isActiveSceneEnabled = (Boolean) activeScene.getSceneNode().getUserData("isEnabled");
-                boolean isActiveLayersGroupEnabled = (Boolean) activeScene.getSceneNode().getUserData("isEnabled");
+                boolean isActiveLayersGroupEnabled = (Boolean) activeLayerGroup.getLayersGroupNode().getUserData("isEnabled");
                 boolean isLayerOfEntityLocked = (Boolean) selectedModel.getParent().getUserData("isLocked");
                 boolean isLayerOfEntityEnabled = (Boolean) selectedModel.getParent().getUserData("isEnabled");
 
                 // remove entity from selection if scene or LayersGroup disabled and if layer is disabled or locked
-                if (!isActiveSceneEnabled || isActiveLayersGroupEnabled
+                if (!isActiveSceneEnabled || !isActiveLayersGroupEnabled
                         || isLayerOfEntityLocked || !isLayerOfEntityEnabled) {
                     tempSelList.add(id);
                 }
@@ -218,7 +217,7 @@ public class EditorGuiWorkers {
         tempSelList.clear();
         tempSelList = null;
     }
-    
+
     protected void updateCheckBoxes(Element mainElement) {
         for (Element childElement : mainElement.getElements()) {
 
@@ -239,5 +238,4 @@ public class EditorGuiWorkers {
             }
         }
     }
-    
 }
