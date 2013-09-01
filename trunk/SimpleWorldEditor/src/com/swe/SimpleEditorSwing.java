@@ -183,8 +183,9 @@ public class SimpleEditorSwing {
         settings.setHeight(scrnsize.height - 400);
 
         try{
-            Class<? extends Application> clazz = (Class<? extends Application>) Class.forName(appClass);
-            app = clazz.newInstance();
+            Class<?> clazz = (Class<?>) Class.forName(appClass);
+            SimpleEditor simpleEditor = (SimpleEditor) clazz.newInstance();
+            app = EditorBaseManager.getInstance();
         }catch (ClassNotFoundException ex){
             ex.printStackTrace();
         }catch (InstantiationException ex){

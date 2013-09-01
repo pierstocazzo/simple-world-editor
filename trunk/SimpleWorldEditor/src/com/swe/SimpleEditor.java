@@ -7,10 +7,10 @@ import com.jme3.system.AppSettings;
 
 
 
-public class SimpleEditor extends SimpleApplication{
+public class SimpleEditor {
 
     public static void main(String[] args) {
-        SimpleEditor app = new SimpleEditor();
+        EditorBaseManager app = EditorBaseManager.getInstance();
         AppSettings aps = new AppSettings(true);
         aps.setVSync(true);
 //        aps.setFrameRate(80);
@@ -18,31 +18,6 @@ public class SimpleEditor extends SimpleApplication{
         app.setSettings(aps);
         app.setShowSettings(false);
         app.start();
-    }
-
-              
-    
-
-    @Override
-    public void simpleInitApp() {
-
-//        this.setShowSettings(false);
-        this.setDisplayStatView(false);
-        EditorBaseManager baseParts = new EditorBaseManager(this);        
         
     }
-
-    
-
-    
-    @Override
-    public void simpleUpdate(float tpf) {
-       
-        
-    }    
-    
-    
-    
-
-
 }

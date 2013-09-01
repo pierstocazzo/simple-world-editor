@@ -17,6 +17,7 @@ import com.swe.entitysystem.EntityManager;
 import com.swe.entitysystem.EntitySpatialsSystem;
 import com.jme3.app.Application;
 import com.jme3.app.FlyCamAppState;
+import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.FlyByCamera;
 import com.jme3.renderer.Camera;
@@ -28,7 +29,7 @@ import com.swe.events.EditorEventManager;
  *
  * @author mifth
  */
-public class EditorBaseManager {
+public class EditorBaseManager extends SimpleApplication{
 
     private Application app;
     private AssetManager assetManager;
@@ -56,13 +57,34 @@ public class EditorBaseManager {
 
     // Version of the Editor
     private static String editorVersion;
+    
+   
+    // singleton things
+    private static class EditorBaseManagerHolder {
+        private static final EditorBaseManager INSTANCE = new EditorBaseManager();
+    }
 
-    public EditorBaseManager(Application app) {
+    // Use this class to load the singleton
+    public static EditorBaseManager getInstance() {
+        return EditorBaseManager.EditorBaseManagerHolder.INSTANCE;
+    }
+    
+    // singleton things
+    private EditorBaseManager() {
+      
+    }
+    
+    
+    // SimpleAPP
+    @Override
+    public void simpleInitApp() {
 
-        this.app = app;
-        sceneCamera = this.app.getCamera();
-        viewPort = this.app.getViewPort();
-        assetManager = this.app.getAssetManager();
+        this.app = (SimpleApplication) this;
+
+        this.setDisplayStatView(false);
+        sceneCamera = this.getCamera();
+        viewPort = this.getViewPort();
+        assetManager = this.getAssetManager();
         
         editorVersion = EditorVersion.editorVersion;
 
@@ -93,10 +115,17 @@ public class EditorBaseManager {
 //        setSomeEntities();
 
         gui = new EditorGuiManager(this);
-        this.app.getStateManager().attach(gui);        
+        this.app.getStateManager().attach(gui);      
         
     }
+    
+    @Override
+    public void simpleUpdate(float tpf) {
+      
+    }  
 
+   
+    // BASE METHODS
     private void setGlobalNodes() {
 
         rootNode = (Node) app.getViewPort().getScenes().get(0);
