@@ -17,7 +17,6 @@ import com.swe.entitysystem.EntityManager;
 import com.swe.entitysystem.EntitySpatialsSystem;
 import com.jme3.app.Application;
 import com.jme3.app.FlyCamAppState;
-import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.input.FlyByCamera;
 import com.jme3.renderer.Camera;
@@ -29,7 +28,7 @@ import com.swe.events.EditorEventManager;
  *
  * @author mifth
  */
-public class EditorBaseManager extends SimpleApplication{
+public class EditorBaseManager {
 
     private Application app;
     private AssetManager assetManager;
@@ -57,34 +56,13 @@ public class EditorBaseManager extends SimpleApplication{
 
     // Version of the Editor
     private static String editorVersion;
-    
-   
-    // singleton things
-    private static class EditorBaseManagerHolder {
-        private static final EditorBaseManager INSTANCE = new EditorBaseManager();
-    }
 
-    // Use this class to load the singleton
-    public static EditorBaseManager getInstance() {
-        return EditorBaseManager.EditorBaseManagerHolder.INSTANCE;
-    }
-    
-    // singleton things
-    private EditorBaseManager() {
-      
-    }
-    
-    
-    // SimpleAPP
-    @Override
-    public void simpleInitApp() {
+    public EditorBaseManager(Application app) {
 
-        this.app = (SimpleApplication) this;
-
-        this.setDisplayStatView(false);
-        sceneCamera = this.getCamera();
-        viewPort = this.getViewPort();
-        assetManager = this.getAssetManager();
+        this.app = app;
+        sceneCamera = this.app.getCamera();
+        viewPort = this.app.getViewPort();
+        assetManager = this.app.getAssetManager();
         
         editorVersion = EditorVersion.editorVersion;
 
@@ -115,17 +93,10 @@ public class EditorBaseManager extends SimpleApplication{
 //        setSomeEntities();
 
         gui = new EditorGuiManager(this);
-        this.app.getStateManager().attach(gui);      
+        this.app.getStateManager().attach(gui);        
         
     }
-    
-    @Override
-    public void simpleUpdate(float tpf) {
-      
-    }  
 
-   
-    // BASE METHODS
     private void setGlobalNodes() {
 
         rootNode = (Node) app.getViewPort().getScenes().get(0);
