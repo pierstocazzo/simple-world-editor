@@ -56,7 +56,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EditorGuiManager extends AbstractAppState implements ScreenController {
 
     private Screen screen;
-    private static Nifty nifty;
+    private Nifty nifty;
     private SimpleApplication application;
     private Node gridNode, rootNode, guiNode;
     private AssetManager assetManager;
@@ -173,7 +173,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
     }
 
-    public static Nifty getNifty() {
+    public Nifty getNifty() {
         return nifty;
     }
 
