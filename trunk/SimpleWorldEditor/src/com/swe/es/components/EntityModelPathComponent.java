@@ -2,13 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.swe.entitysystem;
+package com.swe.es.components;
+
+import com.swe.es.EntityComponent;
 
 /**
  *
  * @author mifth
  */
-public class EntityModelPathComponent {
+public class EntityModelPathComponent implements EntityComponent{
     
     private String modelPath;    
     

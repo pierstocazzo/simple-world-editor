@@ -1,4 +1,4 @@
-package com.swe.entitysystem;
+package com.swe.es;
 
 
 import com.jme3.app.SimpleApplication;

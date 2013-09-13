@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.swe.entitysystem;
+package com.swe.es;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author mifth
  */
-public final class EntitySpatialsControl {
+public final class EntitySpatialsControl implements EntityComponent{
     
     private Spatial spatial;
     private static List<Geometry> mapChildMeshes = new ArrayList<Geometry>(); //Collection of meshes

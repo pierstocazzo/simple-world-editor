@@ -6,7 +6,7 @@ package com.swe.gui;
 
 import com.swe.transform.EditorTransformConstraint;
 import com.swe.transform.EditorTransformManager;
-import com.swe.entitysystem.EntityNameComponent;
+import com.swe.es.components.EntityNameComponent;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -27,7 +27,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Line;
 import com.swe.EditorBaseManager;
-import com.swe.entitysystem.ComponentsControl;
+import com.swe.es.ComponentsControl;
 import com.swe.scene.EditorLayersGroupObject;
 import com.swe.scene.EditorSceneObject;
 import com.swe.selection.EditorSelectionManager;

@@ -1,6 +1,8 @@
-package com.swe.entitysystem;
+package com.swe.es;
 
 
+import com.swe.es.components.EntityNameComponent;
+import com.swe.es.components.EntityTransformComponent;
 import com.jme3.app.SimpleApplication;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -49,7 +51,7 @@ public class EntityTest extends SimpleApplication {
 
         // setup Entity
         long ent = entityManager.createEntity();                
-        ComponentsControl components = entityManager.addComponentControl(ent);
+        ComponentsControl components = entityManager.getComponentControl(ent);
         
         EntityNameComponent name = new EntityNameComponent("ent" + i);
         components.setComponent(name);
@@ -66,7 +68,7 @@ public class EntityTest extends SimpleApplication {
 //         Update components
 //        components.setUpdateType(ComponentsControl.UpdateType.dynamicServerEntity);
         
-        EntitySpatialsControl spatialControl = spatialSystem.addSpatialControl(selectedSp, ent, entityManager.getComponentControl(ent));
+        EntitySpatialsControl spatialControl = spatialSystem.setSpatialControl(selectedSp, ent, entityManager.getComponentControl(ent));
         spatialControl.setType(EntitySpatialsControl.SpatialType.Node);
         spatialControl.recurseNodeID(selectedSp);
         

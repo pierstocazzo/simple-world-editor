@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.swe.entitysystem;
+package com.swe.es;
 
 import com.jme3.math.Vector3f;
 import java.util.Iterator;

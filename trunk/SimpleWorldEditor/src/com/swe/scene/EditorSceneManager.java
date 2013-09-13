@@ -4,10 +4,10 @@
  */
 package com.swe.scene;
 
-import com.swe.entitysystem.ComponentsControl;
-import com.swe.entitysystem.EntityModelPathComponent;
-import com.swe.entitysystem.EntityNameComponent;
-import com.swe.entitysystem.EntitySpatialsControl;
+import com.swe.es.ComponentsControl;
+import com.swe.es.components.EntityModelPathComponent;
+import com.swe.es.components.EntityNameComponent;
+import com.swe.es.EntitySpatialsControl;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.DesktopAssetManager;
@@ -32,6 +32,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -458,7 +459,7 @@ public class EditorSceneManager {
         base.getDataManager().clearEntityData();
 
         // clear entities
-        ConcurrentHashMap<Long, ComponentsControl> allControls = base.getEntityManager().getAllEntities();
+        Map<Long, ComponentsControl> allControls = base.getEntityManager().getAllEntities();
         for (Long ID : allControls.keySet()) {
             base.getEntityManager().removeEntity(ID);
             base.getSpatialSystem().removeSpatialControl(ID);
@@ -634,10 +635,11 @@ public class EditorSceneManager {
             ent = base.getEntityManager().createEntity();
         } else {
             ent = existedID;
+            base.getEntityManager().setComponentControl(ent, null);
         }
 
         base.getDataManager().setEntityData(ent, new ConcurrentHashMap<String, String>());
-        ComponentsControl components = base.getEntityManager().addComponentControl(ent);
+        ComponentsControl components = base.getEntityManager().getComponentControl(ent);
 
         EntityModelPathComponent modelPath = new EntityModelPathComponent(path);
         components.setComponent(modelPath);
@@ -646,7 +648,7 @@ public class EditorSceneManager {
         components.setComponent(nameComponent);
         model.setName(nameComponent.getName());
 
-        EntitySpatialsControl spatialControl = base.getSpatialSystem().addSpatialControl(model, ent, base.getEntityManager().getComponentControl(ent));
+        EntitySpatialsControl spatialControl = base.getSpatialSystem().setSpatialControl(model, ent, base.getEntityManager().getComponentControl(ent));
         spatialControl.setType(EntitySpatialsControl.SpatialType.Node);
         spatialControl.recurseNodeID(model);
 
