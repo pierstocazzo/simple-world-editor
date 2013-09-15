@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author mifth
  */
-public final class EntitySpatialsSystem implements EntityComponent {
+public final class EntitySpatialsSystem {
 
     private static Map<Long, EntitySpatialsControl> spatialControl;
 

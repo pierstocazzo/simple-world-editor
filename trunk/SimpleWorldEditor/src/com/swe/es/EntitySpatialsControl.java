@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author mifth
  */
-public final class EntitySpatialsControl implements EntityComponent{
+public final class EntitySpatialsControl {
     
     private Spatial spatial;
     private static List<Geometry> mapChildMeshes = new ArrayList<Geometry>(); //Collection of meshes
@@ -103,50 +103,7 @@ public final class EntitySpatialsControl implements EntityComponent{
     public void destroy() {
         mapChildMeshes.clear();
         spatial.removeFromParent();
-//        spatial.removeControl(this);
         spatial = null;
     }
-    
-//    @Override
-//    protected void controlUpdate(float tpf) {
-//
-//        // Update transforms
-//        if (components.getUpdateType() == ComponentsControl.UpdateType.dynamicServerEntity) {
-//            EntityTransformComponent transform = (EntityTransformComponent) components.getComponent(EntityTransformComponent.class);
-//            spatial.setLocalTransform(transform.getTransform());
-//        } else if (components.getUpdateType() == ComponentsControl.UpdateType.dynamicClientEntity) {
-//            EntityTransformComponent transform = (EntityTransformComponent) components.getComponent(EntityTransformComponent.class);
-//            transform.getTransform().set(spatial.getLocalTransform());
-//        }
-//        
-//        if (components.isDoUpdateOnce()) {
-//            components.updateOnce(false, ComponentsControl.UpdateType.staticEntity);
-////            components.setUpdateType(ComponentsControl.UpdateType.staticEntity);
-//        }
-//    }
-//    
-//    @Override
-//    protected void controlRender(RenderManager rm, ViewPort vp) {
-//        
-//    }
-//    
-//    public Control cloneForSpatial(Spatial spatial) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//    
-//    @Override
-//    public void read(JmeImporter im) throws IOException {
-//        super.read(im);
-//        InputCapsule in = im.getCapsule(this);
-//        //TODO: load properties of this Control, e.g.
-//        //this.value = in.readFloat("name", defaultValue);
-//    }
-//    
-//    @Override
-//    public void write(JmeExporter ex) throws IOException {
-//        super.write(ex);
-//        OutputCapsule out = ex.getCapsule(this);
-//        //TODO: save properties of this Control, e.g.
-//        //out.write(this.value, "name", defaultValue);
-//    }    
+   
 }
