@@ -28,9 +28,6 @@ public final class EntitySpatialsControl {
         this.ID = ID;
         this.components = components;
         spatial = sp;
-//        spatial.addControl(this);
-        
-        
     }
     
     public static enum SpatialType {
@@ -81,7 +78,6 @@ public final class EntitySpatialsControl {
             } else if (nd_temp.getChildren().get(i) instanceof Geometry) {
                 Geometry geom = (Geometry) nd_temp.getChildren().get(i);
                 geom.setUserData("EntityID", ID);
-                //System.out.println("omomomomoomomomo GEOMETRY ADDED : "+geom.getName()+" for Entity "+mObjectName);
                 mapChildMeshes.add(geom);
             }
         }
