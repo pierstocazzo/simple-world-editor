@@ -15,28 +15,35 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class EntitySpatialsSystem {
 
-    private static Map<Long, EntitySpatialsControl> spatialControl;
+    private static Map<Long, EntitySpatialsControl> spatialsControls;
 
     public EntitySpatialsSystem() {
-        spatialControl = new ConcurrentHashMap<Long, EntitySpatialsControl>();
+        spatialsControls = new ConcurrentHashMap<Long, EntitySpatialsControl>();
     }
 
     public EntitySpatialsControl setSpatialControl(Spatial sp, long ID, ComponentsControl control) {
-        if (spatialControl.get(ID) != null) {
+        if (spatialsControls.get(ID) != null) {
             return null;
         }
 
         EntitySpatialsControl spControl = new EntitySpatialsControl(sp, ID, control);
-        spatialControl.put(ID, spControl);
+        spatialsControls.put(ID, spControl);
         return spControl;
     }
 
     public EntitySpatialsControl getSpatialControl(long ID) {
-        return spatialControl.get(ID);
+        return spatialsControls.get(ID);
     }
 
     public void removeSpatialControl(long ID) {
-        spatialControl.get(ID).destroy();
-        spatialControl.remove(ID);
+        spatialsControls.get(ID).destroy();
+        spatialsControls.remove(ID);
+    }
+    
+    public void clearSpatialsSystem(){
+        for (Long entId : spatialsControls.keySet()){
+            spatialsControls.get(entId).destroy();
+        }
+        spatialsControls.clear();
     }
 }
