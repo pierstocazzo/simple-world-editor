@@ -15,40 +15,41 @@ import java.util.List;
  * @author mifth
  */
 public final class EntitySpatialsControl {
-    
+
     private Spatial spatial;
     private static List<Geometry> mapChildMeshes = new ArrayList<Geometry>(); //Collection of meshes
     private SpatialType type;
 //    private static EntityManager entManager;
     private long ID;
     private ComponentsControl components;
-    
+
     public EntitySpatialsControl(Spatial sp, long ID, ComponentsControl components) {
-        
+
         this.ID = ID;
         this.components = components;
         spatial = sp;
     }
-    
+
     public enum SpatialType {
+
         Node,
         LightNode,
         BatchNode,
         CameraNode
-    }    
-    
+    }
+
     public void setType(SpatialType type) {
         this.type = type;
     }
-    
+
     public SpatialType getType() {
         return type;
     }
-    
+
     public Spatial setGeneralNode(Spatial sp) {
         return spatial = sp;
     }
-    
+
     public Spatial getGeneralNode() {
         return spatial;
     }
@@ -69,7 +70,7 @@ public final class EntitySpatialsControl {
             }
         }
     }
-    
+
     public Geometry getChildMesh(String name) {
         for (Geometry mc : mapChildMeshes) {
             if (name.equals(mc.getName())) {
@@ -78,15 +79,21 @@ public final class EntitySpatialsControl {
         }
         return null;
     }
-    
+
     public List<Geometry> getChildMeshes() {
         return mapChildMeshes;
     }
-    
+
     public void destroy() {
+        // CHILDREN CLEAN
         mapChildMeshes.clear();
+
+        // remove all controls
+        for (int i = 0; i < spatial.getNumControls(); i++) {
+            spatial.removeControl(spatial.getControl(i));
+        }
+
         spatial.removeFromParent();
         spatial = null;
     }
-   
 }
