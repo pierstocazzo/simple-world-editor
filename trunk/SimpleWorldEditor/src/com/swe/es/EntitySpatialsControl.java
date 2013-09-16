@@ -30,13 +30,11 @@ public final class EntitySpatialsControl {
         spatial = sp;
     }
     
-    public static enum SpatialType {
-
+    public enum SpatialType {
         Node,
         LightNode,
         BatchNode,
-        CameraNode,
-        GuiNode
+        CameraNode
     }    
     
     public void setType(SpatialType type) {
@@ -56,17 +54,16 @@ public final class EntitySpatialsControl {
     }
 
     //Read the node child to find geomtry and stored it to the map for later access as submesh
-    public void recurseNodeID(Node generalNodde) {
-        Node nd_temp = (Node) generalNodde;
-        nd_temp.setUserData("EntityID", ID);
-        
-        for (int i = 0; i < nd_temp.getChildren().size(); i++) {
-            
-            if (nd_temp.getChildren().get(i) instanceof Node) {
-                nd_temp.getChildren().get(i).setUserData("EntityID", ID);
-                recurseNodeID((Node)nd_temp.getChildren().get(i));
-            } else if (nd_temp.getChildren().get(i) instanceof Geometry) {
-                Geometry geom = (Geometry) nd_temp.getChildren().get(i);
+    public void recurseNodeID(Node generalNode) {
+        generalNode.setUserData("EntityID", ID);
+
+        for (Spatial sp : generalNode.getChildren()) {
+
+            if (sp instanceof Node) {
+                sp.setUserData("EntityID", ID);
+                recurseNodeID((Node) sp);
+            } else if (sp instanceof Geometry) {
+                Geometry geom = (Geometry) sp;
                 geom.setUserData("EntityID", ID);
                 mapChildMeshes.add(geom);
             }
