@@ -40,17 +40,7 @@ public final class EntitySpatialsControl {
     }    
     
     public void setType(SpatialType type) {
-        if (type.equals(SpatialType.Node)) {
-            type = SpatialType.Node;
-        } else if (type.equals(SpatialType.BatchNode)) {
-            type = SpatialType.BatchNode;
-        } else if (type.equals(SpatialType.CameraNode)) {
-            type = SpatialType.CameraNode;
-        } else if (type.equals(SpatialType.GuiNode)) {
-            type = SpatialType.GuiNode;
-        } else if (type.equals(SpatialType.LightNode)) {
-            type = SpatialType.LightNode;
-        }
+        this.type = type;
     }
     
     public SpatialType getType() {
