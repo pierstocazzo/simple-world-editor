@@ -70,7 +70,7 @@ public class EntityTest extends SimpleApplication {
         
         EntitySpatialsControl spatialControl = spatialSystem.setSpatialControl(selectedSp, ent, entityManager.getComponentControl(ent));
         spatialControl.setType(EntitySpatialsControl.SpatialType.Node);
-        spatialControl.recurseNodeID(selectedSp);
+//        spatialControl.recurseNodeID(selectedSp);
         
         System.out.println(selectedSp.getUserData("EntityID"));
     }

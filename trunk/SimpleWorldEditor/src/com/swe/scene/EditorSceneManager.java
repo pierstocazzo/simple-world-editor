@@ -650,7 +650,7 @@ public class EditorSceneManager {
 
         EntitySpatialsControl spatialControl = base.getSpatialSystem().setSpatialControl(model, ent, base.getEntityManager().getComponentControl(ent));
         spatialControl.setType(EntitySpatialsControl.SpatialType.Node);
-        spatialControl.recurseNodeID(model);
+//        spatialControl.recurseNodeID(model);
 
         return ent;
     }
