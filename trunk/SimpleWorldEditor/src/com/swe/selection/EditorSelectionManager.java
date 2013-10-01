@@ -150,15 +150,10 @@ public class EditorSelectionManager extends AbstractControl {
 
         // Remove old selection
         if (selectionMode == SelectionMode.Normal) {
-            // remove selection boxes
-            for (Long idToRemove : selectionList) {
-                removeSelectionBox((Node) base.getSpatialSystem().getSpatialControl(idToRemove).getGeneralNode());
-            }
-
-            selectionList.clear();  // clear selectionList
+            clearSelectionList();
         }
-        
-        
+
+
         EditorLayersGroupObject activelayersGroup = base.getSceneManager().getActiveSceneObject().getActivelayersGroup();
         boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getSceneNode().getUserData("isEnabled");
         boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
