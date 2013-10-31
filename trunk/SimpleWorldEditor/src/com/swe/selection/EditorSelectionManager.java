@@ -214,11 +214,13 @@ public class EditorSelectionManager extends AbstractControl {
         Transform tempScale = nodeSelect.getLocalTransform().clone();
         nodeSelect.setLocalTransform(new Transform());
         wbx.fromBoundingBox((BoundingBox) nodeSelect.getWorldBound());
-        nodeSelect.setLocalTransform(tempScale);
 
         Geometry bx = new Geometry("SelectionTempMesh", wbx);
         bx.setMaterial(mat_box);
+        bx.setLocalTranslation(nodeSelect.getWorldBound().getCenter());
         nodeSelect.attachChild(bx);
+        
+        nodeSelect.setLocalTransform(tempScale);
 
     }
 
