@@ -2,6 +2,8 @@ package com.swe.scene;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.swe.es.EntityManager;
+import com.swe.es.EntitySpatialsSystem;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -51,11 +53,12 @@ public class EditorSceneObject {
         }
     }
 
-    public void createLayersGroup(String layersGroupName) {
+    public EditorLayersGroupObject createLayersGroup(String layersGroupName) {
         // First Layer Group
         EditorLayersGroupObject layersGroup = new EditorLayersGroupObject(allGroupsNode, layersGroupName, sceneName);
         layersGroupsList.put(layersGroupName, layersGroup);
-        setActivelayersGroup(layersGroup);
+        
+        return layersGroup;
     }
 
     public void removeLayersGroup(String layersGroupName, EditorSceneManager sceneManager) {
@@ -124,8 +127,9 @@ public class EditorSceneObject {
     }
 
     public EditorLayersGroupObject cloneLayersGroup(String newLayersGroupName, EditorLayersGroupObject layersGroupToClone, EditorSceneManager sceneManager) {
-            createLayersGroup(newLayersGroupName);
-            EditorLayersGroupObject newActiveLayersGroup = getActivelayersGroup();
+            
+            EditorLayersGroupObject newActiveLayersGroup = createLayersGroup(newLayersGroupName);
+
             newActiveLayersGroup.setLayersGroupEnabled((Boolean) layersGroupToClone.getLayersGroupNode().getUserData("isEnabled"));
 
             // parse Layers
@@ -144,8 +148,7 @@ public class EditorSceneObject {
                 for (Spatial childSp : layerNodeToClone.getChildren()) {
 
                     long idToClone = (Long) childSp.getUserData("EntityID");
-                    sceneManager.cloneEntity(idToClone, newLayer);
-
+                    long clonedID = sceneManager.cloneEntity(idToClone, newLayer);
                 }
             }
         

@@ -345,11 +345,12 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void newSceneButton() {
         if (!base.getEventManager().isActive()) {
             base.getSceneManager().newScene();
-
             // create new scene
-            base.getSceneManager().createSceneObject("Scene1");
-            base.getSceneManager().getScenesList().get("Scene1").createLayersGroup("LayersGroup1");
-            base.getSceneManager().getActiveSceneObject().getActivelayersGroup().enableLayer(1);
+            EditorSceneObject newScene = base.getSceneManager().createSceneObject("Scene1");
+            base.getSceneManager().setActiveSceneObject(newScene);
+            EditorLayersGroupObject newLayersGroup = newScene.createLayersGroup("LayersGroup1");
+            newScene.setActivelayersGroup(newLayersGroup);
+            newLayersGroup.enableLayer(1);
 
             workers.clearGui();
             workers.updateSceneGUI(true, true);
@@ -814,32 +815,40 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
                 } else if (label.getText().equals("Add Scene")
                         && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
-                    base.getSceneManager().createSceneObject(text.getDisplayedText());
-                    base.getSceneManager().getActiveSceneObject().createLayersGroup("LayersGroup1");
-                    base.getSceneManager().getActiveSceneObject().getActivelayersGroup().enableLayer(1);
+                    EditorSceneObject newAddedScene = base.getSceneManager().createSceneObject(text.getDisplayedText());
+                    base.getSceneManager().setActiveSceneObject(newAddedScene);
+                    EditorLayersGroupObject newAddedLayersGroup = newAddedScene.createLayersGroup("LayersGroup1");
+                    newAddedScene.setActivelayersGroup(newAddedLayersGroup);
+                    newAddedLayersGroup.enableLayer(1);
                 } else if (label.getText().equals("Clone Scene")
                         && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
-
                     // CLONE SCENE
-                    base.getSceneManager().cloneSceneObject(text.getDisplayedText(), base.getSceneManager().getActiveSceneObject());
+                    EditorSceneObject clonedScene = base.getSceneManager().cloneSceneObject(text.getDisplayedText(), base.getSceneManager().getActiveSceneObject());
+                    base.getSceneManager().setActiveSceneObject(clonedScene);
 
                     base.getSelectionManager().clearSelectionList();
                     base.getSelectionManager().calculateSelectionCenter();
                 } // LAYERSGROUP
                 else if (label.getText().equals("Edit LayersGroup")
-                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+                        && base.getSceneManager().getActiveSceneObject() != null
+                        && base.getSceneManager().getActiveSceneObject().getLayersGroupsList().get(text.getDisplayedText()) == null) {
                     base.getSceneManager().getActiveSceneObject().getLayersGroupsList().remove(base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupName()); // remove scene from the list
                     base.getSceneManager().getActiveSceneObject().getActivelayersGroup().renameLayersGroup(text.getDisplayedText()); // rename the scene
                     base.getSceneManager().getActiveSceneObject().getLayersGroupsList().put(base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupName(), base.getSceneManager().getActiveSceneObject().getActivelayersGroup()); // ad the scene but with a ne name                    
                 } else if (label.getText().equals("Add LayersGroup")
-                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
-                    base.getSceneManager().getActiveSceneObject().createLayersGroup(text.getDisplayedText());
-                    base.getSceneManager().getActiveSceneObject().getActivelayersGroup().enableLayer(1);
+                        && base.getSceneManager().getActiveSceneObject() != null
+                        && base.getSceneManager().getActiveSceneObject().getLayersGroupsList().get(text.getDisplayedText()) == null) {
+                    EditorSceneObject activeScene = base.getSceneManager().getActiveSceneObject();
+                    EditorLayersGroupObject newLayerGroupToAdd = activeScene.createLayersGroup(text.getDisplayedText());
+                    activeScene.setActivelayersGroup(newLayerGroupToAdd);
+                    newLayerGroupToAdd.enableLayer(1);
 
                 } else if (label.getText().equals("Clone LayersGroup")
-                        && base.getSceneManager().getScenesList().get(text.getDisplayedText()) == null) {
+                        && base.getSceneManager().getActiveSceneObject() != null
+                        && base.getSceneManager().getActiveSceneObject().getLayersGroupsList().get(text.getDisplayedText()) == null) {
                     // CLONE SCENE
-                    base.getSceneManager().getActiveSceneObject().cloneLayersGroup(text.getDisplayedText(), base.getSceneManager().getActiveSceneObject().getActivelayersGroup(), base.getSceneManager());
+                    EditorLayersGroupObject clonedLayerGroup = base.getSceneManager().getActiveSceneObject().cloneLayersGroup(text.getDisplayedText(), base.getSceneManager().getActiveSceneObject().getActivelayersGroup(), base.getSceneManager());
+                    base.getSceneManager().getActiveSceneObject().setActivelayersGroup(clonedLayerGroup);
 
                     base.getSelectionManager().clearSelectionList();
                     base.getSelectionManager().calculateSelectionCenter();

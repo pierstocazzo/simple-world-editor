@@ -91,13 +91,17 @@ public class EditorSceneManager {
         app.getViewPort().setBackgroundColor(ColorRGBA.DarkGray);
 
         savePreviewJ3o = false;
-
+        
         // create new scene
-        createSceneObject("Scene1");
-        scenesList.get("Scene1").createLayersGroup("LayersGroup1");
-        createSceneObject("Scene2");
-        scenesList.get("Scene2").createLayersGroup("LayersGroup1");
-        scenesList.get("Scene2").createLayersGroup("LayersGroup2");
+        EditorSceneObject scene1 = createSceneObject("Scene1");
+        scene1.createLayersGroup("LayersGroup1");
+        scene1.setActivelayersGroup(scene1.getLayersGroupsList().get("LayersGroup1"));
+        
+        EditorSceneObject scene2 = createSceneObject("Scene2");
+        setActiveSceneObject(scene2);
+        scene2.createLayersGroup("LayersGroup1");
+        scene2.createLayersGroup("LayersGroup2");
+        scene2.setActivelayersGroup(scene2.getLayersGroupsList().get("LayersGroup1"));
         getActiveSceneObject().getActivelayersGroup().enableLayer(1); // set 1 layer enabled
 
     }
@@ -865,11 +869,13 @@ public class EditorSceneManager {
         return scenesList;
     }
     
-    public void createSceneObject(String sceneName) {
+    public EditorSceneObject createSceneObject(String sceneName) {
         EditorSceneObject newScene = new EditorSceneObject(root, sceneName);
         newScene.setSceneEnabled(true);
-        setActiveSceneObject(newScene);
+//        setActiveSceneObject(newScene);
         scenesList.put(sceneName, newScene);
+        
+        return newScene;
     }
     
     public EditorSceneObject getActiveSceneObject() {
@@ -891,10 +897,8 @@ public class EditorSceneManager {
     }
     
     public EditorSceneObject cloneSceneObject(String newName, EditorSceneObject sceneToClone) {
-
         // CLONE SCENE
-        createSceneObject(newName);
-        EditorSceneObject newActiveClonedScene = getActiveSceneObject();
+        EditorSceneObject newActiveClonedScene = createSceneObject(newName);
         newActiveClonedScene.setSceneEnabled((Boolean) sceneToClone.getSceneNode().getUserData("isEnabled"));
 
         // parse LayersGroups
