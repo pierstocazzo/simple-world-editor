@@ -5,6 +5,7 @@
 package com.swe.selection;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.material.Material;
@@ -29,7 +30,7 @@ import java.util.List;
  *
  * @author mifth
  */
-public class EditorSelectionManager extends AbstractControl {
+public class EditorSelectionManager extends AbstractAppState {
 
     private AssetManager assetMan;
     private Node root, guiNode;
@@ -315,14 +316,11 @@ public class EditorSelectionManager extends AbstractControl {
     }
 
     @Override
-    protected void controlUpdate(float tpf) {
+    public void update(float tpf) {
 
         if (isActive) {
             selectionTools.drawRectangle();
         }
     }
 
-    @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
-    }
 }

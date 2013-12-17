@@ -5,6 +5,7 @@
 package com.swe.transform;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
@@ -32,7 +33,7 @@ import java.util.List;
  *
  * @author mifth
  */
-public class EditorTransformManager extends AbstractControl {
+public class EditorTransformManager extends AbstractAppState {
 
     private Node transformTool;
     private Node moveTool, rotateTool, scaleTool, collisionPlane;
@@ -424,7 +425,7 @@ public class EditorTransformManager extends AbstractControl {
 //    }
 
     @Override
-    protected void controlUpdate(float tpf) {
+    public void update(float tpf) {
 
         // Transform Selected Objects!
         if (pickedAxis != PickedAxis.scaleAll && isActive && selectionTransformCenter != null) {
@@ -471,13 +472,5 @@ public class EditorTransformManager extends AbstractControl {
         } else if (base.getSelectionManager().getSelectionList().size() == 0) {
             transformTool.detachAllChildren();
         }
-    }
-
-    @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
-    }
-
-    public Control cloneForSpatial(Spatial spatial) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -83,9 +83,9 @@ public class EditorBaseManager {
         historyManager = new EditorHistoryManager(this.app, this);
         dataManager = new EditorDataManager();
         selectionManager = new EditorSelectionManager(this.app, this);
-        tempNode.addControl(selectionManager);
+        this.app.getStateManager().attach(selectionManager);
         transformManager = new EditorTransformManager(this.app, this);
-        tempNode.addControl(transformManager);   
+        this.app.getStateManager().attach(transformManager);   
         spatialSystem = new EntitySpatialsSystem();
         entityManager = new EntityManager();
         sceneManager = new EditorSceneManager(this.app, this);
