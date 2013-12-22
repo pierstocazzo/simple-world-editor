@@ -77,8 +77,8 @@ public class EditorBaseManager {
         mappings = new EditorMappings(this.app, this);
 
 
-        Node tempNode = new Node();
-        rootNode.attachChild(tempNode);
+//        Node tempNode = new Node();
+//        rootNode.attachChild(tempNode);
         // setup global tools
         eventManager = new EditorEventManager();
         historyManager = new EditorHistoryManager(this.app, this);
