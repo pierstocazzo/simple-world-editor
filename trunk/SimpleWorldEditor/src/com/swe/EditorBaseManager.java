@@ -73,6 +73,7 @@ public class EditorBaseManager {
         
         camManager = new EditorCameraManager(this.app, this);        
         camManager.setCamTracker();
+//        app.getStateManager().attach(camManager);
         mappings = new EditorMappings(this.app, this);
 
 

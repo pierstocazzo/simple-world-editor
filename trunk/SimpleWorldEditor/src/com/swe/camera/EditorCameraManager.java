@@ -5,6 +5,8 @@
 package com.swe.camera;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.input.ChaseCamera;
@@ -35,16 +37,19 @@ public class EditorCameraManager {
     private Camera cam;
     private Node camTrackHelper;
     private InputManager imputMan;
-    private EditorChaseCamera chaseCam;
+    private SimpleChaseCamera chaseCam;
     private Application app;
     private EditorBaseManager base;
     private float camMoveSpeed;
     private AssetManager assetManager;
+    private boolean doMoveCamera;
 
     public EditorCameraManager(Application app, EditorBaseManager base) {
 
         this.app = app;
         this.base = base;
+        
+        doMoveCamera = false;
         cam = this.app.getCamera();
         camTrackHelper = (Node) this.app.getViewPort().getScenes().get(0);
         camTrackHelper = (Node) camTrackHelper.getChild("camTrackHelper");
@@ -62,68 +67,31 @@ public class EditorCameraManager {
 //        setOrtho(true);
 
     }
-
+    
+    
     private void setCameraNow() {
 
         // Enable a chase cam
-        chaseCam = new EditorChaseCamera(cam, camTrackHelper, imputMan);
-        chaseCam.setInvertVerticalAxis(true);
-        chaseCam.setTrailingEnabled(false);
+        chaseCam = new SimpleChaseCamera(app, imputMan);
+        chaseCam.setDoVerticalConstraint(false);
+//        chaseCam.setInvertVerticalAxis(true);
+//        chaseCam.setTrailingEnabled(false);
 
 //        chaseCam.setMinVerticalRotation(-FastMath.PI * 0.499f);
 //        chaseCam.setMaxVerticalRotation(FastMath.PI * 0.499f);
 
         chaseCam.setToggleRotationTrigger(new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
-        chaseCam.setRotationSpeed(2f);
+        chaseCam.setRotateSpeed(2f);
 
-        chaseCam.setMinDistance(0.05f);
-        chaseCam.setMaxDistance(5000);
-        chaseCam.setDefaultDistance(300);
-        setTopView();
+        chaseCam.setZoomMin(0.05f);
+        chaseCam.setZoomMax(5000);
+        chaseCam.setZoom(300);
+        
+        chaseCam.setSpatialToFollow(camTrackHelper);
+//        chaseCam.se
+//        setTopView();
 
 
-    }
-
-    public void setTopView() {
-        chaseCam.setDefaultVerticalRotation(FastMath.PI / 2f);
-        chaseCam.setDefaultHorizontalRotation(FastMath.PI / 2);
-    }
-
-    public void setBottomView() {
-        chaseCam.setDefaultVerticalRotation(-FastMath.PI / 2f);
-        chaseCam.setDefaultHorizontalRotation(FastMath.PI / 2);
-    }
-    
-    public void setFrontView() {
-        chaseCam.setDefaultVerticalRotation(0);
-        chaseCam.setDefaultHorizontalRotation(FastMath.PI / 2);
-    }
-
-    public void setBackView() {
-        chaseCam.setDefaultVerticalRotation(0);
-        chaseCam.setDefaultHorizontalRotation(-FastMath.PI / 2);
-    }
-    
-    public void setLeftView() {
-        chaseCam.setDefaultVerticalRotation(0);
-        chaseCam.setDefaultHorizontalRotation(0);
-    }
-    
-    public void setRightView() {
-        chaseCam.setDefaultVerticalRotation(0);
-        chaseCam.setDefaultHorizontalRotation(FastMath.PI);
-    }
-    
-    public float getCamMoveSpeed() {
-        return camMoveSpeed;
-    }
-
-    public void setCamMoveSpeed(float camMoveSpeed) {
-        this.camMoveSpeed = camMoveSpeed;
-    }
-
-    public Node getCamTrackHelper() {
-        return camTrackHelper;
     }
 
     public void moveCamera() {
@@ -145,7 +113,7 @@ public class EditorCameraManager {
 
         Vector3f vecToMove = camMoveX.mult((endPosMouse.x - ceneterScr.x) / cam.getWidth());
         vecToMove.addLocal(camMoveY.mult((endPosMouse.y - ceneterScr.y) / cam.getHeight())).normalizeLocal();
-        vecToMove.multLocal(mouseDist * camMoveSpeed * (0.3f + (chaseCam.getDistanceToTarget() * 0.005f)));
+        vecToMove.multLocal(mouseDist * camMoveSpeed * (0.3f + (chaseCam.getZoom() * 0.005f)));
 //        System.out.println("target" + chaseCam.getDistanceToTarget());
 //        System.out.println(mouseDist * camMoveSpeed);
 
@@ -204,6 +172,15 @@ public class EditorCameraManager {
 
     }
 
+    public void updateCamera() {
+        if (doMoveCamera) {
+            moveCamera();
+            doMoveCamera = false;
+        }
+        chaseCam.update();
+    }
+    
+    @Deprecated
     protected void setOrtho(boolean bool) {
 
         if (bool == true) {
@@ -213,7 +190,7 @@ public class EditorCameraManager {
 
             cam.setParallelProjection(true);
             float aspect = (float) cam.getWidth() / (float) cam.getHeight();
-            float frustumSize = chaseCam.getDistanceToTarget();
+            float frustumSize = chaseCam.getZoom();
             cam.setFrustum(-cam.getFrustumFar(), cam.getFrustumFar(), -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
 
         } else if (bool == false) {
@@ -221,5 +198,60 @@ public class EditorCameraManager {
             cam.setParallelProjection(false);
         }
 
+    }
+
+    public SimpleChaseCamera getChaseCam() {
+        return chaseCam;
+    }
+
+    public boolean isDoMoveCamera() {
+        return doMoveCamera;
+    }
+
+    public void setDoMoveCamera(boolean doMoveCamera) {
+        this.doMoveCamera = doMoveCamera;
+    }
+    
+    
+//    public void setTopView() {
+//        chaseCam.setDefaultVerticalRotation(FastMath.PI / 2f);
+//        chaseCam.setDefaultHorizontalRotation(FastMath.PI / 2);
+//    }
+//
+//    public void setBottomView() {
+//        chaseCam.setDefaultVerticalRotation(-FastMath.PI / 2f);
+//        chaseCam.setDefaultHorizontalRotation(FastMath.PI / 2);
+//    }
+//    
+//    public void setFrontView() {
+//        chaseCam.setDefaultVerticalRotation(0);
+//        chaseCam.setDefaultHorizontalRotation(FastMath.PI / 2);
+//    }
+//
+//    public void setBackView() {
+//        chaseCam.setDefaultVerticalRotation(0);
+//        chaseCam.setDefaultHorizontalRotation(-FastMath.PI / 2);
+//    }
+//    
+//    public void setLeftView() {
+//        chaseCam.setDefaultVerticalRotation(0);
+//        chaseCam.setDefaultHorizontalRotation(0);
+//    }
+//    
+//    public void setRightView() {
+//        chaseCam.setDefaultVerticalRotation(0);
+//        chaseCam.setDefaultHorizontalRotation(FastMath.PI);
+//    }
+    
+    public float getCamMoveSpeed() {
+        return camMoveSpeed;
+    }
+
+    public void setCamMoveSpeed(float camMoveSpeed) {
+        this.camMoveSpeed = camMoveSpeed;
+    }
+
+    public Node getCamTrackHelper() {
+        return camTrackHelper;
     }
 }

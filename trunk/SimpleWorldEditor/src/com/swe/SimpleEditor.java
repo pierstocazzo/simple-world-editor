@@ -1,13 +1,9 @@
 package com.swe;
 
-
-import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.system.AppSettings;
 
-
-
-public class SimpleEditor extends SimpleApplication{
+public class SimpleEditor extends SimpleApplication {
 
     public static void main(String[] args) {
         SimpleEditor app = new SimpleEditor();
@@ -19,30 +15,24 @@ public class SimpleEditor extends SimpleApplication{
         app.setShowSettings(false);
         app.start();
     }
-
-              
     
+    private EditorUpdateManager updateManager;
 
     @Override
     public void simpleInitApp() {
 
 //        this.setShowSettings(false);
         this.setDisplayStatView(false);
-        EditorBaseManager baseParts = new EditorBaseManager(this);        
+        EditorBaseManager baseManager = new EditorBaseManager(this);
         
+        updateManager = new EditorUpdateManager(baseManager.getCamManager(),
+                baseManager.getTransformManager());
+
     }
 
-    
-
-    
     @Override
     public void simpleUpdate(float tpf) {
-       
-        
-    }    
-    
-    
-    
+        updateManager.doUpdate();
 
-
+    }
 }

@@ -424,29 +424,7 @@ public class EditorTransformManager extends AbstractAppState {
 //        tranformParentNode.detachAllChildren();
 //    }
 
-    @Override
-    public void update(float tpf) {
-
-        // Transform Selected Objects!
-        if (pickedAxis != PickedAxis.scaleAll && isActive && selectionTransformCenter != null) {
-            if (transformType == transformType.MoveTool) {
-                transformTool.detachAllChildren();
-                moveToolObj.moveObjects();
-            } else if (transformType == transformType.RotateTool) {
-                transformTool.detachAllChildren();
-                rotateToolObj.rotateObjects();
-            } else if (transformType == transformType.ScaleTool) {
-                transformTool.detachAllChildren();
-                scaleToolObj.scaleObjects();
-            }
-
-        } // if scaleAll
-        else if (isActive && selectionTransformCenter != null) {
-            transformTool.detachAllChildren();
-            scaleToolObj.scaleObjects();
-        }
-
-
+    public void updateTransformTool(){
         // update transform tool
         if (!isActive && base.getSelectionManager().getSelectionList().size() > 0
                 && base.getSelectionManager().getSelectionCenter() != null) {
@@ -471,6 +449,29 @@ public class EditorTransformManager extends AbstractAppState {
 //            System.out.println(selectionTransformCenter);
         } else if (base.getSelectionManager().getSelectionList().size() == 0) {
             transformTool.detachAllChildren();
+        }
+    }
+    
+    @Override
+    public void update(float tpf) {
+
+        // Transform Selected Objects!
+        if (pickedAxis != PickedAxis.scaleAll && isActive && selectionTransformCenter != null) {
+            if (transformType == transformType.MoveTool) {
+                transformTool.detachAllChildren();
+                moveToolObj.moveObjects();
+            } else if (transformType == transformType.RotateTool) {
+                transformTool.detachAllChildren();
+                rotateToolObj.rotateObjects();
+            } else if (transformType == transformType.ScaleTool) {
+                transformTool.detachAllChildren();
+                scaleToolObj.scaleObjects();
+            }
+
+        } // if scaleAll
+        else if (isActive && selectionTransformCenter != null) {
+            transformTool.detachAllChildren();
+            scaleToolObj.scaleObjects();
         }
     }
 }

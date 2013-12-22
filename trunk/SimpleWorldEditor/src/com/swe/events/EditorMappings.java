@@ -81,7 +81,7 @@ public class EditorMappings implements AnalogListener, ActionListener {
 
         // Move Camera
         if (name.equals("MoveCameraHelper")) {
-            camMan.moveCamera();
+            camMan.setDoMoveCamera(true);
         }
     }
 
