@@ -52,19 +52,22 @@ public class EditorMappings implements AnalogListener, ActionListener {
             "MoveCameraHelperToSelection",
             "MoveOrSelect",
             "ScaleAll",
-            "HistoryUndo",
-            "HistoryRedo",
+            "History",
             "ShowHideRightPanel",
-            "SelectDeselectAll"
+            "SelectDeselectAll",
+            "LeftShiftKey",
+            "LeftCtrlKey"
         };
 
         app.getInputManager().addMapping("MoveCameraHelper", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         app.getInputManager().addMapping("MoveCameraHelperToSelection", new KeyTrigger(KeyInput.KEY_C));
         app.getInputManager().addMapping("MoveOrSelect", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         app.getInputManager().addMapping("ScaleAll", new KeyTrigger(KeyInput.KEY_S));
-        app.getInputManager().addMapping("HistoryUndo", new KeyTrigger(KeyInput.KEY_Z));
-        app.getInputManager().addMapping("HistoryRedo", new KeyTrigger(KeyInput.KEY_X));
+        app.getInputManager().addMapping("History", new KeyTrigger(KeyInput.KEY_Z));
+//        app.getInputManager().addMapping("HistoryRedo", new KeyTrigger(KeyInput.KEY_X));
         app.getInputManager().addMapping("ShowHideRightPanel", new KeyTrigger(KeyInput.KEY_TAB));
+        app.getInputManager().addMapping("LeftShiftKey", new KeyTrigger(KeyInput.KEY_LSHIFT));
+        app.getInputManager().addMapping("LeftCtrlKey", new KeyTrigger(KeyInput.KEY_LCONTROL));
 
         addListener();
     }
@@ -86,6 +89,19 @@ public class EditorMappings implements AnalogListener, ActionListener {
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
+
+        // set booleans for Ctrl and Shift
+        if (name.equals("LeftCtrlKey") && isPressed) {
+            base.getEventManager().setCtrlBool(true);
+        } else if (name.equals("LeftCtrlKey") && !isPressed) {
+            base.getEventManager().setCtrlBool(false);
+        }
+
+        if (name.equals("LeftShiftKey") && isPressed) {
+            base.getEventManager().setShiftBool(true);
+        } else if (name.equals("LeftShiftKey") && !isPressed) {
+            base.getEventManager().setShiftBool(false);
+        }
 
         // Select or transformTool an entity
         if (name.equals("MoveOrSelect") && isPressed && !name.equals("ScaleAll")) {
@@ -139,10 +155,14 @@ public class EditorMappings implements AnalogListener, ActionListener {
         }
 
         // Undo/Redo
-        if (name.equals("HistoryUndo") && isPressed && !base.getEventManager().isActive()) {
+        if (name.equals("History") && isPressed 
+                && !base.getEventManager().isActive() && base.getEventManager().isCtrlBool()
+                && !base.getEventManager().isShiftBool()) {
             base.getHistoryManager().historyUndo();
 
-        } else if (name.equals("HistoryRedo") && isPressed && !base.getEventManager().isActive()) {
+        } else if (name.equals("History") && isPressed 
+                && !base.getEventManager().isActive() && base.getEventManager().isCtrlBool()
+                && base.getEventManager().isShiftBool()) {
             base.getHistoryManager().historyRedo();
         }
 

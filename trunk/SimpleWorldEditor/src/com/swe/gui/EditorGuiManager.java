@@ -148,6 +148,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         //TempAssetsString
         assetsListBox.addItem("/home/mifth/jMonkeyProjects/AD/ad/trunk/ADAssets/assets");
+        assetsListBox.addItem("/media/anotherDisk/jMonkeyProjects/AD/ad/trunk/ADAssets/assets/");
 
         nifty.gotoScreen("start"); // start the screen 
 
@@ -674,6 +675,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
             popupEditComponent.getFocusHandler().resetFocusElements();
             base.getEditorMappings().removeListener();
+            base.getCamManager().getChaseCam().setDisabled();
 
         }
 
@@ -710,6 +712,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
                 popupEditComponent.getFocusHandler().resetFocusElements();
                 base.getEditorMappings().removeListener();
+                base.getCamManager().getChaseCam().setDisabled();
             }
         }
         screen.getFocusHandler().resetFocusElements();
@@ -769,6 +772,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         popupEditComponent.getFocusHandler().resetFocusElements();
         screen.getFocusHandler().resetFocusElements();
         base.getEditorMappings().addListener();
+        base.getCamManager().getChaseCam().setEnabled();
     }
 
     public void finishEditAsset(String bool) {
@@ -792,6 +796,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         popupEditAsset.getFocusHandler().resetFocusElements();
         screen.getFocusHandler().resetFocusElements();
         base.getEditorMappings().addListener();
+        base.getCamManager().getChaseCam().setEnabled();
     }
 
     public void finishEditSceneLG(String bool) {
@@ -864,6 +869,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         popupEditSeneLg.getFocusHandler().resetFocusElements();
         screen.getFocusHandler().resetFocusElements();
         base.getEditorMappings().addListener();
+        base.getCamManager().getChaseCam().setEnabled();
     }
 
     public void changeSceneObjectButton(String str) {
@@ -875,6 +881,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 popupEditSeneLg.findNiftyControl("sceneLGName", Label.class).setText(str);
                 popupEditSeneLg.findNiftyControl("sceneLgString", TextField.class).setText("");
                 base.getEditorMappings().removeListener();
+                base.getCamManager().getChaseCam().setDisabled();
             } else if (str.equals("Delete Scene") && base.getSceneManager().getScenesList().size() > 1) {
                 EditorSceneObject scene = base.getSceneManager().getActiveSceneObject();
                 base.getSceneManager().getScenesList().remove(scene.getSceneName());
@@ -909,6 +916,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
             popupEditAsset.getFocusHandler().resetFocusElements();
             base.getEditorMappings().removeListener();
+            base.getCamManager().getChaseCam().setDisabled();
         } else if (value.equals("edit") && !assetsListBox.getSelection().isEmpty()) {
             popupEditAsset.enable();
             nifty.showPopup(nifty.getCurrentScreen(), popupEditAsset.getId(), null);
@@ -917,6 +925,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
             popupEditAsset.getFocusHandler().resetFocusElements();
             base.getEditorMappings().removeListener();
+            base.getCamManager().getChaseCam().setDisabled();
         } else if (value.equals("remove") && !assetsListBox.getSelection().isEmpty()) {
             assetsListBox.removeItem(assetsListBox.getSelection().get(0));
             screen.getFocusHandler().resetFocusElements();
@@ -1014,11 +1023,13 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             nifty.showPopup(nifty.getCurrentScreen(), popupMoveToLayer.getId(), null);
             popupMoveToLayer.getFocusHandler().resetFocusElements();
             base.getEditorMappings().removeListener();
+            base.getCamManager().getChaseCam().setDisabled();
         } else {
             nifty.closePopup(popupMoveToLayer.getId());
             popupMoveToLayer.disable();
             popupMoveToLayer.getFocusHandler().resetFocusElements();
             base.getEditorMappings().addListener();
+            base.getCamManager().getChaseCam().setEnabled();
         }
 
     }
@@ -1134,6 +1145,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         popupMoveToLayer.disable();
         screen.getFocusHandler().resetFocusElements();
         base.getEditorMappings().addListener();
+        base.getCamManager().getChaseCam().setEnabled();
 
     }
 
