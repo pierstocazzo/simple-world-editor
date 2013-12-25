@@ -54,7 +54,7 @@ public class EditorMappings implements AnalogListener, ActionListener {
             "MoveCameraHelper",
             "MoveCameraHelperToSelection",
             "MoveOrSelect",
-            "ScaleAll",
+            "S_Key_Edt",
             "History",
             "ShowHideRightPanel",
             "SelectDeselectAll",
@@ -62,9 +62,9 @@ public class EditorMappings implements AnalogListener, ActionListener {
             "LeftCtrlKey",
             "DelecteSelectedEnt",
             "SelectAllKey",
-            "MoveKey",
-            "RotateKey",
-            "ScaleKey",
+            "W_Key_Edt",
+            "E_Key_Edt",
+            "R_Key_Edt",
             "EdtLeftView",
             "EdtFrontView",
             "EdtTopView",};
@@ -72,7 +72,7 @@ public class EditorMappings implements AnalogListener, ActionListener {
         app.getInputManager().addMapping("MoveCameraHelper", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         app.getInputManager().addMapping("MoveCameraHelperToSelection", new KeyTrigger(KeyInput.KEY_C));
         app.getInputManager().addMapping("MoveOrSelect", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        app.getInputManager().addMapping("ScaleAll", new KeyTrigger(KeyInput.KEY_S));
+        app.getInputManager().addMapping("S_Key_Edt", new KeyTrigger(KeyInput.KEY_S));
         app.getInputManager().addMapping("History", new KeyTrigger(KeyInput.KEY_Z));
 //        app.getInputManager().addMapping("HistoryRedo", new KeyTrigger(KeyInput.KEY_X));
         app.getInputManager().addMapping("ShowHideRightPanel", new KeyTrigger(KeyInput.KEY_TAB));
@@ -80,9 +80,9 @@ public class EditorMappings implements AnalogListener, ActionListener {
         app.getInputManager().addMapping("LeftCtrlKey", new KeyTrigger(KeyInput.KEY_LCONTROL));
         app.getInputManager().addMapping("DelecteSelectedEnt", new KeyTrigger(KeyInput.KEY_DELETE));
         app.getInputManager().addMapping("SelectAllKey", new KeyTrigger(KeyInput.KEY_A));
-        app.getInputManager().addMapping("MoveKey", new KeyTrigger(KeyInput.KEY_W));
-        app.getInputManager().addMapping("RotateKey", new KeyTrigger(KeyInput.KEY_E));
-        app.getInputManager().addMapping("ScaleKey", new KeyTrigger(KeyInput.KEY_R));
+        app.getInputManager().addMapping("W_Key_Edt", new KeyTrigger(KeyInput.KEY_W));
+        app.getInputManager().addMapping("E_Key_Edt", new KeyTrigger(KeyInput.KEY_E));
+        app.getInputManager().addMapping("R_Key_Edt", new KeyTrigger(KeyInput.KEY_R));
         app.getInputManager().addMapping("EdtLeftView", new KeyTrigger(KeyInput.KEY_NUMPAD3));
         app.getInputManager().addMapping("EdtFrontView", new KeyTrigger(KeyInput.KEY_NUMPAD1));
         app.getInputManager().addMapping("EdtTopView", new KeyTrigger(KeyInput.KEY_NUMPAD7));
@@ -117,12 +117,22 @@ public class EditorMappings implements AnalogListener, ActionListener {
                 base.getGuiManager().selectAllButton();
             } else if (name.equals("MoveCameraHelperToSelection") && isPressed && base.getEventManager().isCtrlBool()) {
                 base.getGuiManager().cloneSelectedButton();
-            } else if (name.equals("ScaleAll") && isPressed) {
-                if (base.getSelectionManager().getSelectionList().size() > 0) {
-                    base.getHistoryManager().prepareNewHistory();
-                    base.getTransformManager().scaleAll();
-                    transformResult = true;
-                    base.getEventManager().setAction(true);
+            } else if (name.equals("S_Key_Edt") && isPressed) {
+                if (base.getEventManager().isCtrlBool() && !base.getEventManager().isShiftBool()) {
+                    base.getGuiManager().saveSceneButton();
+//                    base.getEventManager().setCtrlBool(false);
+//                    base.getEventManager().setShiftBool(false);
+                } else if (base.getEventManager().isCtrlBool() && base.getEventManager().isShiftBool()) {
+                    base.getGuiManager().saveAsNewSceneButton();
+//                    base.getEventManager().setCtrlBool(false);
+//                    base.getEventManager().setShiftBool(false);
+                } else {
+                    if (base.getSelectionManager().getSelectionList().size() > 0) {
+                        base.getHistoryManager().prepareNewHistory();
+                        base.getTransformManager().scaleAll();
+                        transformResult = true;
+                        base.getEventManager().setAction(true);
+                    }
                 }
             } else if (name.equals("MoveCameraHelperToSelection") && isPressed) {
                 if (!transformResult && !selectResult) {
@@ -137,12 +147,26 @@ public class EditorMappings implements AnalogListener, ActionListener {
                 if (base.getSelectionManager().getSelectionList().size() > 0) {
                     base.getSelectionManager().clearSelectionList();
                 }
-            } else if (name.equals("MoveKey") && isPressed) {
-                base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
-            } else if (name.equals("RotateKey") && isPressed) {
-                base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
-            } else if (name.equals("ScaleKey") && isPressed) {
-                base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.ScaleTool);
+            } else if (name.equals("W_Key_Edt") && isPressed) {
+                if (base.getEventManager().isShiftBool()) {
+                    base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
+                } else {
+                    base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
+                }
+
+            } else if (name.equals("E_Key_Edt") && isPressed) {
+                if (base.getEventManager().isShiftBool()) {
+                    base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.WorldCoords);
+                } else {
+                    base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
+                }
+
+            } else if (name.equals("R_Key_Edt") && isPressed) {
+                if (base.getEventManager().isShiftBool()) {
+                    base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.ViewCoords);
+                } else {
+                    base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.ScaleTool);
+                }
 
             } else if (name.equals("EdtLeftView") && isPressed) {
                 if (base.getEventManager().isCtrlBool()) {
@@ -187,7 +211,7 @@ public class EditorMappings implements AnalogListener, ActionListener {
         }
 
         // Select or transformTool an entity
-        if (name.equals("MoveOrSelect") && isPressed && !name.equals("ScaleAll")) {
+        if (name.equals("MoveOrSelect") && isPressed && !name.equals("S_Key_Edt")) {
 
             if (!base.getEventManager().isActive()) {
                 base.getHistoryManager().prepareNewHistory();

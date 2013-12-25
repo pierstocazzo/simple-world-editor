@@ -283,6 +283,8 @@ public class EditorSceneManager {
             if (savePreviewJ3o) {
                 savePreviewScene(scenePathCache, sceneNameCache);
             }
+        } else {
+            saveAsNewScene();
         }
 
     }
@@ -329,10 +331,10 @@ public class EditorSceneManager {
 
         // save assets paths
         JSONObject assetsToSave = new JSONObject();
-        int assetIndex = 1;
+//        int assetIndex = 1;
         for (String str : assetsList) {
 
-            assetsToSave.put("AssetPath_" + assetIndex, str);
+            assetsToSave.put("AssetPath_" + assetsList.indexOf(str), str);
         }
         saveSceneJson.put("AssetsPaths", assetsToSave);
 
