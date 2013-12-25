@@ -57,7 +57,9 @@ public class EditorMappings implements AnalogListener, ActionListener {
             "ShowHideRightPanel",
             "SelectDeselectAll",
             "LeftShiftKey",
-            "LeftCtrlKey"
+            "LeftCtrlKey",
+            "DelecteSelectedEnt",
+            "SelectAllKey"
         };
 
         app.getInputManager().addMapping("MoveCameraHelper", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
@@ -69,6 +71,9 @@ public class EditorMappings implements AnalogListener, ActionListener {
         app.getInputManager().addMapping("ShowHideRightPanel", new KeyTrigger(KeyInput.KEY_TAB));
         app.getInputManager().addMapping("LeftShiftKey", new KeyTrigger(KeyInput.KEY_LSHIFT));
         app.getInputManager().addMapping("LeftCtrlKey", new KeyTrigger(KeyInput.KEY_LCONTROL));
+        app.getInputManager().addMapping("DelecteSelectedEnt", new KeyTrigger(KeyInput.KEY_DELETE));
+        app.getInputManager().addMapping("SelectAllKey", new KeyTrigger(KeyInput.KEY_A));
+//        app.getInputManager().addMapping("CloneKey", new KeyTrigger(KeyInput.KEY_C));
 
         addListener();
     }
@@ -90,6 +95,38 @@ public class EditorMappings implements AnalogListener, ActionListener {
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
+
+        // some keys
+        if (!base.getEventManager().isActive()) {
+            if (name.equals("DelecteSelectedEnt") && isPressed) {
+                base.getGuiManager().removeSelectedButton();
+            } else if (name.equals("SelectAllKey") && isPressed) {
+                base.getGuiManager().selectAllButton();
+            } else if (name.equals("MoveCameraHelperToSelection") && isPressed && base.getEventManager().isCtrlBool()) {
+                base.getGuiManager().cloneSelectedButton();
+            } else if (name.equals("ScaleAll") && isPressed) {
+                if (base.getSelectionManager().getSelectionList().size() > 0) {
+                    base.getHistoryManager().prepareNewHistory();
+                    base.getTransformManager().scaleAll();
+                    transformResult = true;
+                    base.getEventManager().setAction(true);
+                }
+            } else if (name.equals("MoveCameraHelperToSelection") && isPressed) {
+                if (!transformResult && !selectResult) {
+                    Transform selectionCenter = base.getSelectionManager().getSelectionCenter();
+                    if (selectionCenter != null) {
+                        base.getCamManager().getCamTrackHelper().setLocalTranslation(selectionCenter.getTranslation().clone());
+                    }
+                    selectionCenter = null;
+                }
+
+            } else if ((name.equals("MoveCameraHelperToSelection") && isPressed)) {
+                if (base.getSelectionManager().getSelectionList().size() > 0) {
+                    base.getSelectionManager().clearSelectionList();
+                }
+            }
+        }
+
 
         // set booleans for Ctrl and Shift
         if (name.equals("LeftCtrlKey") && isPressed) {
@@ -135,29 +172,6 @@ public class EditorMappings implements AnalogListener, ActionListener {
             System.out.println("transform done");
         }
 
-
-        // scaleTool
-        if (name.equals("ScaleAll") && isPressed && !base.getEventManager().isActive()) {
-            if (base.getSelectionManager().getSelectionList().size() > 0) {
-                base.getHistoryManager().prepareNewHistory();
-                base.getTransformManager().scaleAll();
-                transformResult = true;
-                base.getEventManager().setAction(true);
-            }
-        } else if (name.equals("MoveCameraHelperToSelection") && isPressed && !base.getEventManager().isActive()) {
-            if (!transformResult && !selectResult) {
-                Transform selectionCenter = base.getSelectionManager().getSelectionCenter();
-                if (selectionCenter != null) {
-                    base.getCamManager().getCamTrackHelper().setLocalTranslation(selectionCenter.getTranslation().clone());
-                }
-                selectionCenter = null;
-            }
-
-        } else if ((name.equals("MoveCameraHelperToSelection") && isPressed && !base.getEventManager().isActive())) {
-            if (base.getSelectionManager().getSelectionList().size() > 0) {
-                base.getSelectionManager().clearSelectionList();
-            }
-        }
 
         // Undo/Redo
         if (name.equals("History") && isPressed
