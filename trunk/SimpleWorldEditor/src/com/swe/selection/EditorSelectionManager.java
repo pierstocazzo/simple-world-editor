@@ -40,7 +40,7 @@ public class EditorSelectionManager extends AbstractAppState {
     private Transform selectionCenter;
     private SelectionToolType selectionToolType;
     private EditorSelectionTools selectionTools;
-    private boolean isActive;
+    private boolean isActive, doActiveRectange;
     private SelectionMode selectionMode;
     private long lastSelected;
 
@@ -63,6 +63,7 @@ public class EditorSelectionManager extends AbstractAppState {
         guiNode = (Node) this.app.getGuiViewPort().getScenes().get(0);
 
         isActive = false;
+        doActiveRectange = false;
         selectionCenter = null;
         selectionList = new ArrayList<Long>();
 
@@ -83,6 +84,7 @@ public class EditorSelectionManager extends AbstractAppState {
         } else if (selectionToolType == SelectionToolType.Rectangle) {
 //            selectionTools.drawRectangle();
             isActive = true;
+            doActiveRectange = true;
             result = true;
         }
 
@@ -93,7 +95,7 @@ public class EditorSelectionManager extends AbstractAppState {
     public void deactivate() {
 
         // SELECT ENTITIES OF THE RECTANGLE TOOL
-        if (selectionToolType == SelectionToolType.Rectangle && isActive) {
+        if (doActiveRectange && isActive) {
             boolean isSceneEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getSceneNode().getUserData("isEnabled");
             boolean isLayersGoupEnabled = (Boolean) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayersGroupNode().getUserData("isEnabled");
 
@@ -102,6 +104,8 @@ public class EditorSelectionManager extends AbstractAppState {
                 rectangleSelectEntities();
             }
             selectionTools.clearRectangle();
+            doActiveRectange = false;
+            
             System.out.println("Deactivate Rectangle");
         }
 
@@ -318,7 +322,7 @@ public class EditorSelectionManager extends AbstractAppState {
     @Override
     public void update(float tpf) {
 
-        if (isActive) {
+        if (isActive && doActiveRectange) {
             selectionTools.drawRectangle();
         }
     }

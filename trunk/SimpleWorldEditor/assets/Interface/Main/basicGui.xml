@@ -187,10 +187,10 @@
                             <panel height="5px" padding="10">
                             </panel>
                     
-                            <!--Selection-->
+<!--                            Selection
                             <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" >
                                 <control id="RadioGroupSelection" name="radioButtonGroup" />
-                                <!--<control name="label" text="Coordinates" />-->
+                                <control name="label" text="Coordinates" />
                                 <panel width="10" />
                                 <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
                                     <effect>
@@ -220,10 +220,10 @@
                             <panel height="5px" padding="10">
                             </panel>
                             
-                            <!--Selection Normal/Additive-->
+                            Selection Normal/Additive
                             <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" >
                                 <control id="RadioGroupSelectionAdditive" name="radioButtonGroup" />
-                                <!--                        <control name="label" text="Transforms" />-->
+                                                        <control name="label" text="Transforms" />
                                 <panel width="10" />
                                 <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
                                     <effect>
@@ -248,11 +248,11 @@
                                     </panel>
                     
                                 </panel>
-                            </panel>        
+                            </panel>        -->
 
 
-                            <panel height="5px" padding="10">
-                            </panel>
+<!--                            <panel height="5px" padding="10">
+                            </panel>-->
 
                                         
                             <panel align="center" childLayout="vertical">

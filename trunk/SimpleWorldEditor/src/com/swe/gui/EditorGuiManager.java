@@ -202,35 +202,35 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         }
     }
 
-    /**
-     * This is called when the RadioButton selection has changed.
-     */
-    @NiftyEventSubscriber(id = "RadioGroupSelection")
-    public void RadioGroupSelectionChanged(final String id, final RadioButtonGroupStateChangedEvent event) {
-
-        if (event.getSelectedId().equals("mouse_sel")) {
-            setMouseSelection();
-            screen.getFocusHandler().resetFocusElements();
-        } else if (event.getSelectedId().equals("rectangle_sel")) {
-            setRectangleSelection();
-            screen.getFocusHandler().resetFocusElements();
-        }
-    }
-
-    /**
-     * This is called when the RadioButton selection has changed.
-     */
-    @NiftyEventSubscriber(id = "RadioGroupSelectionAdditive")
-    public void RadioGroupSelectionAdditiveChanged(final String id, final RadioButtonGroupStateChangedEvent event) {
-
-        if (event.getSelectedId().equals("normal_sel")) {
-            setNormalSelection();
-            screen.getFocusHandler().resetFocusElements();
-        } else if (event.getSelectedId().equals("additive_sel")) {
-            setAdditiveSelection();
-            screen.getFocusHandler().resetFocusElements();
-        }
-    }
+//    /**
+//     * This is called when the RadioButton selection has changed.
+//     */
+//    @NiftyEventSubscriber(id = "RadioGroupSelection")
+//    public void RadioGroupSelectionChanged(final String id, final RadioButtonGroupStateChangedEvent event) {
+//
+//        if (event.getSelectedId().equals("mouse_sel")) {
+//            setMouseSelection();
+//            screen.getFocusHandler().resetFocusElements();
+//        } else if (event.getSelectedId().equals("rectangle_sel")) {
+//            setRectangleSelection();
+//            screen.getFocusHandler().resetFocusElements();
+//        }
+//    }
+//
+//    /**
+//     * This is called when the RadioButton selection has changed.
+//     */
+//    @NiftyEventSubscriber(id = "RadioGroupSelectionAdditive")
+//    public void RadioGroupSelectionAdditiveChanged(final String id, final RadioButtonGroupStateChangedEvent event) {
+//
+//        if (event.getSelectedId().equals("normal_sel")) {
+//            setNormalSelection();
+//            screen.getFocusHandler().resetFocusElements();
+//        } else if (event.getSelectedId().equals("additive_sel")) {
+//            setAdditiveSelection();
+//            screen.getFocusHandler().resetFocusElements();
+//        }
+//    }
 
     public void setMoveManipulator() {
         System.out.println("Manipulator is changed");
@@ -300,15 +300,15 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         screen.getFocusHandler().resetFocusElements();
     }
 
-    public void setMouseSelection() {
-        base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.MouseClick);
-        screen.getFocusHandler().resetFocusElements();
-    }
-
-    public void setRectangleSelection() {
-        base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
-        screen.getFocusHandler().resetFocusElements();
-    }
+//    public void setMouseSelection() {
+//        base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.MouseClick);
+//        screen.getFocusHandler().resetFocusElements();
+//    }
+//
+//    public void setRectangleSelection() {
+//        base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
+//        screen.getFocusHandler().resetFocusElements();
+//    }
 
     public void setLocalCoords() {
         base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
@@ -325,15 +325,15 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         screen.getFocusHandler().resetFocusElements();
     }
 
-    public void setAdditiveSelection() {
-        base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Additive);
-        screen.getFocusHandler().resetFocusElements();
-    }
-
-    public void setNormalSelection() {
-        base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Normal);
-        screen.getFocusHandler().resetFocusElements();
-    }
+//    public void setAdditiveSelection() {
+//        base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Additive);
+//        screen.getFocusHandler().resetFocusElements();
+//    }
+//
+//    public void setNormalSelection() {
+//        base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Normal);
+//        screen.getFocusHandler().resetFocusElements();
+//    }
 
     public Element getRightPanel() {
         return rightPanel;

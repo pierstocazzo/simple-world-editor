@@ -16,6 +16,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.swe.EditorBaseManager;
 import com.swe.camera.EditorCameraManager;
+import com.swe.selection.EditorSelectionManager;
 import de.lessvoid.nifty.elements.Element;
 
 public class EditorMappings implements AnalogListener, ActionListener {
@@ -93,14 +94,18 @@ public class EditorMappings implements AnalogListener, ActionListener {
         // set booleans for Ctrl and Shift
         if (name.equals("LeftCtrlKey") && isPressed) {
             base.getEventManager().setCtrlBool(true);
+            base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
         } else if (name.equals("LeftCtrlKey") && !isPressed) {
             base.getEventManager().setCtrlBool(false);
+            base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.MouseClick);
         }
 
         if (name.equals("LeftShiftKey") && isPressed) {
             base.getEventManager().setShiftBool(true);
+            base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Additive);
         } else if (name.equals("LeftShiftKey") && !isPressed) {
             base.getEventManager().setShiftBool(false);
+            base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Normal);
         }
 
         // Select or transformTool an entity
@@ -155,12 +160,12 @@ public class EditorMappings implements AnalogListener, ActionListener {
         }
 
         // Undo/Redo
-        if (name.equals("History") && isPressed 
+        if (name.equals("History") && isPressed
                 && !base.getEventManager().isActive() && base.getEventManager().isCtrlBool()
                 && !base.getEventManager().isShiftBool()) {
             base.getHistoryManager().historyUndo();
 
-        } else if (name.equals("History") && isPressed 
+        } else if (name.equals("History") && isPressed
                 && !base.getEventManager().isActive() && base.getEventManager().isCtrlBool()
                 && base.getEventManager().isShiftBool()) {
             base.getHistoryManager().historyRedo();
