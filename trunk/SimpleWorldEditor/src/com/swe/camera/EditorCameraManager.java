@@ -48,7 +48,7 @@ public class EditorCameraManager {
 
         this.app = app;
         this.base = base;
-        
+
         doMoveCamera = false;
         cam = this.app.getCamera();
         camTrackHelper = (Node) this.app.getViewPort().getScenes().get(0);
@@ -67,8 +67,7 @@ public class EditorCameraManager {
 //        setOrtho(true);
 
     }
-    
-    
+
     private void setCameraNow() {
 
         // Enable a chase cam
@@ -86,8 +85,9 @@ public class EditorCameraManager {
         chaseCam.setZoomMin(0.05f);
         chaseCam.setZoomMax(5000);
         chaseCam.setZoom(300);
-        
+
         chaseCam.setSpatialToFollow(camTrackHelper);
+        chaseCam.setCameraNodeRotation(-FastMath.QUARTER_PI * 0.5f, FastMath.QUARTER_PI);
 //        chaseCam.se
 //        setTopView();
 
@@ -179,7 +179,7 @@ public class EditorCameraManager {
         }
         chaseCam.update();
     }
-    
+
     @Deprecated
     protected void setOrtho(boolean bool) {
 
@@ -211,8 +211,7 @@ public class EditorCameraManager {
     public void setDoMoveCamera(boolean doMoveCamera) {
         this.doMoveCamera = doMoveCamera;
     }
-    
-    
+
 //    public void setTopView() {
 //        chaseCam.setDefaultVerticalRotation(FastMath.PI / 2f);
 //        chaseCam.setDefaultHorizontalRotation(FastMath.PI / 2);
@@ -242,7 +241,6 @@ public class EditorCameraManager {
 //        chaseCam.setDefaultVerticalRotation(0);
 //        chaseCam.setDefaultHorizontalRotation(FastMath.PI);
 //    }
-    
     public float getCamMoveSpeed() {
         return camMoveSpeed;
     }

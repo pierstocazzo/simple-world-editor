@@ -172,7 +172,7 @@ public class SimpleChaseCamera implements ActionListener, AnalogListener {
             if (spatialToFollow != null) {
                 chaseGeneralNode.setLocalTranslation(spatialToFollow.getLocalTranslation());
             }
-            
+
             if (canRotate && doRotate) {
 
                 // HORIZONTAL
@@ -301,6 +301,15 @@ public class SimpleChaseCamera implements ActionListener, AnalogListener {
 
     public void setCameraNodeLocation(Vector3f location) {
         chaseGeneralNode.setLocalTranslation(location);
+    }
+
+    public Quaternion getCameraNodeRotation() {
+        return chaseGeneralNode.getLocalRotation();
+    }
+
+    public void setCameraNodeRotation(float xRot, float yRot) {
+        chaseGeneralNode.setLocalRotation(new Quaternion());
+        chaseGeneralNode.rotate(xRot, yRot, 0f);
     }
 
     public float getRotateSpeed() {

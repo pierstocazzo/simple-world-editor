@@ -11,12 +11,14 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.math.FastMath;
 import com.jme3.math.Transform;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.swe.EditorBaseManager;
 import com.swe.camera.EditorCameraManager;
 import com.swe.selection.EditorSelectionManager;
+import com.swe.transform.EditorTransformManager;
 import de.lessvoid.nifty.elements.Element;
 
 public class EditorMappings implements AnalogListener, ActionListener {
@@ -59,8 +61,13 @@ public class EditorMappings implements AnalogListener, ActionListener {
             "LeftShiftKey",
             "LeftCtrlKey",
             "DelecteSelectedEnt",
-            "SelectAllKey"
-        };
+            "SelectAllKey",
+            "MoveKey",
+            "RotateKey",
+            "ScaleKey",
+            "EdtLeftView",
+            "EdtFrontView",
+            "EdtTopView",};
 
         app.getInputManager().addMapping("MoveCameraHelper", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         app.getInputManager().addMapping("MoveCameraHelperToSelection", new KeyTrigger(KeyInput.KEY_C));
@@ -73,7 +80,13 @@ public class EditorMappings implements AnalogListener, ActionListener {
         app.getInputManager().addMapping("LeftCtrlKey", new KeyTrigger(KeyInput.KEY_LCONTROL));
         app.getInputManager().addMapping("DelecteSelectedEnt", new KeyTrigger(KeyInput.KEY_DELETE));
         app.getInputManager().addMapping("SelectAllKey", new KeyTrigger(KeyInput.KEY_A));
-//        app.getInputManager().addMapping("CloneKey", new KeyTrigger(KeyInput.KEY_C));
+        app.getInputManager().addMapping("MoveKey", new KeyTrigger(KeyInput.KEY_W));
+        app.getInputManager().addMapping("RotateKey", new KeyTrigger(KeyInput.KEY_E));
+        app.getInputManager().addMapping("ScaleKey", new KeyTrigger(KeyInput.KEY_R));
+        app.getInputManager().addMapping("EdtLeftView", new KeyTrigger(KeyInput.KEY_NUMPAD3));
+        app.getInputManager().addMapping("EdtFrontView", new KeyTrigger(KeyInput.KEY_NUMPAD1));
+        app.getInputManager().addMapping("EdtTopView", new KeyTrigger(KeyInput.KEY_NUMPAD7));
+
 
         addListener();
     }
@@ -120,10 +133,38 @@ public class EditorMappings implements AnalogListener, ActionListener {
                     selectionCenter = null;
                 }
 
-            } else if ((name.equals("MoveCameraHelperToSelection") && isPressed)) {
+            } else if (name.equals("MoveCameraHelperToSelection") && isPressed) {
                 if (base.getSelectionManager().getSelectionList().size() > 0) {
                     base.getSelectionManager().clearSelectionList();
                 }
+            } else if (name.equals("MoveKey") && isPressed) {
+                base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
+            } else if (name.equals("RotateKey") && isPressed) {
+                base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
+            } else if (name.equals("ScaleKey") && isPressed) {
+                base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.ScaleTool);
+
+            } else if (name.equals("EdtLeftView") && isPressed) {
+                if (base.getEventManager().isCtrlBool()) {
+                    base.getCamManager().getChaseCam().setCameraNodeRotation(0f, -FastMath.HALF_PI);
+                } else {
+                    base.getCamManager().getChaseCam().setCameraNodeRotation(0f, FastMath.HALF_PI);
+                }
+
+            } else if (name.equals("EdtFrontView") && isPressed) {
+                if (base.getEventManager().isCtrlBool()) {
+                    base.getCamManager().getChaseCam().setCameraNodeRotation(0f, FastMath.PI);
+                } else {
+                    base.getCamManager().getChaseCam().setCameraNodeRotation(0f, 0f);
+                }
+
+            } else if (name.equals("EdtTopView") && isPressed) {
+                if (base.getEventManager().isCtrlBool()) {
+                    base.getCamManager().getChaseCam().setCameraNodeRotation(FastMath.HALF_PI, 0f);
+                } else {
+                    base.getCamManager().getChaseCam().setCameraNodeRotation(-FastMath.HALF_PI, 0f);
+                }
+
             }
         }
 
