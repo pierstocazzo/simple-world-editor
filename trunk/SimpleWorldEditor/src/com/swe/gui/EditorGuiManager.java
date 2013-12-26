@@ -1158,7 +1158,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         floor_mat.getAdditionalRenderState().setWireframe(true);
         floor_mat.setColor("Color", new ColorRGBA(0.4f, 0.4f, 0.4f, 0.15f));
         floor_mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-        g.setCullHint(Spatial.CullHint.Never);
+        floor_mat.getAdditionalRenderState().setDepthWrite(false);
+//        g.setCullHint(Spatial.CullHint.Never);
         g.setShadowMode(RenderQueue.ShadowMode.Off);
         g.setQueueBucket(RenderQueue.Bucket.Transparent);
         g.setMaterial(floor_mat);
@@ -1170,13 +1171,14 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         xAxis.setLineWidth(2f);
         Geometry gxAxis = new Geometry("XAxis", xAxis);
         gxAxis.setModelBound(new BoundingBox());
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", new ColorRGBA(1.0f, 0.2f, 0.5f, 0.2f));
-        mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-        gxAxis.setCullHint(Spatial.CullHint.Never);
+        Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat1.setColor("Color", new ColorRGBA(1.0f, 0.2f, 0.5f, 0.2f));
+        mat1.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        mat1.getAdditionalRenderState().setDepthWrite(false);
+//        gxAxis.setCullHint(Spatial.CullHint.Never);
         gxAxis.setQueueBucket(RenderQueue.Bucket.Transparent);
         gxAxis.setShadowMode(RenderQueue.ShadowMode.Off);
-        gxAxis.setMaterial(mat);
+        gxAxis.setMaterial(mat1);
         gxAxis.setCullHint(Spatial.CullHint.Never);
 
         gridNode.attachChild(gxAxis);
@@ -1186,14 +1188,15 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         zAxis.setLineWidth(2f);
         Geometry gzAxis = new Geometry("ZAxis", zAxis);
         gzAxis.setModelBound(new BoundingBox());
-        mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", new ColorRGBA(0.2f, 1.0f, 0.2f, 0.2f));
-        mat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat2.setColor("Color", new ColorRGBA(0.2f, 1.0f, 0.2f, 0.2f));
+        mat2.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+        mat2.getAdditionalRenderState().setDepthWrite(false);
         gzAxis.setCullHint(Spatial.CullHint.Never);
         gzAxis.setQueueBucket(RenderQueue.Bucket.Transparent);
         gzAxis.setShadowMode(RenderQueue.ShadowMode.Off);
-        gzAxis.setMaterial(mat);
-        gzAxis.setCullHint(Spatial.CullHint.Never);
+        gzAxis.setMaterial(mat2);
+//        gzAxis.setCullHint(Spatial.CullHint.Never);
         gridNode.attachChild(gzAxis);
 
         rootNode.attachChild(gridNode);

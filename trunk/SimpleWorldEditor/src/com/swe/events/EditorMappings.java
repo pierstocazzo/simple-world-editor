@@ -145,14 +145,14 @@ public class EditorMappings implements AnalogListener, ActionListener {
                 }
             } else if (name.equals("W_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
-                    base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
+                    base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.WorldCoords);
                 } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
                 }
 
             } else if (name.equals("E_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
-                    base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.WorldCoords);
+                    base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
                 } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
                 }

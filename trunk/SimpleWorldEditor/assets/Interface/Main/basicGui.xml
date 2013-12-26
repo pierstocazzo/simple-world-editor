@@ -48,69 +48,57 @@
 
         
                             <!--Transforms-->
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_move" name="button" style="ma_button" label="Move" visibleToMouse="true">
+                            <control name="label" text="Transforms" with="100%"/>
+                            <panel height="26px" align="center" childLayout="horizontal">
+                                <control id="button_move" name="button" style="ma_button" width="30px" label="M" visibleToMouse="true">
                                     <interact onClick="setMoveManipulator()"/>
                                 </control>              
-                            </panel>  
-        
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_rotate" name="button" style="ma_button" label="Rotate" visibleToMouse="true">
+
+                                <control id="button_rotate" name="button" style="ma_button" width="30px" label="R" visibleToMouse="true">
                                     <interact onClick="setRotateManipulator()"/>
-                                </control>              
-                            </panel>  
-        
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_scale" name="button" style="ma_button" label="Scale" visibleToMouse="true">
+                                </control> 
+                                
+                                <control id="button_scale" name="button" style="ma_button" width="30px" label="S" visibleToMouse="true">
                                     <interact onClick="setScaleManipulator()"/>
-                                </control>              
-                            </panel>
+                                </control>
+                            </panel>  
         
                             <panel height="5px" padding="10">
-                        
                             </panel>
           
                             <!--Coords-->
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_set_local_coords" name="button" style="ma_button" label="Local Coords" visibleToMouse="true">
-                                    <interact onClick="setLocalCoords()"/>
-                                </control>              
-                            </panel>                       
-        
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_set_world_coords" name="button" style="ma_button" label="World Coords" visibleToMouse="true">
+                            <control name="label" text="Coordinates" with="100%"/>
+                            <panel height="26px" align="center" childLayout="horizontal">
+                                <control id="button_set_world_coords" name="button" style="ma_button" width="30px" label="W" visibleToMouse="true">
                                     <interact onClick="setWorldCoords()"/>
                                 </control>              
-                            </panel>                               
-        
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_set_view_coords" name="button" style="ma_button" label="View Coords" visibleToMouse="true">
+                                 <control id="button_set_local_coords" name="button" style="ma_button" width="30px" label="L" visibleToMouse="true">
+                                    <interact onClick="setLocalCoords()"/>
+                                </control>  
+                                <control id="button_set_view_coords" name="button" style="ma_button" width="30px" label="V" visibleToMouse="true">
                                     <interact onClick="setViewCoords()"/>
-                                </control>              
-                            </panel>           
+                                </control>   
+                            </panel>                               
         
                             <panel height="5px" padding="10">
                                 <!-- add your content here -->
                             </panel>
 
                             <!--Clear Transforms-->
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_clear_location" name="button" style="ma_button" label="Clear Location" visibleToMouse="true">
+                            <control name="label" text="Clear Transforms" with="100%"/>
+                            <panel height="26px" align="center" childLayout="horizontal">
+                                <control id="button_clear_location" name="button" style="ma_button" width="30px" label="L" visibleToMouse="true">
                                     <interact onClick="clearTransform(Translation)"/>
                                 </control>              
-                            </panel>                       
-        
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_clear_rotation" name="button" style="ma_button" label="Clear Rotation" visibleToMouse="true">
+                                
+                                <control id="button_clear_rotation" name="button" style="ma_button" width="30px" label="R" visibleToMouse="true">
                                     <interact onClick="clearTransform(Rotation)"/>
                                 </control>              
-                            </panel>                               
-        
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_clear_scale" name="button" style="ma_button" label="Clear Scale" visibleToMouse="true">
+
+                                <control id="button_clear_scale" name="button" style="ma_button" width="30px" label="S" visibleToMouse="true">
                                     <interact onClick="clearTransform(Scale)"/>
                                 </control>              
-                            </panel>
+                            </panel>                       
 
                             <panel height="5px" padding="10">
                                 <!-- add your content here -->
@@ -248,10 +236,10 @@
                                     </panel>
                     
                                 </panel>
-                            </panel>        -->
+                            </panel>  
 
 
-<!--                            <panel height="5px" padding="10">
+                         <panel height="5px" padding="10">
                             </panel>-->
 
                                         
