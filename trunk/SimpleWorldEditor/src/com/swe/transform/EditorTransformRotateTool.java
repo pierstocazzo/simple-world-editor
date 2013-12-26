@@ -98,7 +98,7 @@ public class EditorTransformRotateTool {
         // rotate according to angle
         Vector2f vec1 = selectedCoords.subtract(cursorPos).normalizeLocal();
         float angle = vec1.angleBetween(new Vector2f(trManager.getDeltaMoveVector().getX(), trManager.getDeltaMoveVector().getY()));
-        angle = constraintTool.constraintValue(FastMath.RAD_TO_DEG * angle) * FastMath.DEG_TO_RAD;
+        angle = constraintTool.constraintValue(FastMath.RAD_TO_DEG * angle, constraintTool.getRotateConstraint()) * FastMath.DEG_TO_RAD;
         Quaternion rotationOfSelection = trManager.getselectionTransformCenter().getRotation();
         
         Vector3f axisToRotate = rotationOfSelection.mult(pickedVec);

@@ -106,7 +106,7 @@ public class EditorTransformScaleTool {
         float disDelta = delta2d.distance(selectedCoords);
         Vector3f scalevec = null;
         float scaleValue = cursorPos.distance(delta2d);
-        scaleValue = constraintTool.constraintValue(scaleValue *0.007f);
+        scaleValue = constraintTool.constraintValue(scaleValue *0.007f, constraintTool.getScaleConstraint());
 
         if (disCursor > disDelta) {
             scalevec = baseScale.add(pickedVec.mult(scaleValue));

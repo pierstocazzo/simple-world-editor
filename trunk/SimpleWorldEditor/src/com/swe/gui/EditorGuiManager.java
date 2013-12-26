@@ -185,19 +185,19 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void RadioGroupConstraintsChanged(final String id, final RadioButtonGroupStateChangedEvent event) {
 
         if (event.getSelectedId().equals("constraint_none")) {
-            base.getTransformManager().getConstraintTool().setConstraint(0.0f);
+            base.getTransformManager().getConstraintTool().setMoveConstraint(0.0f);
             screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_0.5")) {
-            base.getTransformManager().getConstraintTool().setConstraint(0.5f);
+            base.getTransformManager().getConstraintTool().setMoveConstraint(0.5f);
             screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_1")) {
-            base.getTransformManager().getConstraintTool().setConstraint(1.0f);
+            base.getTransformManager().getConstraintTool().setMoveConstraint(1.0f);
             screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_5")) {
-            base.getTransformManager().getConstraintTool().setConstraint(5.0f);
+            base.getTransformManager().getConstraintTool().setMoveConstraint(5.0f);
             screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("constraint_10")) {
-            base.getTransformManager().getConstraintTool().setConstraint(10.0f);
+            base.getTransformManager().getConstraintTool().setMoveConstraint(10.0f);
             screen.getFocusHandler().resetFocusElements();
         }
     }
@@ -274,10 +274,11 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void snapObjectsToGrid() {
         for (Long id : base.getSelectionManager().getSelectionList()) {
             Node entity = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
-
-            float constrX = base.getTransformManager().getConstraintTool().constraintValue(entity.getLocalTranslation().getX());
-            float constrY = base.getTransformManager().getConstraintTool().constraintValue(entity.getLocalTranslation().getY());
-            float constrZ = base.getTransformManager().getConstraintTool().constraintValue(entity.getLocalTranslation().getZ());
+            
+            EditorTransformConstraint constraintTool = base.getTransformManager().getConstraintTool();
+            float constrX = constraintTool.constraintValue(entity.getLocalTranslation().getX(), constraintTool.getMoveConstraint());
+            float constrY = constraintTool.constraintValue(entity.getLocalTranslation().getY(), constraintTool.getMoveConstraint());
+            float constrZ = constraintTool.constraintValue(entity.getLocalTranslation().getZ(), constraintTool.getMoveConstraint());
 
             entity.setLocalTranslation(constrX, constrY, constrZ);
             base.getSelectionManager().calculateSelectionCenter();
@@ -453,10 +454,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer().attachChild(entitySp);
             EditorTransformConstraint constraintTool = base.getTransformManager().getConstraintTool();
 
-            if (constraintTool.getConstraint() > 0) {
-                float x = constraintTool.constraintValue(entitySp.getLocalTranslation().getX());
-                float y = constraintTool.constraintValue(entitySp.getLocalTranslation().getY());
-                float z = constraintTool.constraintValue(entitySp.getLocalTranslation().getZ());
+            if (constraintTool.getMoveConstraint() > 0) {
+                float x = constraintTool.constraintValue(entitySp.getLocalTranslation().getX(), constraintTool.getMoveConstraint());
+                float y = constraintTool.constraintValue(entitySp.getLocalTranslation().getY(), constraintTool.getMoveConstraint());
+                float z = constraintTool.constraintValue(entitySp.getLocalTranslation().getZ(), constraintTool.getMoveConstraint());
                 entitySp.setLocalTranslation(new Vector3f(x, y, z));
             }
 

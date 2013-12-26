@@ -177,7 +177,7 @@ public class EditorTransformMoveTool {
             // find distance to mave
             float distanceToMove = contactPoint.add(perendicularVec).distance(selectedCenter.getTranslation());
 
-            distanceToMove = constraintTool.constraintValue(distanceToMove);
+            distanceToMove = constraintTool.constraintValue(distanceToMove, constraintTool.getMoveConstraint());
             
             // invert value if it's needed for negative movement
             if (angle > FastMath.HALF_PI) {
