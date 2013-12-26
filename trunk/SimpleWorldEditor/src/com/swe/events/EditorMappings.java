@@ -87,7 +87,6 @@ public class EditorMappings implements AnalogListener, ActionListener {
         app.getInputManager().addMapping("EdtFrontView", new KeyTrigger(KeyInput.KEY_NUMPAD1));
         app.getInputManager().addMapping("EdtTopView", new KeyTrigger(KeyInput.KEY_NUMPAD7));
 
-
         addListener();
     }
 
@@ -118,22 +117,19 @@ public class EditorMappings implements AnalogListener, ActionListener {
             } else if (name.equals("MoveCameraHelperToSelection") && isPressed && base.getEventManager().isCtrlBool()) {
                 base.getGuiManager().cloneSelectedButton();
             } else if (name.equals("S_Key_Edt") && isPressed) {
-                if (base.getEventManager().isCtrlBool() && !base.getEventManager().isShiftBool()) {
-                    base.getGuiManager().saveSceneButton();
-//                    base.getEventManager().setCtrlBool(false);
-//                    base.getEventManager().setShiftBool(false);
-                } else if (base.getEventManager().isCtrlBool() && base.getEventManager().isShiftBool()) {
-                    base.getGuiManager().saveAsNewSceneButton();
-//                    base.getEventManager().setCtrlBool(false);
-//                    base.getEventManager().setShiftBool(false);
-                } else {
+//                if (base.getEventManager().isCtrlBool() && !base.getEventManager().isShiftBool()) {
+//                    base.getGuiManager().saveSceneButton();
+//                } else if (base.getEventManager().isCtrlBool() && base.getEventManager().isShiftBool()) {
+//                    base.getGuiManager().saveAsNewSceneButton();
+//                }
+//                else {
                     if (base.getSelectionManager().getSelectionList().size() > 0) {
                         base.getHistoryManager().prepareNewHistory();
                         base.getTransformManager().scaleAll();
                         transformResult = true;
                         base.getEventManager().setAction(true);
                     }
-                }
+//                }
             } else if (name.equals("MoveCameraHelperToSelection") && isPressed) {
                 if (!transformResult && !selectResult) {
                     Transform selectionCenter = base.getSelectionManager().getSelectionCenter();
