@@ -32,8 +32,12 @@
 
 
                 <!--Tools Panel-->   
-                
-                <panel id="toolsPanel" width="150px" height="95%" align="left" valign="center" childLayout="vertical" style="panel_style_01" padding="5" >
+                <panel id="toolsPanel" width="150px" height="95%" align="left" valign="center" childLayout="vertical" padding="5" >
+                      <control id="toolsTabsGroup" name="tabGroup">
+                                                        
+                        <control id="ToolsTab" name="tab" caption="Tools" group="toolsTabsGroup"  style="nifty-tabs-my"> 
+                                            
+                               
                     <control name="scrollPanel-my" horizontal="false" width="100%" height="100%" padding="5" stepSizeY="100" pageSizeY="100" autoScroll="off" >                             
                         <panel width="100%" height="1200px" align="left" valign="center" childLayout="vertical">
                             <effect>
@@ -115,65 +119,6 @@
                             </panel>        
 
 
-
-                            <!--Constraints-->
-                            <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
-                                <control id="RadioGroupConstraints" name="radioButtonGroup" />
-                                <panel width="10" />
-                                <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
-                                    <effect>
-                                        <onActive name="border" color="#0003" />
-                                    </effect>
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="None" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_none" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>
-
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="0.5" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_0.5" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>
-
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="1" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_1" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>
-                            
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="5" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_5" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>                            
-
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="10" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_10" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>                            
-                                                                    
-                                </panel>
-                            </panel>
-
-                            <panel height="5px" padding="10">
-                            </panel>
                     
 <!--                            Selection
                             <panel childLayout="vertical" align="center" valign="center" width="90%" height="48px" >
@@ -239,54 +184,128 @@
                             </panel>  
 
 
-                         <panel height="5px" padding="10">
-                            </panel>-->
+                                 <panel height="5px" padding="10">
+                                    </panel>-->
 
                                         
-                            <panel align="center" childLayout="vertical">
-                                <panel height="26px" align="center" childLayout="vertical">
-                                    <control id="cloneSelectedButton()" name="button" valign="center" align="center" style="ma_button" label="CloneSelected" visibleToMouse="true">
-                                        <interact onClick="cloneSelectedButton()"/>
-                                    </control>
-                                </panel>
+                                    <panel align="center" childLayout="vertical">
+                                        <panel height="26px" align="center" childLayout="vertical">
+                                            <control id="cloneSelectedButton()" name="button" valign="center" align="center" style="ma_button" label="CloneSelected" visibleToMouse="true">
+                                                <interact onClick="cloneSelectedButton()"/>
+                                            </control>
+                                        </panel>
                        
-                                <panel height="26px" align="center" childLayout="vertical">
-                                    <control id="moveToLayerTrue" name="button" style="ma_button" label="MoveToLayer" visibleToMouse="true">
-                                        <interact onClick="moveToLayerEnable(true)"/>
-                                    </control>
-                                </panel>
+                                        <panel height="26px" align="center" childLayout="vertical">
+                                            <control id="moveToLayerTrue" name="button" style="ma_button" label="MoveToLayer" visibleToMouse="true">
+                                                <interact onClick="moveToLayerEnable(true)"/>
+                                            </control>
+                                        </panel>
                         
-                                <panel height="26px" align="center" childLayout="vertical">
-                                    <control id="selectAllButton" name="button" style="ma_button" label="SelectAll" visibleToMouse="true">
-                                        <interact onClick="selectAllButton()"/>
-                                    </control>                        
-                                </panel>
-                            </panel>                        
+                                        <panel height="26px" align="center" childLayout="vertical">
+                                            <control id="selectAllButton" name="button" style="ma_button" label="SelectAll" visibleToMouse="true">
+                                                <interact onClick="selectAllButton()"/>
+                                            </control>                        
+                                        </panel>
+                                    </panel>                        
                     
-                            <panel height="5px" padding="10">
-                                <!-- add your content here -->
-                            </panel>              
+                                    <panel height="5px" padding="10">
+                                        <!-- add your content here -->
+                                    </panel>              
                     
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="button_set_grid" name="button" style="ma_button" label="Show Grid" visibleToMouse="true">
-                                    <interact onClick="setGrid()"/>
-                                </control>              
-                            </panel>
+                                    <panel height="26px" align="center" childLayout="vertical">
+                                        <control id="button_set_grid" name="button" style="ma_button" label="Show Grid" visibleToMouse="true">
+                                            <interact onClick="setGrid()"/>
+                                        </control>              
+                                    </panel>
                                                                                                                                                                                                                                             
-                            <panel height="5px" padding="10">
-                                <!-- add your content here -->
-                            </panel>              
+                                    <panel height="5px" padding="10">
+                                        <!-- add your content here -->
+                                    </panel>              
                     
-                            <panel height="26px" align="center" childLayout="vertical">
-                                <control id="removeEntityInScene" name="button" valign="center" align="center" style="ma_button" label="RemoveSelected" visibleToMouse="true">
-                                    <interact onClick="removeSelectedButton()"/>
-                                </control>                                                                          
-                            </panel>      
+                                    <panel height="26px" align="center" childLayout="vertical">
+                                        <control id="removeEntityInScene" name="button" valign="center" align="center" style="ma_button" label="RemoveSelected" visibleToMouse="true">
+                                            <interact onClick="removeSelectedButton()"/>
+                                        </control>                                                                          
+                                    </panel>      
                                                                                 
-                        </panel>
+                                </panel>
+                            </control>
+                        
+                        </control>
+                    
+                        <control id="ConstraintsTab" name="tab" caption="Const" group="toolsTabsGroup"  width="150px" height="95%" style="nifty-tabs-my"> 
+                                            
+                            <control name="scrollPanel-my" horizontal="false" width="100%" height="100%" padding="5" stepSizeY="100" pageSizeY="100" autoScroll="off" >                             
+                                
+
+
+                            <!--Constraints-->
+                            <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
+                                <control id="RadioGroupConstraints" name="radioButtonGroup" />
+                                <panel width="10" />
+                                <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
+                                    <effect>
+                                        <onActive name="border" color="#0003" />
+                                    </effect>
+                                    <panel childLayout="horizontal" width="100%" align="right">
+                                        <panel childLayout="horizontal" width="70%" align="right">
+                                            <control name="label" text="None" with="100%"/>
+                                        </panel>                        
+                                        <panel childLayout="horizontal" width="30%">
+                                            <control name="radioButton" id="constraint_none" group="RadioGroupConstraints" />
+                                        </panel>
+                                    </panel>
+
+                                    <panel childLayout="horizontal" width="100%" align="right">
+                                        <panel childLayout="horizontal" width="70%" align="right">
+                                            <control name="label" text="0.5" with="100%"/>
+                                        </panel>                        
+                                        <panel childLayout="horizontal" width="30%">
+                                            <control name="radioButton" id="constraint_0.5" group="RadioGroupConstraints" />
+                                        </panel>
+                                    </panel>
+
+                                    <panel childLayout="horizontal" width="100%" align="right">
+                                        <panel childLayout="horizontal" width="70%" align="right">
+                                            <control name="label" text="1" with="100%"/>
+                                        </panel>                        
+                                        <panel childLayout="horizontal" width="30%">
+                                            <control name="radioButton" id="constraint_1" group="RadioGroupConstraints" />
+                                        </panel>
+                                    </panel>
+                            
+                                    <panel childLayout="horizontal" width="100%" align="right">
+                                        <panel childLayout="horizontal" width="70%" align="right">
+                                            <control name="label" text="5" with="100%"/>
+                                        </panel>                        
+                                        <panel childLayout="horizontal" width="30%">
+                                            <control name="radioButton" id="constraint_5" group="RadioGroupConstraints" />
+                                        </panel>
+                                    </panel>                            
+
+                                    <panel childLayout="horizontal" width="100%" align="right">
+                                        <panel childLayout="horizontal" width="70%" align="right">
+                                            <control name="label" text="10" with="100%"/>
+                                        </panel>                        
+                                        <panel childLayout="horizontal" width="30%">
+                                            <control name="radioButton" id="constraint_10" group="RadioGroupConstraints" />
+                                        </panel>
+                                    </panel>                            
+                                                                    
+                                </panel>
+                            </panel>
+
+                            <panel height="5px" padding="10">
+                            </panel>
+                                
+                            </control> 
+                        </control>
+                    
                     </control>
-                </panel>
+                </panel>     
                 
+                           
+                                                 
                 <!--Layers Panel-->
                 <panel id="bottomPanel" height="1px" valign="bottom" align="center" childLayout="center">
                 </panel>
