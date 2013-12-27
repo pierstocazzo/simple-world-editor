@@ -30,7 +30,7 @@ public class EditorTransformConstraint {
                 strDistance = strDistance.substring(0, strDistance.indexOf(".") + 1);
             } else if (constaintValue == 1.0f) {
                 strDistance = strDistance.substring(0, strDistance.indexOf("."));
-            } else if ((constaintValue == 10.0f || constaintValue == 5.0f) || constaintValue > 10f) {
+            } else if ((constaintValue == 10.0f || constaintValue == 5.0f) || constaintValue > 45f) {
                 strDistance = strDistance.substring(0, strDistance.indexOf(".") - 1);
                 strDistance = strDistance + "0";
             }

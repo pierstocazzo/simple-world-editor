@@ -181,27 +181,65 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     /**
      * This is called when the RadioButton selection has changed.
      */
-    @NiftyEventSubscriber(id = "RadioGroupConstraints")
+    @NiftyEventSubscriber(id = "RadioMoveConstraint")
     public void RadioGroupConstraintsChanged(final String id, final RadioButtonGroupStateChangedEvent event) {
 
-        if (event.getSelectedId().equals("constraint_none")) {
+        if (event.getSelectedId().equals("move_constraint_none")) {
             base.getTransformManager().getConstraintTool().setMoveConstraint(0.0f);
             screen.getFocusHandler().resetFocusElements();
-        } else if (event.getSelectedId().equals("constraint_0.5")) {
+        } else if (event.getSelectedId().equals("move_constraint_0.5")) {
             base.getTransformManager().getConstraintTool().setMoveConstraint(0.5f);
             screen.getFocusHandler().resetFocusElements();
-        } else if (event.getSelectedId().equals("constraint_1")) {
+        } else if (event.getSelectedId().equals("move_constraint_1")) {
             base.getTransformManager().getConstraintTool().setMoveConstraint(1.0f);
             screen.getFocusHandler().resetFocusElements();
-        } else if (event.getSelectedId().equals("constraint_5")) {
+        } else if (event.getSelectedId().equals("move_constraint_5")) {
             base.getTransformManager().getConstraintTool().setMoveConstraint(5.0f);
             screen.getFocusHandler().resetFocusElements();
-        } else if (event.getSelectedId().equals("constraint_10")) {
+        } else if (event.getSelectedId().equals("move_constraint_10")) {
             base.getTransformManager().getConstraintTool().setMoveConstraint(10.0f);
             screen.getFocusHandler().resetFocusElements();
         }
     }
 
+    @NiftyEventSubscriber(id = "RadioRotateConstraint")
+    public void RadioGroupConstraintsChanged2(final String id, final RadioButtonGroupStateChangedEvent event) {
+
+        if (event.getSelectedId().equals("rotate_constraint_none")) {
+            base.getTransformManager().getConstraintTool().setRotateConstraint(0.0f);
+            screen.getFocusHandler().resetFocusElements();
+        } else if (event.getSelectedId().equals("rotate_constraint_1")) {
+            base.getTransformManager().getConstraintTool().setRotateConstraint(1.0f);
+            screen.getFocusHandler().resetFocusElements();
+        } else if (event.getSelectedId().equals("rotate_constraint_5")) {
+            base.getTransformManager().getConstraintTool().setRotateConstraint(5.0f);
+            screen.getFocusHandler().resetFocusElements();
+        } else if (event.getSelectedId().equals("rotate_constraint_10")) {
+            base.getTransformManager().getConstraintTool().setRotateConstraint(10.0f);
+            screen.getFocusHandler().resetFocusElements();
+        } else if (event.getSelectedId().equals("rotate_constraint_45")) {
+            base.getTransformManager().getConstraintTool().setRotateConstraint(45.0f);
+            screen.getFocusHandler().resetFocusElements();
+        }
+    }
+    
+    
+        @NiftyEventSubscriber(id = "RadioScaleConstraint")
+    public void RadioGroupConstraintsChanged3(final String id, final RadioButtonGroupStateChangedEvent event) {
+
+        if (event.getSelectedId().equals("scale_constraint_none")) {
+            base.getTransformManager().getConstraintTool().setScaleConstraint(0.0f);
+            screen.getFocusHandler().resetFocusElements();
+        } else if (event.getSelectedId().equals("scale_constraint_0.1")) {
+            base.getTransformManager().getConstraintTool().setScaleConstraint(0.1f);
+            screen.getFocusHandler().resetFocusElements();
+        } else if (event.getSelectedId().equals("scale_constraint_0.5")) {
+            base.getTransformManager().getConstraintTool().setScaleConstraint(0.5f);
+            screen.getFocusHandler().resetFocusElements();
+        }
+    }
+        
+        
 //    /**
 //     * This is called when the RadioButton selection has changed.
 //     */

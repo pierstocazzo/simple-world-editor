@@ -238,71 +238,179 @@
                             <control name="scrollPanel-my" horizontal="false" width="100%" height="100%" padding="5" stepSizeY="100" pageSizeY="100" autoScroll="off" >                             
                                 
 
-
-                            <!--Constraints-->
-                            <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
-                                <control id="RadioGroupConstraints" name="radioButtonGroup" />
-                                <panel width="10" />
-                                <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
-                                    <effect>
-                                        <onActive name="border" color="#0003" />
-                                    </effect>
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="None" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_none" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>
-
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="0.5" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_0.5" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>
-
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="1" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_1" group="RadioGroupConstraints" />
-                                        </panel>
+                                <panel width="100%" height="100%" childLayout="vertical"> 
+                                
+                                    <panel height="5px" padding="10">
                                     </panel>
                             
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="5" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_5" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>                            
+                                    <!--Constraints Movement-->
+                                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
+                                        <control id="RadioMoveConstraint" name="radioButtonGroup" />
+                                        <panel width="10" />
+                                        <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
+                                            <effect>
+                                                <onActive name="border" color="#0003" />
+                                            </effect>
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="None" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="move_constraint_none" group="RadioMoveConstraint" />
+                                                </panel>
+                                            </panel>
 
-                                    <panel childLayout="horizontal" width="100%" align="right">
-                                        <panel childLayout="horizontal" width="70%" align="right">
-                                            <control name="label" text="10" with="100%"/>
-                                        </panel>                        
-                                        <panel childLayout="horizontal" width="30%">
-                                            <control name="radioButton" id="constraint_10" group="RadioGroupConstraints" />
-                                        </panel>
-                                    </panel>                            
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="0.5" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="move_constraint_0.5" group="RadioMoveConstraint" />
+                                                </panel>
+                                            </panel>
+
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="1" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="move_constraint_1" group="RadioMoveConstraint" />
+                                                </panel>
+                                            </panel>
+                            
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="5" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="move_constraint_5" group="RadioMoveConstraint" />
+                                                </panel>
+                                            </panel>                            
+
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="10" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="move_constraint_10" group="RadioMoveConstraint" />
+                                                </panel>
+                                            </panel>                            
                                                                     
-                                </panel>
-                            </panel>
+                                        </panel>
+                                    </panel>
 
-                            <panel height="5px" padding="10">
-                            </panel>
+                                    <panel height="5px" padding="10">
+                                    </panel>
                                 
+                                
+                                    <!--Constraints Rotation-->
+                                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
+                                        <control id="RadioRotateConstraint" name="radioButtonGroup" />
+                                        <panel width="10" />
+                                        <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
+                                            <effect>
+                                                <onActive name="border" color="#0003" />
+                                            </effect>
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="None" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="rotate_constraint_none" group="RadioRotateConstraint" />
+                                                </panel>
+                                            </panel>
+
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="1" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="rotate_constraint_1" group="RadioRotateConstraint" />
+                                                </panel>
+                                            </panel>
+
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="5" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="rotate_constraint_5" group="RadioRotateConstraint" />
+                                                </panel>
+                                            </panel>
+                            
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="10" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="rotate_constraint_10" group="RadioRotateConstraint" />
+                                                </panel>
+                                            </panel>                            
+
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="45" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="rotate_constraint_45" group="RadioRotateConstraint" />
+                                                </panel>
+                                            </panel>                            
+                                                                    
+                                        </panel>
+                                    </panel>
+
+                                    <panel height="5px" padding="10">
+                                    </panel>
+                            
+                            
+                                    <!--Constraints Scale-->
+                                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
+                                        <control id="RadioScaleConstraint" name="radioButtonGroup" />
+                                        <panel width="10" />
+                                        <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">
+                                            <effect>
+                                                <onActive name="border" color="#0003" />
+                                            </effect>
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="None" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="scale_constraint_none" group="RadioScaleConstraint" />
+                                                </panel>
+                                            </panel>
+
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="0.1" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="scale_constraint_0.1" group="RadioScaleConstraint" />
+                                                </panel>
+                                            </panel>
+
+                                            <panel childLayout="horizontal" width="100%" align="right">
+                                                <panel childLayout="horizontal" width="70%" align="right">
+                                                    <control name="label" text="0.5" with="100%"/>
+                                                </panel>                        
+                                                <panel childLayout="horizontal" width="30%">
+                                                    <control name="radioButton" id="scale_constraint_0.5" group="RadioScaleConstraint" />
+                                                </panel>
+                                            </panel>
+
+                                        </panel>
+                                    </panel>
+
+                                    <panel height="5px" padding="10">
+                                    </panel>
+                              
+                                </panel>
+                                    
                             </control> 
                         </control>
                     
                     </control>
-                </panel>     
+                </panel>
                 
                            
                                                  
