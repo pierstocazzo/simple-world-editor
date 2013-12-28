@@ -244,6 +244,7 @@
                                     </panel>
                             
                                     <!--Constraints Movement-->
+                                    <control name="label" text="Movement" with="100%"/>
                                     <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
                                         <control id="RadioMoveConstraint" name="radioButtonGroup" />
                                         <panel width="10" />
@@ -304,6 +305,7 @@
                                 
                                 
                                     <!--Constraints Rotation-->
+                                    <control name="label" text="Rotation" with="100%"/>
                                     <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
                                         <control id="RadioRotateConstraint" name="radioButtonGroup" />
                                         <panel width="10" />
@@ -364,7 +366,8 @@
                             
                             
                                     <!--Constraints Scale-->
-                                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="120px" >
+                                    <control name="label" text="Scale" with="100%"/>
+                                    <panel childLayout="vertical" align="center" valign="center" width="90%" height="80px" >
                                         <control id="RadioScaleConstraint" name="radioButtonGroup" />
                                         <panel width="10" />
                                         <panel childLayout="vertical" paddingLeft="7px" paddingRight="7px" paddingTop="4px" paddingBottom="4px" width="100%">

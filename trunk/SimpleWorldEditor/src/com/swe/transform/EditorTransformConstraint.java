@@ -17,37 +17,24 @@ public class EditorTransformConstraint {
         rotateConstraint = 0f;
         scaleConstraint = 0f;
     }
-    
+
     public float constraintValue(float value, float constaintValue) {
 
-        float valueToConstrait = value;
+        if (constaintValue > 0f) {
+            float rest = value % constaintValue;
+            float valueToConstrait = value - rest;
 
-        // Make Constraint
-        if (constaintValue > 0.0f) {
-            float distanceTest = valueToConstrait + (constaintValue);
-            String strDistance = String.valueOf(valueToConstrait);
-            if (constaintValue == 0.5f) {
-                strDistance = strDistance.substring(0, strDistance.indexOf(".") + 1);
-            } else if (constaintValue == 1.0f) {
-                strDistance = strDistance.substring(0, strDistance.indexOf("."));
-            } else if ((constaintValue == 10.0f || constaintValue == 5.0f) || constaintValue > 45f) {
-                strDistance = strDistance.substring(0, strDistance.indexOf(".") - 1);
-                strDistance = strDistance + "0";
+            if (rest > constaintValue * 0.5f) {
+                valueToConstrait += constaintValue;
             }
 
-            float lowValue = Float.valueOf(strDistance);
-            float hightValue = lowValue + constaintValue;
+            return valueToConstrait;
 
-            if (valueToConstrait >= hightValue) {
-                valueToConstrait = hightValue;
-            } else {
-                valueToConstrait = lowValue;
-            }
+        } else {
+            return value;
         }
-
-        return valueToConstrait;
     }
-    
+
     public float getMoveConstraint() {
         return moveConstraint;
     }
@@ -71,5 +58,4 @@ public class EditorTransformConstraint {
     public void setScaleConstraint(float scaleConstraint) {
         this.scaleConstraint = scaleConstraint;
     }
-    
 }
