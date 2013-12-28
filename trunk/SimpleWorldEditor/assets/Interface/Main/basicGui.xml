@@ -226,8 +226,14 @@
                                         <control id="removeEntityInScene" name="button" valign="center" align="center" style="ma_button" label="RemoveSelected" visibleToMouse="true">
                                             <interact onClick="removeSelectedButton()"/>
                                         </control>                                                                          
-                                    </panel>      
-                                                                                
+                                    </panel>     
+
+                                    <panel height="26px" align="center" childLayout="vertical">
+                                        <control id="openPopupKeys" name="button" style="ma_button" label="Shortcuts" visibleToMouse="true">
+                                            <interact onClick="popupKeys(true)"/>
+                                        </control> 
+                                    </panel>     
+
                                 </panel>
                             </control>
                         

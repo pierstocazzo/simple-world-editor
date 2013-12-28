@@ -62,7 +62,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     private AssetManager assetManager;
     private ViewPort guiViewPort;
     private EditorBaseManager base;
-    private static Element popupMoveToLayer, popupEditComponent, popupEditAsset, popupEditSeneLg, rightPanel;
+    private static Element popupKeys, popupMoveToLayer, popupEditComponent, popupEditAsset, popupEditSeneLg, rightPanel;
     private static ListBox entitiesListBox, layersGroupObjectsListBox, componentsListBox, assetsListBox, scenesListbox, layersGroupsListbox;
     private ConcurrentHashMap<String, ListBox> listBoxesList;
     protected long lastIdOfComponentList, idComponentToChange;
@@ -106,26 +106,29 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            }
 //        }
 
+
         // set popup test
         popupMoveToLayer = nifty.createPopup("popupMoveToLayer");
         popupMoveToLayer.disable();
-        screen.getFocusHandler().resetFocusElements();
+//        screen.getFocusHandler().resetFocusElements();
 
         // set popup test
         popupEditComponent = nifty.createPopup("popupEditComponent");
         popupEditComponent.disable();
-        screen.getFocusHandler().resetFocusElements();
+//        screen.getFocusHandler().resetFocusElements();
 
         // set popup test
         popupEditAsset = nifty.createPopup("popupEditAsset");
         popupEditAsset.disable();
-        screen.getFocusHandler().resetFocusElements();
+//        screen.getFocusHandler().resetFocusElements();
 
         // set popup SceneLayersGoup
         popupEditSeneLg = nifty.createPopup("popupEditSeneLg");
         popupEditSeneLg.disable();
-        screen.getFocusHandler().resetFocusElements();
+//        screen.getFocusHandler().resetFocusElements();
 
+        popupKeys = nifty.createPopup("popupKeys");
+        popupKeys.disable();
 
         // ListBoxes
         listBoxesList = new ConcurrentHashMap<String, ListBox>();
@@ -222,9 +225,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             screen.getFocusHandler().resetFocusElements();
         }
     }
-    
-    
-        @NiftyEventSubscriber(id = "RadioScaleConstraint")
+
+    @NiftyEventSubscriber(id = "RadioScaleConstraint")
     public void RadioGroupConstraintsChanged3(final String id, final RadioButtonGroupStateChangedEvent event) {
 
         if (event.getSelectedId().equals("scale_constraint_none")) {
@@ -238,8 +240,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             screen.getFocusHandler().resetFocusElements();
         }
     }
-        
-        
+
 //    /**
 //     * This is called when the RadioButton selection has changed.
 //     */
@@ -269,6 +270,17 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            screen.getFocusHandler().resetFocusElements();
 //        }
 //    }
+    public void popupKeys(String str) {
+        if (str.equals("true")) {
+        popupKeys.enable();
+        nifty.showPopup(nifty.getCurrentScreen(), popupKeys.getId(), null);
+        } else {
+        nifty.closePopup(popupKeys.getId());
+        popupKeys.disable();
+        popupKeys.getFocusHandler().resetFocusElements();
+        screen.getFocusHandler().resetFocusElements();
+        }
+    }
 
     public void setMoveManipulator() {
         System.out.println("Manipulator is changed");
@@ -312,7 +324,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void snapObjectsToGrid() {
         for (Long id : base.getSelectionManager().getSelectionList()) {
             Node entity = (Node) base.getSpatialSystem().getSpatialControl(id).getGeneralNode();
-            
+
             EditorTransformConstraint constraintTool = base.getTransformManager().getConstraintTool();
             float constrX = constraintTool.constraintValue(entity.getLocalTranslation().getX(), constraintTool.getMoveConstraint());
             float constrY = constraintTool.constraintValue(entity.getLocalTranslation().getY(), constraintTool.getMoveConstraint());
@@ -348,7 +360,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //        base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
 //        screen.getFocusHandler().resetFocusElements();
 //    }
-
     public void setLocalCoords() {
         base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
         screen.getFocusHandler().resetFocusElements();
@@ -373,7 +384,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //        base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Normal);
 //        screen.getFocusHandler().resetFocusElements();
 //    }
-
     public Element getRightPanel() {
         return rightPanel;
     }
@@ -422,7 +432,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 for (String str : entList.keySet()) {
                     entitiesListBox.addItem(str);
                 }
-                
+
                 workers.updateSceneGUI(true, true);
 
                 entitiesListBox.sortAllItems();
@@ -539,7 +549,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         if (entitiesListBox.getSelection().size() > 0 && !base.getEventManager().isActive()) {
             String entityName = entitiesListBox.getSelection().get(0).toString();
             base.getSceneManager().removeClones(entityName);
-            
+
 //            // clear duplicates of clones for sceneObjectsListBox
 //            List<String> itemsToRemove = new ArrayList<String>();
 //            for ( int i=0; i < sceneObjectsListBox.getItems().size(); i++) {
@@ -555,7 +565,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            
 //            itemsToRemove.clear();
 //            itemsToRemove = null;
-            
+
             layersGroupObjectsListBox.sortAllItems();
             layersGroupObjectsListBox.refresh();
         }
@@ -926,7 +936,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 base.getSceneManager().getScenesList().remove(scene.getSceneName());
                 scene.clearScene(base.getSceneManager());
                 base.getSceneManager().setActiveSceneObject(base.getSceneManager().getScenesList().values().iterator().next());
-                
+
                 workers.updateSceneGUI(true, true);
                 base.getSelectionManager().calculateSelectionCenter();
             } else if (str.equals("Delete LayersGroup") && base.getSceneManager().getActiveSceneObject().getLayersGroupsList().size() > 1) {
@@ -1101,7 +1111,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
                 workers.updateSceneGUI(false, false);
             }
 
-            
+
             System.out.println("SceneGUI Updated!");
         }
     }
