@@ -60,6 +60,7 @@ public class EditorMappings implements AnalogListener, ActionListener {
             "SelectDeselectAll",
             "LeftShiftKey",
             "LeftCtrlKey",
+            "LeftAltKey",
             "DelecteSelectedEnt",
             "SelectAllKey",
             "W_Key_Edt",
@@ -78,6 +79,7 @@ public class EditorMappings implements AnalogListener, ActionListener {
         app.getInputManager().addMapping("ShowHideRightPanel", new KeyTrigger(KeyInput.KEY_TAB));
         app.getInputManager().addMapping("LeftShiftKey", new KeyTrigger(KeyInput.KEY_LSHIFT));
         app.getInputManager().addMapping("LeftCtrlKey", new KeyTrigger(KeyInput.KEY_LCONTROL));
+        app.getInputManager().addMapping("LeftAltKey", new KeyTrigger(KeyInput.KEY_LMENU));
         app.getInputManager().addMapping("DelecteSelectedEnt", new KeyTrigger(KeyInput.KEY_DELETE));
         app.getInputManager().addMapping("SelectAllKey", new KeyTrigger(KeyInput.KEY_A));
         app.getInputManager().addMapping("W_Key_Edt", new KeyTrigger(KeyInput.KEY_W));
@@ -123,12 +125,12 @@ public class EditorMappings implements AnalogListener, ActionListener {
 //                    base.getGuiManager().saveAsNewSceneButton();
 //                }
 //                else {
-                    if (base.getSelectionManager().getSelectionList().size() > 0) {
-                        base.getHistoryManager().prepareNewHistory();
-                        base.getTransformManager().scaleAll();
-                        transformResult = true;
-                        base.getEventManager().setAction(true);
-                    }
+                if (base.getSelectionManager().getSelectionList().size() > 0) {
+                    base.getHistoryManager().prepareNewHistory();
+                    base.getTransformManager().scaleAll();
+                    transformResult = true;
+                    base.getEventManager().setAction(true);
+                }
 //                }
             } else if (name.equals("MoveCameraHelperToSelection") && isPressed) {
                 if (!transformResult && !selectResult) {
@@ -146,6 +148,8 @@ public class EditorMappings implements AnalogListener, ActionListener {
             } else if (name.equals("W_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.WorldCoords);
+                } else if (base.getEventManager().isAltBool()) {
+                    base.getGuiManager().clearTransform("Translation");
                 } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
                 }
@@ -153,6 +157,8 @@ public class EditorMappings implements AnalogListener, ActionListener {
             } else if (name.equals("E_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
+                } else if (base.getEventManager().isAltBool()) {
+                    base.getGuiManager().clearTransform("Rotation");
                 } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
                 }
@@ -160,6 +166,8 @@ public class EditorMappings implements AnalogListener, ActionListener {
             } else if (name.equals("R_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.ViewCoords);
+                } else if (base.getEventManager().isAltBool()) {
+                    base.getGuiManager().clearTransform("Scale");
                 } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.ScaleTool);
                 }
@@ -204,6 +212,12 @@ public class EditorMappings implements AnalogListener, ActionListener {
         } else if (name.equals("LeftShiftKey") && !isPressed) {
             base.getEventManager().setShiftBool(false);
             base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Normal);
+        }
+
+        if (name.equals("LeftAltKey") && isPressed) {
+            base.getEventManager().setAltBool(true);
+        } else if (name.equals("LeftAltKey") && !isPressed) {
+            base.getEventManager().setAltBool(false);
         }
 
         // Select or transformTool an entity

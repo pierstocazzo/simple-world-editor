@@ -10,7 +10,7 @@ package com.swe.events;
  */
 public class EditorEventManager {
 
-    private boolean shiftBool, ctrlBool, action = false;
+    private boolean shiftBool, ctrlBool, altBool, action = false;
 
     public void setAction(boolean newAction) {
         action = newAction;
@@ -35,4 +35,13 @@ public class EditorEventManager {
     public void setCtrlBool(boolean ctrlBool) {
         this.ctrlBool = ctrlBool;
     }
+
+    public boolean isAltBool() {
+        return altBool;
+    }
+
+    public void setAltBool(boolean altBool) {
+        this.altBool = altBool;
+    }
+    
 }
