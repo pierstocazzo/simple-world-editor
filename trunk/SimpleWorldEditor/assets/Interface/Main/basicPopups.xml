@@ -16,16 +16,17 @@
             <panel align="center" width="95%" valign="center" childLayout="vertical" padding="5">
                 <text font="Interface/Fonts/Default.fnt" wrap="true" text="
 Shortcuts:&#10;&#10;
-Shft+LeftClick –-- Additive selection&#10;
+Shft+LeftClick –-- additive selection&#10;
 Ctrl+LeftClick –-- rectangle selection mode&#10;
 A –-- select/deselect&#10;
+C –-- center camera to selection&#10;
 Ctrl+C –-- clone&#10;
 Delete –-- delete&#10;
-Ctrl+z and Ctrl+Shift+Z –-- undo/redo&#10;
+Ctrl+z Ctrl+Shift+Z –-- undo/redo&#10;
 WER –-- move/rotate/scale&#10;
 Shift+W Shift+E Shift+R –-- World/Local/View coordinates&#10;
 Alt+W Alt+E Alt+R –-- clear Location/Rotation/Scale&#10;
-Numpad 1/3/7/Ctrl+1/Ctrl+3/Ctrl+7 –-- Top/Left/Front&#10;"  />
+Numpad 1/3/7/Ctrl+1/Ctrl+3/Ctrl+7 –-- Top/Left/Front view&#10;"  />
 
             </panel>
             <panel align="center" valign="center" childLayout="horizontal" padding="5">
