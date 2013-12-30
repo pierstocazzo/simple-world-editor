@@ -20,12 +20,26 @@ public class EditorTransformConstraint {
 
     public float constraintValue(float value, float constaintValue) {
 
-        if (constaintValue > 0f) {
-            float rest = value % constaintValue;
-            float valueToConstrait = value - rest;
+        float theValue = value + 0f;
+        float theConstraint = constaintValue + 0f;
 
-            if (rest > constaintValue * 0.5f) {
-                valueToConstrait += constaintValue;
+        // fix
+        if (constaintValue < 10f) {
+            theValue *= 100f;
+            theConstraint *= 100f;
+        }
+
+        if (theConstraint > 0f) {
+            float rest = theValue % theConstraint;
+            float valueToConstrait = theValue - rest;
+
+            if (rest > theConstraint * 0.5f) {
+                valueToConstrait += theConstraint;
+            }
+
+            // fix back
+            if (constaintValue < 10f) {
+                valueToConstrait /= 100f;
             }
 
             return valueToConstrait;

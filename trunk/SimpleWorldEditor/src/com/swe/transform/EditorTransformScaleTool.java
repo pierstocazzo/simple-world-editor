@@ -117,7 +117,7 @@ public class EditorTransformScaleTool {
 //            System.out.println("YY");
         }
 
-        System.out.println(scaleValue);
+//        System.out.println(scaleValue);
         trNode.setLocalScale(scalevec);
 
 
