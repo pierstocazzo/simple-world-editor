@@ -62,10 +62,10 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     private AssetManager assetManager;
     private ViewPort guiViewPort;
     private EditorBaseManager base;
-    private static Element popupKeys, popupMoveToLayer, popupEditComponent, popupEditAsset, popupEditSeneLg, rightPanel;
+    private static Element popupKeys, popupMoveToLayer, popupAddComponent, popupEditAsset, popupEditSeneLg, rightPanel;
     private static ListBox entitiesListBox, layersGroupObjectsListBox, componentsListBox, assetsListBox, scenesListbox, layersGroupsListbox;
     private ConcurrentHashMap<String, ListBox> listBoxesList;
-    protected long lastIdOfComponentList, idComponentToChange;
+    protected long lastIdOfComponentList;
     private EditorGuiWorkers workers;
 
     public EditorGuiManager(EditorBaseManager base) {
@@ -113,8 +113,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //        screen.getFocusHandler().resetFocusElements();
 
         // set popup test
-        popupEditComponent = nifty.createPopup("popupEditComponent");
-        popupEditComponent.disable();
+        popupAddComponent = nifty.createPopup("popupAddComponent");
+        popupAddComponent.disable();
 //        screen.getFocusHandler().resetFocusElements();
 
         // set popup test
@@ -168,8 +168,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     protected Element getPopup(String str) {
         if (str.equals("popupMoveToLayer")) {
             return popupMoveToLayer;
-        } else if (str.equals("popupEditComponent")) {
-            return popupEditComponent;
+        } else if (str.equals("popupAddComponent")) {
+            return popupAddComponent;
         } else if (str.equals("popupEditAsset")) {
             return popupEditAsset;
         } else {
@@ -272,13 +272,13 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //    }
     public void popupKeys(String str) {
         if (str.equals("true")) {
-        popupKeys.enable();
-        nifty.showPopup(nifty.getCurrentScreen(), popupKeys.getId(), null);
+            popupKeys.enable();
+            nifty.showPopup(nifty.getCurrentScreen(), popupKeys.getId(), null);
         } else {
-        nifty.closePopup(popupKeys.getId());
-        popupKeys.disable();
-        popupKeys.getFocusHandler().resetFocusElements();
-        screen.getFocusHandler().resetFocusElements();
+            nifty.closePopup(popupKeys.getId());
+            popupKeys.disable();
+            popupKeys.getFocusHandler().resetFocusElements();
+            screen.getFocusHandler().resetFocusElements();
         }
     }
 
@@ -545,26 +545,24 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         screen.getFocusHandler().resetFocusElements();
     }
 
+    
+    public void replaceModelsButton() {
+        if (entitiesListBox.getSelection().size() > 0 && !base.getEventManager().isActive()) {
+            String entityName = entitiesListBox.getSelection().get(0).toString();
+            String entPath = base.getSceneManager().getEntitiesListsList().get(entityName);
+            
+            base.getSceneManager().replaceModels(entPath);
+
+        }
+        screen.getFocusHandler().resetFocusElements();
+    }
+    
+    
     public void removeClonesButton() {
         if (entitiesListBox.getSelection().size() > 0 && !base.getEventManager().isActive()) {
             String entityName = entitiesListBox.getSelection().get(0).toString();
-            base.getSceneManager().removeClones(entityName);
-
-//            // clear duplicates of clones for sceneObjectsListBox
-//            List<String> itemsToRemove = new ArrayList<String>();
-//            for ( int i=0; i < sceneObjectsListBox.getItems().size(); i++) {
-//                String item = (String) sceneObjectsListBox.getItems().get(0);
-//                if (item.substring(0, item.indexOf("_IDX")).equals(entityName)) {
-//                    itemsToRemove.add(item);
-//                }                
-//            }
-//            
-//            for (String str : itemsToRemove) {
-//                sceneObjectsListBox.removeItem(str);
-//            }
-//            
-//            itemsToRemove.clear();
-//            itemsToRemove = null;
+            String entPath = base.getSceneManager().getEntitiesListsList().get(entityName);
+            base.getSceneManager().removeClones(entPath);
 
             layersGroupObjectsListBox.sortAllItems();
             layersGroupObjectsListBox.refresh();
@@ -714,15 +712,15 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void addComponentButton() {
         // if entity is selected
         if (base.getSelectionManager().getSelectionList().contains(lastIdOfComponentList)) {
-            idComponentToChange = lastIdOfComponentList; // set emp id to change
+//            idComponentToChange = lastIdOfComponentList; // set emp id to change
 
-            popupEditComponent.enable();
-            nifty.showPopup(nifty.getCurrentScreen(), popupEditComponent.getId(), null);
+            popupAddComponent.enable();
+            nifty.showPopup(nifty.getCurrentScreen(), popupAddComponent.getId(), null);
 
-            popupEditComponent.findNiftyControl("entityDataName", TextField.class).setText("");
-            popupEditComponent.findNiftyControl("entityData", TextField.class).setText("");
+            popupAddComponent.findNiftyControl("entityDataName", TextField.class).setText("");
+            popupAddComponent.findNiftyControl("entityData", TextField.class).setText("");
 
-            popupEditComponent.getFocusHandler().resetFocusElements();
+            popupAddComponent.getFocusHandler().resetFocusElements();
             base.getEditorMappings().removeListener();
             base.getCamManager().getChaseCam().setDisabled();
 
@@ -747,21 +745,14 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         if (componentsListBox.getSelection().size() > 0) {
             // textFields
             String dataComponentName = (String) componentsListBox.getSelection().get(0);
-
+            List selectedItem = componentsListBox.getSelection();
+            
             // if entity is selected
-            if (base.getSelectionManager().getSelectionList().contains(lastIdOfComponentList)) {
-                idComponentToChange = lastIdOfComponentList; // set emp id to change
+            if (selectedItem.size() != 0 && base.getSelectionManager().getSelectionList().contains(lastIdOfComponentList)) {
 
-                popupEditComponent.enable();
-                nifty.showPopup(nifty.getCurrentScreen(), popupEditComponent.getId(), null);
+                String value = screen.findNiftyControl("compEditValue", TextField.class).getDisplayedText();
+                base.getDataManager().getEntityData(lastIdOfComponentList).put((String) selectedItem.get(0), value);
 
-                ConcurrentHashMap<String, String> data = base.getDataManager().getEntityData(idComponentToChange);
-                popupEditComponent.findNiftyControl("entityDataName", TextField.class).setText(dataComponentName);
-                popupEditComponent.findNiftyControl("entityData", TextField.class).setText(data.get(dataComponentName));
-
-                popupEditComponent.getFocusHandler().resetFocusElements();
-                base.getEditorMappings().removeListener();
-                base.getCamManager().getChaseCam().setDisabled();
             }
         }
         screen.getFocusHandler().resetFocusElements();
@@ -797,15 +788,15 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         screen.getFocusHandler().resetFocusElements();
     }
 
-    public void finishEditComponent(String bool) {
+    public void finishAddComponent(String bool) {
         boolean boo = Boolean.valueOf(bool);
         // if entity is selected
 
         if (boo) {
-            ConcurrentHashMap<String, String> data = base.getDataManager().getEntityData(idComponentToChange);
+            ConcurrentHashMap<String, String> data = base.getDataManager().getEntityData(lastIdOfComponentList);
 
-            String newDataName = popupEditComponent.findNiftyControl("entityDataName", TextField.class).getDisplayedText();
-            String newData = popupEditComponent.findNiftyControl("entityData", TextField.class).getDisplayedText();
+            String newDataName = popupAddComponent.findNiftyControl("entityDataName", TextField.class).getDisplayedText();
+            String newData = popupAddComponent.findNiftyControl("entityData", TextField.class).getDisplayedText();
             data.put(newDataName, newData);
 
 //            if (base.getSelectionManager().getSelectionList().size() > 0
@@ -816,9 +807,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            }
         }
 
-        nifty.closePopup(popupEditComponent.getId());
-        popupEditComponent.disable();
-        popupEditComponent.getFocusHandler().resetFocusElements();
+        nifty.closePopup(popupAddComponent.getId());
+        popupAddComponent.disable();
+        popupAddComponent.getFocusHandler().resetFocusElements();
         screen.getFocusHandler().resetFocusElements();
         base.getEditorMappings().addListener();
         base.getCamManager().getChaseCam().setEnabled();
@@ -1273,17 +1264,38 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         String selectedTabName = screen.findNiftyControl("settingsTabsGroup", TabGroup.class).getSelectedTab().getId();
         if (screen.isRunning() && selectedTabName.equals("ComponentsTab")) {
             List<Long> selList = base.getSelectionManager().getSelectionList();
+
             if (selList.size() == 0) {
                 componentsListBox.clear();
                 lastIdOfComponentList = -1; // just for the case if user will select the same entity
             } else if (selList.get(selList.size() - 1) != lastIdOfComponentList) {
                 componentsListBox.clear();
                 lastIdOfComponentList = selList.get(selList.size() - 1);
-                ConcurrentHashMap<String, String> data = base.getDataManager().getEntityData(lastIdOfComponentList);
-                for (String key : data.keySet()) {
+                ConcurrentHashMap<String, String> data_1 = base.getDataManager().getEntityData(lastIdOfComponentList);
+                for (String key : data_1.keySet()) {
                     componentsListBox.addItem(key);
                 }
             }
+
+            // update selected component value
+            if (selList.size() != 0 && selList.get(selList.size() - 1) == lastIdOfComponentList) {
+                List selectedItem = componentsListBox.getSelection();
+                ConcurrentHashMap<String, String> data_2 = base.getDataManager().getEntityData(lastIdOfComponentList);
+                TextField componentText = screen.findNiftyControl("compDisplayValue", TextField.class);
+
+                if (selectedItem.size() > 0) {
+                    String dataValue = data_2.get(selectedItem.get(0));
+
+                    if (!dataValue.equals(componentText.getRealText())) {
+                        componentText.setText(dataValue);
+                    }
+                } else {
+                    if (!componentText.getRealText().equals("")) {
+                        componentText.setText("");
+                    }
+                }
+            }
+
             selList = null; // clear this object                    
         }
     }
@@ -1291,9 +1303,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     @Override
     public void cleanup() {
         super.cleanup();
-        //TODO: clean up what you initialized in the initialize method,
-        //e.g. remove all spatials from rootNode
-        //this is called on the OpenGL thread after the AppState has been detached
     }
 
     public void bind(Nifty nifty, Screen screen) {

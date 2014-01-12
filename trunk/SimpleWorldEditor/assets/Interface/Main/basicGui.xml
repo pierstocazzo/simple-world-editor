@@ -772,11 +772,22 @@
                                             <panel childLayout="horizontal">
                                                 <control id="addEntity" name="button" valign="center" align="center" style="ma_button" label="Add Entity" visibleToMouse="true">
                                                     <interact onClick="addEntityToSceneButton()"/>
-                                                </control> 
+                                                </control>
                                                 <control id="removeEntityClones" name="button" valign="center" align="center" style="ma_button" label="Remove Clones" visibleToMouse="true">
                                                     <interact onClick="removeClonesButton()"/>
-                                                </control> 
-                                            </panel>                  
+                                                </control>
+                                            </panel>
+                                            
+                                            <panel height="10px">
+                                            </panel>
+                                            
+                                            <panel childLayout="horizontal">
+                                                <control id="replaceSelectedModels" name="button" valign="center" align="center" style="ma_button" label="Replace Selected" visibleToMouse="true">
+                                                    <interact onClick="replaceModelsButton()"/>
+                                                </control>                                                
+                                            </panel>
+                                                
+                                                
                                         </panel>
                                 
                                     </panel>
@@ -790,10 +801,27 @@
                                 
                                 
                                         <panel childLayout="vertical">
+                                            
+                                            <text style="ma_button#text" width="50px" text="Components"  />
                                             <control id="componentsListBox" name="listBox-my" vertical="optional" horizontal="optional" displayItems="10" selection="Multiple">
                                             </control>
+                                            
+                                            <panel childLayout="horizontal" height="30px">
+                                                <text style="ma_button#text" width="50px" text="Value: "  />
+                                                <control id="compDisplayValue" name="textfield" text="" style="nifty-textfield-my"/>
+                                            </panel>
 
                                             <panel childLayout="horizontal">
+                                                <control id="editComponent" name="button" valign="center" width="50px" align="center" style="ma_button" label="Edit" visibleToMouse="true">
+                                                    <interact onClick="editComponent()"/>
+                                                </control>                                         
+                                                <control id="compEditValue" name="textfield" text="" style="nifty-textfield-my"/>
+                                            </panel>
+                                            
+                                            <panel height="8px">
+                                            </panel>
+                                                                                                                                    
+                                            <panel childLayout="horizontal" valign="center" align="center">
                                                 <control id="addComponent" name="button" valign="center" align="center" style="ma_button" label="Add" visibleToMouse="true">
                                                     <interact onClick="addComponentButton()"/>
                                                 </control> 
@@ -802,13 +830,10 @@
                                                 </control>
                                             </panel>                                    
 
-                                            <panel childLayout="horizontal">
-                                                <control id="editComponent" name="button" valign="center" align="center" style="ma_button" label="Edit" visibleToMouse="true">
-                                                    <interact onClick="editComponent()"/>
-                                                </control>                                         
+                                            <panel height="8px">
                                             </panel>
                                         
-                                            <panel childLayout="vertical">
+                                            <panel childLayout="vertical" valign="center" align="center">
                                                 <effect>
                                                     <onActive name="border" color="#8888" />
                                                 </effect>

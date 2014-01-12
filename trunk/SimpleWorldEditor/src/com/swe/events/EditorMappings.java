@@ -148,27 +148,33 @@ public class EditorMappings implements AnalogListener, ActionListener {
             } else if (name.equals("W_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.WorldCoords);
-                } else if (base.getEventManager().isAltBool()) {
-                    base.getGuiManager().clearTransform("Translation");
-                } else {
+                } 
+//                else if (base.getEventManager().isAltBool()) {
+//                    base.getGuiManager().clearTransform("Translation");
+//                } 
+                else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
                 }
 
             } else if (name.equals("E_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
-                } else if (base.getEventManager().isAltBool()) {
-                    base.getGuiManager().clearTransform("Rotation");
-                } else {
+                } 
+//                else if (base.getEventManager().isAltBool()) {
+//                    base.getGuiManager().clearTransform("Rotation");
+//                } 
+                else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
                 }
 
             } else if (name.equals("R_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.ViewCoords);
-                } else if (base.getEventManager().isAltBool()) {
-                    base.getGuiManager().clearTransform("Scale");
-                } else {
+                } 
+//                else if (base.getEventManager().isAltBool()) {
+//                    base.getGuiManager().clearTransform("Scale");
+//                } 
+                else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.ScaleTool);
                 }
 

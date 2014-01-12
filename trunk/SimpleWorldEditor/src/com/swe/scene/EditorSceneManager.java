@@ -9,6 +9,8 @@ import com.swe.es.components.EntityModelPathComponent;
 import com.swe.es.components.EntityNameComponent;
 import com.swe.es.EntitySpatialsControl;
 import com.jme3.app.Application;
+import com.jme3.asset.AssetInfo;
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.DesktopAssetManager;
 import com.jme3.asset.ModelKey;
@@ -16,13 +18,16 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.AssetLinkNode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.swe.EditorBaseManager;
 import java.awt.Dimension;
 import java.io.File;
@@ -61,6 +66,7 @@ public class EditorSceneManager {
     private boolean savePreviewJ3o;
     private DirectionalLight dl;
     private AmbientLight al;
+    private Node notFoundModel;
 
     public EditorSceneManager(Application app, EditorBaseManager base) {
 
@@ -91,18 +97,26 @@ public class EditorSceneManager {
         app.getViewPort().setBackgroundColor(ColorRGBA.DarkGray);
 
         savePreviewJ3o = false;
-        
+
         // create new scene
         EditorSceneObject scene1 = createSceneObject("Scene1");
         scene1.createLayersGroup("LayersGroup1");
         scene1.setActivelayersGroup(scene1.getLayersGroupsList().get("LayersGroup1"));
-        
+
         EditorSceneObject scene2 = createSceneObject("Scene2");
         setActiveSceneObject(scene2);
         scene2.createLayersGroup("LayersGroup1");
         scene2.createLayersGroup("LayersGroup2");
         scene2.setActivelayersGroup(scene2.getLayersGroupsList().get("LayersGroup1"));
         getActiveSceneObject().getActivelayersGroup().enableLayer(1); // set 1 layer enabled
+
+        // Unfound Model
+        notFoundModel = new Node("NOTFOUNDMODEL");
+        Geometry notFoundGeom = new Geometry("NOTFOUNDMODEL", new Box(1f, 1f, 1f));
+        Material notFoundMat = new Material(this.app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        notFoundMat.setColor("Color", ColorRGBA.Red);
+        notFoundGeom.setMaterial(notFoundMat);
+        notFoundModel.attachChild(notFoundGeom);
 
     }
 
@@ -239,12 +253,15 @@ public class EditorSceneManager {
                         long ID = Long.valueOf((String) objID);
                         JSONObject jsEntity = (JSONObject) jsEntities.get(objID);
 
+                        String idPath = (String) jsEntity.get("IDPath");
+
                         String idName = (String) jsEntity.get("IDName");
                         idName = idName.substring(0, idName.indexOf("_IDX"));
 
-                        System.out.println(idName);
+                        System.out.println("Name and Path: " + idName + "  " + idPath);
+
                         // create entity
-                        long entID = createEntityModel(idName, entitiesList.get(idName), ID);
+                        long entID = createEntityModel(idName, idPath, ID);
                         Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(entID).getGeneralNode();
                         newLayersGroup.getLayer(Integer.valueOf(strLayer)).attachChild(entityNode);
 
@@ -400,7 +417,9 @@ public class EditorSceneManager {
                         EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(idLong, EntityNameComponent.class);
                         entityJSON.put("IDName", nameComp.getName());
 
-//                        EntityModelPathComponent pathComp = (EntityModelPathComponent) base.getEntityManager().getComponent(idLong, EntityModelPathComponent.class);
+                        EntityModelPathComponent pathComp = (EntityModelPathComponent) base.getEntityManager().getComponent(idLong, EntityModelPathComponent.class);
+                        entityJSON.put("IDPath", pathComp.getModelPath());
+
                         entityJSON.put("IDModel", nameComp.getName().substring(0, nameComp.getName().indexOf("_IDX")));
 
                         // save transforms
@@ -494,6 +513,8 @@ public class EditorSceneManager {
         }
         assetsList.clear();
 
+        entitiesList.clear();
+
         dsk.clearCache(); // clear all loaded models        
 //        dsk.clearAssetEventListeners();
     }
@@ -566,8 +587,15 @@ public class EditorSceneManager {
                             Object IDObj = spEntity.getUserData("EntityID");
                             Object pathComponent = base.getEntityManager().getComponent((Long) IDObj, EntityModelPathComponent.class);
                             EntityModelPathComponent modelPath = (EntityModelPathComponent) pathComponent;
-                            ModelKey mkLinkToScene = new ModelKey(modelPath.getModelPath());
-                            AssetLinkNode linkedEntity = new AssetLinkNode(mkLinkToScene);
+                            
+                            Spatial linkedEntity;
+                            if (entitiesList.containsValue(modelPath.getModelPath())) {
+                                ModelKey mkLinkToScene = new ModelKey(modelPath.getModelPath());
+                                linkedEntity = new AssetLinkNode(mkLinkToScene);
+                            } else {
+                                linkedEntity = notFoundModel.clone(false);
+                            }
+
 
                             // set name
                             Object modelNameObj = base.getEntityManager().getComponent((Long) IDObj, EntityNameComponent.class);
@@ -620,21 +648,35 @@ public class EditorSceneManager {
 
     }
 
-    public Long createEntityModel(String name, String path, Long existedID) {
-
+    
+    private Node loadSpatial(String path){
         // setup Entity
         Node model = null;
         if (spatialsList.contains(path) == false) {
-            Node loadedModel = (Node) dsk.loadModel(path);
-            spatialsList.put(path, loadedModel);
-            model = loadedModel.clone(false);
+            AssetInfo theAsset = assetMan.locateAsset(new AssetKey(path));
+
+            if (theAsset != null) {
+                Node loadedModel = (Node) dsk.loadModel(path);
+                spatialsList.put(path, loadedModel);
+                model = loadedModel.clone(false);
+            } else {
+                model = (Node) notFoundModel.clone(false);
+            }
+
+
         } else {
             model = (Node) spatialsList.get(path).clone(false);
         }
+        
+        return model;
+    }
+    
+    public Long createEntityModel(String name, String path, Long existedID) {
+
+        Node model = loadSpatial(path);
 
         Vector3f camHelperPosition = base.getCamManager().getCamTrackHelper().getWorldTranslation();
         model.setLocalTranslation(camHelperPosition);
-
 
         long ent;
         if (existedID == null) {
@@ -661,15 +703,14 @@ public class EditorSceneManager {
         return ent;
     }
 
-    public void removeClones(String name) {
-        String nameToRemove = name + "_IDX";
+    public void removeClones(String path) {
         List<Long> selList = base.getSelectionManager().getSelectionList();
         List<Long> idsToRemove = new ArrayList<Long>();
         for (Long id : selList) {
 
             // remove objects from the scene
-            EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(id, EntityNameComponent.class);
-            if (nameComp.getName().indexOf(nameToRemove) == 0) {
+            EntityModelPathComponent pathComp = (EntityModelPathComponent) base.getEntityManager().getComponent(id, EntityModelPathComponent.class);
+            if (pathComp.getModelPath().equals(path)) {
                 idsToRemove.add(id);
             }
         }
@@ -684,33 +725,49 @@ public class EditorSceneManager {
         idsToRemove = null;
         base.getSelectionManager().calculateSelectionCenter();
     }
+    
+    public void replaceModels(String path) {
+        List<Long> selList = base.getSelectionManager().getSelectionList();
+        for (Long id : selList) {
+            EntityModelPathComponent pathComp = (EntityModelPathComponent) base.getEntityManager().getComponent(id, EntityModelPathComponent.class);
+            pathComp.setModelPath(path);
+            
+            Spatial newModel = loadSpatial(path);
+            EntitySpatialsControl spControl = base.getSpatialSystem().getSpatialControl(id);
+            base.getSelectionManager().removeSelectionBox((Node) spControl.getGeneralNode());
+            spControl.setGeneralNode(newModel);
+            base.getSelectionManager().createSelectionBox((Node) newModel);
+        }
+        
+        base.getSelectionManager().calculateSelectionCenter();
+    }
 
     public long cloneEntity(long idToClone, Node layerToClone) {
 //        List<Long> selectionList = base.getSelectionManager().getSelectionList();
 //        List<Long> tempList = new ArrayList<Long>();
 //        for (Long idOfSelected : listOfEntities) {
-            // selected entity's components
-            ComponentsControl compControlSelected = base.getEntityManager().getComponentControl(idToClone);
-            EntityModelPathComponent modelPathSelected = (EntityModelPathComponent) compControlSelected.getComponent(EntityModelPathComponent.class);
-            Node selectedModel = (Node) base.getSpatialSystem().getSpatialControl(idToClone).getGeneralNode();
+        // selected entity's components
+        ComponentsControl compControlSelected = base.getEntityManager().getComponentControl(idToClone);
+        EntityModelPathComponent modelPathSelected = (EntityModelPathComponent) compControlSelected.getComponent(EntityModelPathComponent.class);
+        Node selectedModel = (Node) base.getSpatialSystem().getSpatialControl(idToClone).getGeneralNode();
 //            Node layerToClone = selectedModel.getParent();
-            EntityNameComponent modelNameSelected = (EntityNameComponent) compControlSelected.getComponent(EntityNameComponent.class);
+        EntityNameComponent modelNameSelected = (EntityNameComponent) compControlSelected.getComponent(EntityNameComponent.class);
 
-            // new entity
-            String selectedName = modelNameSelected.getName().substring(0, modelNameSelected.getName().indexOf("_IDX"));
-            long newID = createEntityModel(selectedName, modelPathSelected.getModelPath(), null);
-            Node newModel = (Node) base.getSpatialSystem().getSpatialControl(newID).getGeneralNode();
-            newModel.setLocalTransform(selectedModel.getWorldTransform());
+        // new entity
+        String selectedName = modelNameSelected.getName().substring(0, modelNameSelected.getName().indexOf("_IDX"));
+        long newID = createEntityModel(selectedName, modelPathSelected.getModelPath(), null);
+        Node newModel = (Node) base.getSpatialSystem().getSpatialControl(newID).getGeneralNode();
+        newModel.setLocalTransform(selectedModel.getWorldTransform());
 
-            // Clone data
-            ConcurrentHashMap<String, String> dataOfSelected = base.getDataManager().getEntityData(idToClone);
-            ConcurrentHashMap<String, String> dataNew = base.getDataManager().getEntityData(newID);
-            for (String key : dataOfSelected.keySet()) {
-                dataNew.put(key, dataOfSelected.get(key));
-            }
+        // Clone data
+        ConcurrentHashMap<String, String> dataOfSelected = base.getDataManager().getEntityData(idToClone);
+        ConcurrentHashMap<String, String> dataNew = base.getDataManager().getEntityData(newID);
+        for (String key : dataOfSelected.keySet()) {
+            dataNew.put(key, dataOfSelected.get(key));
+        }
 
 //            tempList.add(newID);
-            layerToClone.attachChild(newModel);
+        layerToClone.attachChild(newModel);
 //        }
 
         return newID;
@@ -821,7 +878,19 @@ public class EditorSceneManager {
                 String modelRelativePath = f.getAbsolutePath().substring(dirEntity.length(), f.getAbsolutePath().length());
 
                 // Add found models
-                entitiesList.put(modelName, modelRelativePath);
+                if (!entitiesList.containsKey(modelName)) {
+                    entitiesList.put(modelName, modelRelativePath);
+                } else {
+
+                    String newModelName = modelName;
+                    int index = 0;
+                    do {
+                        newModelName = modelName + "_N" + index;
+                    } while (!entitiesList.containsKey(modelName));
+
+                    entitiesList.put(newModelName, modelRelativePath);
+                }
+
                 System.out.println("========>>FOUND ENTITY :: " + modelRelativePath);
             }
         }
@@ -864,22 +933,19 @@ public class EditorSceneManager {
         System.out.println(savePreviewJ3o);
     }
 
-    
-    
-    
     public static ConcurrentHashMap<String, EditorSceneObject> getScenesList() {
         return scenesList;
     }
-    
+
     public EditorSceneObject createSceneObject(String sceneName) {
         EditorSceneObject newScene = new EditorSceneObject(root, sceneName);
         newScene.setSceneEnabled(true);
 //        setActiveSceneObject(newScene);
         scenesList.put(sceneName, newScene);
-        
+
         return newScene;
     }
-    
+
     public EditorSceneObject getActiveSceneObject() {
         return activeScene;
     }
@@ -897,7 +963,7 @@ public class EditorSceneManager {
         }
 
     }
-    
+
     public EditorSceneObject cloneSceneObject(String newName, EditorSceneObject sceneToClone) {
         // CLONE SCENE
         EditorSceneObject newActiveClonedScene = createSceneObject(newName);

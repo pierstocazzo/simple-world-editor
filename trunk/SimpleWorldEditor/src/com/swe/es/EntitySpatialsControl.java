@@ -4,6 +4,7 @@
  */
 package com.swe.es;
 
+import com.jme3.math.Transform;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -47,8 +48,17 @@ public final class EntitySpatialsControl {
         return type;
     }
 
-    public Spatial setGeneralNode(Spatial sp) {
-        return spatial = sp;
+    public void setGeneralNode(Spatial sp) {
+        Transform tr = spatial.getLocalTransform();
+        Node layer = spatial.getParent();
+        
+        spatial.removeFromParent();
+        spatial = sp;
+        recurseNodeID(spatial);
+        spatial.setLocalTransform(tr);
+        if (layer != null) {
+            layer.attachChild(spatial);
+        }
     }
 
     public Spatial getGeneralNode() {
@@ -58,7 +68,10 @@ public final class EntitySpatialsControl {
     //Read the node child to find geomtry and stored it to the map for later access as submesh
     private void recurseNodeID(Spatial generalSp) {
         generalSp.setUserData("EntityID", ID);
-
+        
+        if (mapChildMeshes.size() > 0) {
+            mapChildMeshes.clear();
+        }
 
         // set user data to children recusively
         if (generalSp instanceof Node) {

@@ -19,7 +19,7 @@ public abstract class EditorGuiAbstractChild {
     protected Screen screen;
     protected EditorGuiManager guiManager;
     protected ListBox entitiesListBox, layersGroupsObjectsListBox, componentsListBox, assetsListBox, scenesListbox, layersGroupsListbox;
-    protected Element popupMoveToLayer, popupEditComponent, popupEditAsset;
+    protected Element popupMoveToLayer, popupAddComponent, popupEditAsset;
     
     public EditorGuiAbstractChild(EditorBaseManager base) {
         this.base = base;
@@ -33,7 +33,7 @@ public abstract class EditorGuiAbstractChild {
         layersGroupsListbox = guiManager.getListBoxesList().get("layersGroupsListBox");
         
         popupMoveToLayer = guiManager.getPopup("popupMoveToLayer");
-        popupEditComponent = guiManager.getPopup("popupEditComponent");
+        popupAddComponent = guiManager.getPopup("popupAddComponent");
         popupEditAsset = guiManager.getPopup("popupEditAsset");
     }
     
