@@ -51,8 +51,8 @@ public class SimpleChaseCamera implements ActionListener, AnalogListener {
         doRotate = false;
         horizontRotate = 0.0f;
         verticalRotate = 0.0f;
-        verticalUpLimit = FastMath.QUARTER_PI;
-        verticalDownLimit = 0.01f;
+        verticalUpLimit = FastMath.HALF_PI;
+        verticalDownLimit = -FastMath.HALF_PI;
         doVerticalConstraint = true;
         rotateSpeed = 1.0f;
 
@@ -192,16 +192,25 @@ public class SimpleChaseCamera implements ActionListener, AnalogListener {
 
                 // VERTICAL LIMITATION
                 if (doVerticalConstraint) {
-                    float angleVerticalNow = chaseCamNode.getWorldTranslation().subtract(chaseGeneralNode.getLocalTranslation()).normalizeLocal().
+                    float angleVerticalNow_z = chaseGeneralNode.getLocalRotation().mult(Vector3f.UNIT_Z).normalize().
                             angleBetween(Vector3f.UNIT_Y);
 
-                    if (angleVerticalNow < verticalUpLimit || angleVerticalNow > verticalDownLimit + FastMath.HALF_PI) {
+                    float angleVerticalNow_y = chaseGeneralNode.getLocalRotation().mult(Vector3f.UNIT_Y).normalize().
+                            angleBetween(Vector3f.UNIT_Y);
+
+                    if (angleVerticalNow_z > FastMath.HALF_PI && angleVerticalNow_y > FastMath.HALF_PI) {
+                        angleVerticalNow_y = -angleVerticalNow_y;
+                    }
+
+                    System.out.println(angleVerticalNow_y);
+
+                    if (angleVerticalNow_y > verticalUpLimit || angleVerticalNow_y < verticalDownLimit) {
                         float rotateToVertical = 0f;
 
-                        if (angleVerticalNow > verticalDownLimit + FastMath.HALF_PI) {
-                            rotateToVertical = (verticalDownLimit - angleVerticalNow) + FastMath.HALF_PI; // if rotateDown
+                        if (angleVerticalNow_y > verticalUpLimit) {
+                            rotateToVertical = angleVerticalNow_y - verticalUpLimit; // rotateUp
                         } else {
-                            rotateToVertical = verticalUpLimit - angleVerticalNow; // rotateUp
+                            rotateToVertical = angleVerticalNow_y + verticalUpLimit; // rotateUp
                         }
 
                         Quaternion xRotAgain = chaseGeneralNode.getLocalRotation().clone().fromAngleAxis(rotateToVertical, Vector3f.UNIT_X);
