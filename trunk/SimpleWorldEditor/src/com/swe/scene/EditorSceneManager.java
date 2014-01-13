@@ -599,8 +599,8 @@ public class EditorSceneManager {
 
                             // set name
                             Object modelNameObj = base.getEntityManager().getComponent((Long) IDObj, EntityNameComponent.class);
-                            EntityNameComponent modmodelName = (EntityNameComponent) modelNameObj;
-                            linkedEntity.setName(modmodelName.getName());
+                            EntityNameComponent modelName = (EntityNameComponent) modelNameObj;
+                            linkedEntity.setName(modelName.getName());
                             linkedEntity.setLocalTransform(spEntity.getWorldTransform());
 
                             // set components
@@ -608,6 +608,9 @@ public class EditorSceneManager {
                             for (String key : dataComponents.keySet()) {
                                 linkedEntity.setUserData(key, dataComponents.get(key));
                             }
+                            linkedEntity.setUserData("IDPath", modelPath.getModelPath());
+                            linkedEntity.setUserData("IDName", modelName.getName());
+                            
                             // add entity to a layer
                             layerToSave.attachChild(linkedEntity);
                         }
