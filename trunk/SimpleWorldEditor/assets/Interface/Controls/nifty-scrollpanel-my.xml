@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nifty-controls>
     
-  <controlDefinition name="scrollPanel-my" style="nifty-scrollpanel-my" childRootId="#nifty-scrollpanel-child-root" controller="de.lessvoid.nifty.controls.scrollpanel.ScrollPanelControl">
+  <controlDefinition name="scrollPanel-my" childRootId="#nifty-scrollpanel-child-root" controller="de.lessvoid.nifty.controls.scrollpanel.ScrollPanelControl">
       
     <panel childLayout="vertical">
       <panel childLayout="horizontal">
