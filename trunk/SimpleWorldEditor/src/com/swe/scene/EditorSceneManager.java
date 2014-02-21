@@ -4,6 +4,11 @@
  */
 package com.swe.scene;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.swe.es.ComponentsControl;
 import com.swe.es.components.EntityModelPathComponent;
 import com.swe.es.components.EntityNameComponent;
@@ -30,19 +35,21 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.swe.EditorBaseManager;
 import java.awt.Dimension;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -155,10 +162,10 @@ public class EditorSceneManager {
         return false;
     }
 
-    protected void loadSettings(String filePath, JSONObject jsScene) {
+    protected void loadSettings(String filePath, JsonObject jsScene) {
 
         // set new IDX
-        long lastIDX = Long.valueOf((String) jsScene.get("LastIDX"));
+        long lastIDX = jsScene.get("LastIDX").getAsLong();
         base.getEntityManager().setIdx(lastIDX);
 
         // version of the editor which the scene was saved
@@ -166,96 +173,96 @@ public class EditorSceneManager {
         //String SWEVersion = (String) jsScene.get("EditorVersion");
 
         // SevePreviewj3O
-        savePreviewJ3o = (Boolean) jsScene.get("savePreviewJ3o");
+        savePreviewJ3o = jsScene.get("savePreviewJ3o").getAsBoolean();
 
         // load assets
-        JSONObject jsPaths = (JSONObject) jsScene.get("AssetsPaths");
-        for (Object obj : jsPaths.keySet()) {
-            System.out.println("Loaded Path: " + (String) jsPaths.get(obj));
-            addAsset((String) jsPaths.get(obj));
+        JsonObject jsPaths = jsScene.get("AssetsPaths").getAsJsonObject();
+        for (Map.Entry<String, JsonElement> obj : jsPaths.entrySet()) {
+            System.out.println("Loaded Path: " + obj.getValue().getAsString());
+            addAsset(obj.getValue().getAsString());
         }
         System.out.println("Settings are loaded!");
     }
 
     protected void loadSweFile(String filePath) {
-        JSONObject loadSWEJson = loadToJsonFile(filePath + ".swe");
+        JsonObject loadSWEJson = loadToJsonFile(filePath + ".swe", false);
 
         loadSettings(filePath, loadSWEJson);
 
         // load Scenes
-        JSONObject jsScenes = (JSONObject) loadSWEJson.get("Scenes");
-        for (Object sceneStrObj : jsScenes.keySet()) {
-            JSONObject jsScene = (JSONObject) jsScenes.get(sceneStrObj);
+        JsonObject jsScenes = loadSWEJson.get("Scenes").getAsJsonObject();
+        for (Map.Entry<String, JsonElement> sceneStrObj : jsScenes.entrySet()) {
+            JsonObject jsScene = sceneStrObj.getValue().getAsJsonObject();
 
             // set new Scene
-            String strScene = (String) sceneStrObj;
+            String strScene = sceneStrObj.getKey();
             EditorSceneObject newSceneObj = new EditorSceneObject(root, strScene);
-            newSceneObj.setSceneEnabled((Boolean) jsScene.get("isEnabled"));
+            newSceneObj.setSceneEnabled(jsScene.get("isEnabled").getAsBoolean());
 
             // set Scene active
             Node newSceneNode = newSceneObj.getSceneNode();
-            newSceneNode.setUserData("isActive", (Boolean) jsScene.get("isActive"));
-            if ((Boolean) jsScene.get("isActive")) {
+            newSceneNode.setUserData("isActive", jsScene.get("isActive").getAsBoolean());
+            if (jsScene.get("isActive").getAsBoolean()) {
                 setActiveSceneObject(newSceneObj);
             }
 
             scenesList.put(strScene, newSceneObj); // add a scene to the list
 
             // Load LayersGroups of a Scene
-            JSONObject jsAllLayersGroups = (JSONObject) jsScene.get("LayersGroups");
-            for (Object layersGroupStrObj : jsAllLayersGroups.keySet()) {
-                JSONObject jsLayersGroup = (JSONObject) jsAllLayersGroups.get(layersGroupStrObj);
+            JsonObject jsAllLayersGroups = (JsonObject) jsScene.get("LayersGroups");
+            for (Map.Entry<String, JsonElement> layersGroupStrObj : jsAllLayersGroups.entrySet()) {
+                JsonObject jsLayersGroup = layersGroupStrObj.getValue().getAsJsonObject();
 
-                newSceneObj.createLayersGroup((String) layersGroupStrObj);
-                EditorLayersGroupObject newLayersGroup = newSceneObj.getLayersGroupsList().get((String) layersGroupStrObj);
-                newLayersGroup.setLayersGroupEnabled((Boolean) jsLayersGroup.get("isEnabled"));
+                newSceneObj.createLayersGroup(layersGroupStrObj.getKey());
+                EditorLayersGroupObject newLayersGroup = newSceneObj.getLayersGroupsList().get(layersGroupStrObj.getKey());
+                newLayersGroup.setLayersGroupEnabled(jsLayersGroup.get("isEnabled").getAsBoolean());
 
                 // set LayersGroup active
                 Node newLayersGroupNode = newLayersGroup.getLayersGroupNode();
-                if ((Boolean) jsLayersGroup.get("isActive")) {
+                if (jsLayersGroup.get("isActive").getAsBoolean()) {
                     newSceneObj.setActivelayersGroup(newLayersGroup);
                 }
 
                 // load layers
-                JSONObject jsLayers = (JSONObject) jsLayersGroup.get("Layers");
-                for (Object layerStrObj : jsLayers.keySet()) {
-                    JSONObject jslayer = (JSONObject) jsLayers.get(layerStrObj);
+                JsonObject jsLayers = (JsonObject) jsLayersGroup.get("Layers");
+                for (Map.Entry<String, JsonElement> layerStrObj : jsLayers.entrySet()) {
+                    JsonObject jslayer = layerStrObj.getValue().getAsJsonObject();
                     // get layer
-                    String strLayer = (String) layerStrObj;
+                    String strLayer = layerStrObj.getKey();
                     strLayer = strLayer.substring(strLayer.indexOf("layer") + 5, strLayer.length());
                     Node layerNode = newLayersGroup.getLayer(Integer.valueOf(strLayer));
                     System.out.println(strLayer + "Layer number");
 
                     // get layer states
-                    boolean isActive = (Boolean) jslayer.get("isActive");
+                    boolean isActive = jslayer.get("isActive").getAsBoolean();
                     if (isActive) {
                         newLayersGroup.setActiveLayer(layerNode);
 //                    layerNode.setUserData("isActive", true);
                     }
 
                     // don't forget to parse gui layers
-                    boolean isEnabled = (Boolean) jslayer.get("isEnabled");
+                    boolean isEnabled = jslayer.get("isEnabled").getAsBoolean();
                     if (isEnabled) {
                         newLayersGroup.getLayersGroupNode().attachChild(layerNode);
                         layerNode.setUserData("isEnabled", true);
                     }
 
                     // Locked Layer stats
-                    boolean isLocked = (Boolean) jslayer.get("isLocked");
+                    boolean isLocked = jslayer.get("isLocked").getAsBoolean();
                     if (isLocked) {
                         layerNode.setUserData("isLocked", true);
                     }
 
                     // create entities
-                    JSONObject jsEntities = (JSONObject) jslayer.get("Entities");
-                    for (Object objID : jsEntities.keySet()) {
+                    JsonObject jsEntities = (JsonObject) jslayer.get("Entities");
+                    for (Map.Entry<String, JsonElement> objID : jsEntities.entrySet()) {
                         System.out.println(objID + "OBJID");
-                        long ID = Long.valueOf((String) objID);
-                        JSONObject jsEntity = (JSONObject) jsEntities.get(objID);
+                        long ID = Long.valueOf(objID.getKey());
+                        JsonObject jsEntity = objID.getValue().getAsJsonObject();
 
-                        String idPath = (String) jsEntity.get("IDPath");
+                        String idPath = jsEntity.get("IDPath").getAsString();
 
-                        String idName = (String) jsEntity.get("IDName");
+                        String idName = jsEntity.get("IDName").getAsString();
                         idName = idName.substring(0, idName.indexOf("_IDX"));
 
                         System.out.println("Name and Path: " + idName + "  " + idPath);
@@ -266,14 +273,14 @@ public class EditorSceneManager {
                         newLayersGroup.getLayer(Integer.valueOf(strLayer)).attachChild(entityNode);
 
                         //set Transform for the entity
-                        JSONObject jsTransform = (JSONObject) jsEntity.get("IDTransform");
+                        JsonObject jsTransform = (JsonObject) jsEntity.get("IDTransform");
                         Transform entTransform = new Transform();
-                        entTransform.setTranslation(Float.valueOf((String) jsTransform.get("translationX")), Float.valueOf((String) jsTransform.get("translationY")),
-                                Float.valueOf((String) jsTransform.get("translationZ")));
+                        entTransform.setTranslation(jsTransform.get("translationX").getAsFloat(), jsTransform.get("translationY").getAsFloat(),
+                                jsTransform.get("translationZ").getAsFloat());
                         entTransform.setRotation(new Quaternion(
-                                Float.valueOf((String) jsTransform.get("rotationX")), Float.valueOf((String) jsTransform.get("rotationY")), Float.valueOf((String) jsTransform.get("rotationZ")),
-                                Float.valueOf((String) jsTransform.get("rotationW"))));
-                        entTransform.setScale(Float.valueOf((String) jsTransform.get("scaleX")), Float.valueOf((String) jsTransform.get("scaleY")), Float.valueOf((String) jsTransform.get("scaleZ")));
+                                jsTransform.get("rotationX").getAsFloat(), jsTransform.get("rotationY").getAsFloat(), jsTransform.get("rotationZ").getAsFloat(),
+                                jsTransform.get("rotationW").getAsFloat()));
+                        entTransform.setScale(jsTransform.get("scaleX").getAsFloat(), jsTransform.get("scaleY").getAsFloat(), jsTransform.get("scaleZ").getAsFloat());
                         entityNode.setLocalTransform(entTransform);
 
                         System.out.println(entTransform.toString());
@@ -281,10 +288,10 @@ public class EditorSceneManager {
                         layerNode.attachChild(entityNode);
 
                         //set data components for the entity
-                        JSONObject jsDataComponents = (JSONObject) jsEntity.get("IDDataComponents");
-                        for (Object strKey : jsDataComponents.keySet()) {
-                            String value = (String) jsDataComponents.get(strKey);
-                            base.getDataManager().getEntityData(ID).put((String) strKey, value);
+                        JsonObject jsDataComponents = (JsonObject) jsEntity.get("IDDataComponents");
+                        for (Map.Entry<String, JsonElement> strKey : jsDataComponents.entrySet()) {
+                            String value = strKey.getValue().getAsString();
+                            base.getDataManager().getEntityData(ID).put(strKey.getKey(), value);
                         }
                     }
 
@@ -341,125 +348,125 @@ public class EditorSceneManager {
         }
     }
 
-    private void saveSettings(String pathToSave, JSONObject saveSceneJson) {
+    private void saveSettings(String pathToSave, JsonObject saveSceneJson) {
 
         // save Last IDX
-        saveSceneJson.put("LastIDX", String.valueOf(base.getEntityManager().getIdx()));
+        saveSceneJson.addProperty("LastIDX", base.getEntityManager().getIdx());
 
         // save assets paths
-        JSONObject assetsToSave = new JSONObject();
+        JsonObject assetsToSave = new JsonObject();
 //        int assetIndex = 1;
         for (String str : assetsList) {
 
-            assetsToSave.put("AssetPath_" + assetsList.indexOf(str), str);
+            assetsToSave.addProperty("AssetPath_" + assetsList.indexOf(str), str);
         }
-        saveSceneJson.put("AssetsPaths", assetsToSave);
+        saveSceneJson.add("AssetsPaths", assetsToSave);
 
         // save version of the Simple World Editor
-        saveSceneJson.put("EditorVersion", base.getEditorVersion());
-        saveSceneJson.put("savePreviewJ3o", savePreviewJ3o);
+        saveSceneJson.addProperty("EditorVersion", base.getEditorVersion());
+        saveSceneJson.addProperty("savePreviewJ3o", savePreviewJ3o);
 
     }
 
     private void saveSweFile(String pathToSave) {
-        JSONObject saveSWEJson = new JSONObject();
+        JsonObject saveSWEJson = new JsonObject();
 
         saveSettings(pathToSave, saveSWEJson);
 
         //save scenes
-        JSONObject allScenes = new JSONObject();
+        JsonObject allScenes = new JsonObject();
 
         for (String sceneName : scenesList.keySet()) {
-            JSONObject sceneToSave = new JSONObject();
+            JsonObject sceneToSave = new JsonObject();
 
             // save scene states
             Node sceneNode = scenesList.get(sceneName).getSceneNode();
             Object isActScene = sceneNode.getUserData("isActive");
-            sceneToSave.put("isActive", (Boolean) isActScene);
+            sceneToSave.addProperty("isActive", (Boolean) isActScene);
             Object isEnScene = sceneNode.getUserData("isEnabled");
-            sceneToSave.put("isEnabled", (Boolean) isEnScene);
+            sceneToSave.addProperty("isEnabled", (Boolean) isEnScene);
 
 
             //save LayerGroups
-            JSONObject allLayersGroups = new JSONObject();
+            JsonObject allLayersGroups = new JsonObject();
             for (EditorLayersGroupObject layersGroup : scenesList.get(sceneName).getLayersGroupsList().values()) {
-                JSONObject layersGroupToSave = new JSONObject();
+                JsonObject layersGroupToSave = new JsonObject();
 
                 // save layerGroup states
                 Node layersGroupNode = layersGroup.getLayersGroupNode();
                 Object isActLayersGroup = layersGroupNode.getUserData("isActive");
-                layersGroupToSave.put("isActive", (Boolean) isActLayersGroup);
+                layersGroupToSave.addProperty("isActive", (Boolean) isActLayersGroup);
                 Object isEnLayersGroup = layersGroupNode.getUserData("isEnabled");
-                layersGroupToSave.put("isEnabled", (Boolean) isEnLayersGroup);
+                layersGroupToSave.addProperty("isEnabled", (Boolean) isEnLayersGroup);
 
                 //save layers
-                JSONObject allLayers = new JSONObject();
+                JsonObject allLayers = new JsonObject();
                 for (Node layerNode : layersGroup.getLayers()) {
-                    JSONObject layerToSave = new JSONObject();
+                    JsonObject layerToSave = new JsonObject();
 
                     // save layer states
                     Object isActLayer = layerNode.getUserData("isActive");
-                    layerToSave.put("isActive", (Boolean) isActLayer);
+                    layerToSave.addProperty("isActive", (Boolean) isActLayer);
                     Object isEnLayer = layerNode.getUserData("isEnabled");
-                    layerToSave.put("isEnabled", (Boolean) isEnLayer);
+                    layerToSave.addProperty("isEnabled", (Boolean) isEnLayer);
                     Object isLockedLayer = layerNode.getUserData("isLocked");
-                    layerToSave.put("isLocked", (Boolean) isLockedLayer);
+                    layerToSave.addProperty("isLocked", (Boolean) isLockedLayer);
 
                     // save ID entities
-                    JSONObject entitiesToSave = new JSONObject();
+                    JsonObject entitiesToSave = new JsonObject();
                     for (Spatial sp : layerNode.getChildren()) {
-                        JSONObject entityJSON = new JSONObject();
+                        JsonObject entityJSON = new JsonObject();
 
                         Object idObj = sp.getUserData("EntityID");
                         long idLong = (Long) idObj;
 
                         // save name
                         EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(idLong, EntityNameComponent.class);
-                        entityJSON.put("IDName", nameComp.getName());
+                        entityJSON.addProperty("IDName", nameComp.getName());
 
                         EntityModelPathComponent pathComp = (EntityModelPathComponent) base.getEntityManager().getComponent(idLong, EntityModelPathComponent.class);
-                        entityJSON.put("IDPath", pathComp.getModelPath());
+                        entityJSON.addProperty("IDPath", pathComp.getModelPath());
 
-                        entityJSON.put("IDModel", nameComp.getName().substring(0, nameComp.getName().indexOf("_IDX")));
+                        entityJSON.addProperty("IDModel", nameComp.getName().substring(0, nameComp.getName().indexOf("_IDX")));
 
                         // save transforms
                         Transform trID = sp.getWorldTransform();
 //                trID.getRotation().inverseLocal();
-                        JSONObject transformToSave = new JSONObject();
-                        transformToSave.put("translationX", String.valueOf(trID.getTranslation().getX()));
-                        transformToSave.put("translationY", String.valueOf(trID.getTranslation().getY()));
-                        transformToSave.put("translationZ", String.valueOf(trID.getTranslation().getZ()));
-                        transformToSave.put("rotationX", String.valueOf(trID.getRotation().getX()));
-                        transformToSave.put("rotationY", String.valueOf(trID.getRotation().getY()));
-                        transformToSave.put("rotationZ", String.valueOf(trID.getRotation().getZ()));
-                        transformToSave.put("rotationW", String.valueOf(trID.getRotation().getW()));
-                        transformToSave.put("scaleX", String.valueOf(trID.getScale().getX()));
-                        transformToSave.put("scaleY", String.valueOf(trID.getScale().getY()));
-                        transformToSave.put("scaleZ", String.valueOf(trID.getScale().getZ()));
-                        entityJSON.put("IDTransform", transformToSave);
+                        JsonObject transformToSave = new JsonObject();
+                        transformToSave.addProperty("translationX", trID.getTranslation().getX());
+                        transformToSave.addProperty("translationY", trID.getTranslation().getY());
+                        transformToSave.addProperty("translationZ", trID.getTranslation().getZ());
+                        transformToSave.addProperty("rotationX", trID.getRotation().getX());
+                        transformToSave.addProperty("rotationY", trID.getRotation().getY());
+                        transformToSave.addProperty("rotationZ", trID.getRotation().getZ());
+                        transformToSave.addProperty("rotationW", trID.getRotation().getW());
+                        transformToSave.addProperty("scaleX", trID.getScale().getX());
+                        transformToSave.addProperty("scaleY", trID.getScale().getY());
+                        transformToSave.addProperty("scaleZ", trID.getScale().getZ());
+                        entityJSON.add("IDTransform", transformToSave);
 
                         // seve data components of entity
                         ConcurrentHashMap<String, String> entityData = base.getDataManager().getEntityData(idLong);
-                        JSONObject dataComponentsToSave = new JSONObject();
+                        JsonObject dataComponentsToSave = new JsonObject();
                         for (String strKey : entityData.keySet()) {
-                            dataComponentsToSave.put(strKey, entityData.get(strKey));
+                            dataComponentsToSave.addProperty(strKey, entityData.get(strKey));
                         }
-                        entityJSON.put("IDDataComponents", dataComponentsToSave);
+                        entityJSON.add("IDDataComponents", dataComponentsToSave);
 
-                        entitiesToSave.put(String.valueOf(idLong), entityJSON);
+                        entitiesToSave.add(String.valueOf(idLong), entityJSON);
                     }
 
-                    layerToSave.put("Entities", entitiesToSave);
-                    allLayers.put(layerNode.getName(), layerToSave);
+                    layerToSave.add("Entities", entitiesToSave);
+                    allLayers.add(layerNode.getName(), layerToSave);
                 }
-                layersGroupToSave.put("Layers", allLayers);
-                allLayersGroups.put(layersGroup.getLayersGroupName(), layersGroupToSave);
+                layersGroupToSave.add("Layers", allLayers);
+                allLayersGroups.add(layersGroup.getLayersGroupName(), layersGroupToSave);
             }
-            sceneToSave.put("LayersGroups", allLayersGroups);
-            allScenes.put(sceneName, sceneToSave);
+            sceneToSave.add("LayersGroups", allLayersGroups);
+            allScenes.add(sceneName, sceneToSave);
         }
 
-        saveSWEJson.put("Scenes", allScenes);
+        saveSWEJson.add("Scenes", allScenes);
         saveJsonFile(pathToSave + ".swe", saveSWEJson);
         System.out.println("File saved: " + pathToSave + ".swe");
     }
@@ -587,7 +594,7 @@ public class EditorSceneManager {
                             Object IDObj = spEntity.getUserData("EntityID");
                             Object pathComponent = base.getEntityManager().getComponent((Long) IDObj, EntityModelPathComponent.class);
                             EntityModelPathComponent modelPath = (EntityModelPathComponent) pathComponent;
-                            
+
                             Spatial linkedEntity;
                             if (entitiesList.containsValue(modelPath.getModelPath())) {
                                 ModelKey mkLinkToScene = new ModelKey(modelPath.getModelPath());
@@ -610,7 +617,7 @@ public class EditorSceneManager {
                             }
                             linkedEntity.setUserData("IDPath", modelPath.getModelPath());
                             linkedEntity.setUserData("IDName", modelName.getName());
-                            
+
                             // add entity to a layer
                             layerToSave.attachChild(linkedEntity);
                         }
@@ -651,8 +658,7 @@ public class EditorSceneManager {
 
     }
 
-    
-    private Node loadSpatial(String path){
+    private Node loadSpatial(String path) {
         // setup Entity
         Node model = null;
         if (spatialsList.contains(path) == false) {
@@ -670,10 +676,10 @@ public class EditorSceneManager {
         } else {
             model = (Node) spatialsList.get(path).clone(false);
         }
-        
+
         return model;
     }
-    
+
     public Long createEntityModel(String name, String path, Long existedID) {
 
         Node model = loadSpatial(path);
@@ -728,20 +734,20 @@ public class EditorSceneManager {
         idsToRemove = null;
         base.getSelectionManager().calculateSelectionCenter();
     }
-    
+
     public void replaceModels(String path) {
         List<Long> selList = base.getSelectionManager().getSelectionList();
         for (Long id : selList) {
             EntityModelPathComponent pathComp = (EntityModelPathComponent) base.getEntityManager().getComponent(id, EntityModelPathComponent.class);
             pathComp.setModelPath(path);
-            
+
             Spatial newModel = loadSpatial(path);
             EntitySpatialsControl spControl = base.getSpatialSystem().getSpatialControl(id);
             base.getSelectionManager().removeSelectionBox((Node) spControl.getGeneralNode());
             spControl.setGeneralNode(newModel);
             base.getSelectionManager().createSelectionBox((Node) newModel);
         }
-        
+
         base.getSelectionManager().calculateSelectionCenter();
     }
 
@@ -805,14 +811,19 @@ public class EditorSceneManager {
         return pathCorrected;
     }
 
-    protected void saveJsonFile(String pathToSave, JSONObject saveJson) {
+    protected void saveJsonFile(String pathToSave, JsonObject saveJson) {
         try {
             File saveFile = new File(pathToSave);
             saveFile.setReadable(true);
             saveFile.setWritable(true);
 
+            Gson gs = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .disableHtmlEscaping()
+                    .create();
+
             FileWriter fileToSave = new FileWriter(saveFile);
-            fileToSave.write(saveJson.toJSONString());
+            fileToSave.write(gs.toJson(saveJson));
             fileToSave.flush();
             fileToSave.close();
 
@@ -834,26 +845,30 @@ public class EditorSceneManager {
         root.addLight(al);
     }
 
-    protected JSONObject loadToJsonFile(String path) {
-        // Load JSON script
-        JSONParser json = new JSONParser();
-
+    protected JsonObject loadToJsonFile(String path, boolean isClassPath) {
         FileReader fileRead = null;
-        JSONObject jsObj = null;
+        JsonObject jsObj = null;
 
         try {
-            fileRead = new FileReader(new File(path));
-        } catch (FileNotFoundException ex) {
-            System.out.println("bad JSON file");
-        }
+            InputStream inputStr = null;
+            if (isClassPath) {
+                inputStr = getClass().getResourceAsStream(path);
+            } else {
+                inputStr = new FileInputStream(path);
+            }
 
-        try {
-            jsObj = (JSONObject) json.parse(fileRead);
-            fileRead.close();
+            InputStreamReader inputStrRead = new InputStreamReader(inputStr);
+            BufferedReader bufRead = new BufferedReader(inputStrRead);
+//            jsObj = (JSONObject) json.parse(br);
+            jsObj = new JsonParser().parse(bufRead).getAsJsonObject();
+//            fileRead.close();
+            bufRead.close();
+            bufRead = null;
+            inputStrRead = null;
+
         } catch (IOException ex) {
-            System.out.println("bad JSON file");
-        } catch (org.json.simple.parser.ParseException ex) {
-            System.out.println("bad JSON file Parser");
+            throw new UnsupportedOperationException("bad JSON file");
+//            System.out.println("bad JSON file");
         }
 
         return jsObj;

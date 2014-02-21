@@ -55,7 +55,7 @@ public class EditorBaseManager {
     private EditorEventManager eventManager;
 
     // Version of the Editor
-    private static String editorVersion;
+    private static float editorVersion;
 
     public EditorBaseManager(Application app) {
 
@@ -108,7 +108,7 @@ public class EditorBaseManager {
        
     }
 
-    public static String getEditorVersion() {
+    public float getEditorVersion() {
         return editorVersion;
     }    
     

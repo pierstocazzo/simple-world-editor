@@ -9,5 +9,5 @@ package com.swe;
  * @author mifth
  */
 public class EditorVersion {
-    public static String editorVersion = "0.16";
+    public static float editorVersion = 0.16f;
 }

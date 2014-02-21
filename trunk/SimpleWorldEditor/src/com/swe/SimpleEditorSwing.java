@@ -80,8 +80,8 @@ public class SimpleEditorSwing {
         Dimension scrnsize = toolkit.getScreenSize();
 
         settings.setVSync(true);
-        settings.setWidth(scrnsize.width - 800);
-        settings.setHeight(scrnsize.height - 400);
+        settings.setWidth(scrnsize.width - 100);
+        settings.setHeight(scrnsize.height - 100);
 
         try {
             Class<? extends Application> clazz = (Class<? extends Application>) Class.forName(appClass);
@@ -113,7 +113,7 @@ public class SimpleEditorSwing {
             public Void call() {
                 if (app instanceof SimpleApplication) {
                     SimpleApplication simpleApp = (SimpleApplication) app;
-                    simpleApp.getFlyByCamera().setDragToRotate(true);
+//                    simpleApp.getFlyByCamera().setDragToRotate(true);
                 }
                 return null;
             }
@@ -132,6 +132,11 @@ public class SimpleEditorSwing {
 
         createCanvas(appClass);
 
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+        }
+        
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
 
@@ -160,10 +165,5 @@ public class SimpleEditorSwing {
                 frame.setVisible(true);
             }
         });
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-        }
     }
 }
