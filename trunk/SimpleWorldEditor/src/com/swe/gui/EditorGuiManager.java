@@ -36,6 +36,8 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.CheckBox;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
+import de.lessvoid.nifty.controls.RadioButton;
+import de.lessvoid.nifty.controls.RadioButtonGroup;
 import de.lessvoid.nifty.controls.RadioButtonGroupStateChangedEvent;
 import de.lessvoid.nifty.controls.TabGroup;
 import de.lessvoid.nifty.controls.TextField;
@@ -157,7 +159,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         workers = new EditorGuiWorkers(base);
         workers.updateSceneGUI(true, true);
-
+        
         screen.getFocusHandler().resetFocusElements();
     }
 
@@ -201,6 +203,9 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             screen.getFocusHandler().resetFocusElements();
         } else if (event.getSelectedId().equals("move_constraint_10")) {
             base.getTransformManager().getConstraintTool().setMoveConstraint(10.0f);
+            screen.getFocusHandler().resetFocusElements();
+        } else if (event.getSelectedId().equals("move_constraint_50")) {
+            base.getTransformManager().getConstraintTool().setMoveConstraint(50.0f);
             screen.getFocusHandler().resetFocusElements();
         }
     }

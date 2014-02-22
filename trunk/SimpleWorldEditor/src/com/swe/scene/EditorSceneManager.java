@@ -6,6 +6,7 @@ package com.swe.scene;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -34,6 +35,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.swe.EditorBaseManager;
+import de.lessvoid.nifty.controls.RadioButton;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
@@ -45,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -162,10 +165,10 @@ public class EditorSceneManager {
         return false;
     }
 
-    protected void loadSettings(String filePath, JsonObject jsScene) {
+    protected void loadSettings(JsonObject jsSettings) {
 
         // set new IDX
-        long lastIDX = jsScene.get("LastIDX").getAsLong();
+        long lastIDX = jsSettings.get("LastIDX").getAsLong();
         base.getEntityManager().setIdx(lastIDX);
 
         // version of the editor which the scene was saved
@@ -173,29 +176,130 @@ public class EditorSceneManager {
         //String SWEVersion = (String) jsScene.get("EditorVersion");
 
         // SevePreviewj3O
-        savePreviewJ3o = jsScene.get("savePreviewJ3o").getAsBoolean();
+        savePreviewJ3o = jsSettings.get("savePreviewJ3o").getAsBoolean();
 
         // load assets
-        JsonObject jsPaths = jsScene.get("AssetsPaths").getAsJsonObject();
+        JsonObject jsPaths = jsSettings.get("AssetsPaths").getAsJsonObject();
         for (Map.Entry<String, JsonElement> obj : jsPaths.entrySet()) {
             System.out.println("Loaded Path: " + obj.getValue().getAsString());
             addAsset(obj.getValue().getAsString());
         }
+        
+        
+        JsonObject constraintsJson = jsSettings.get("TransformConstraints").getAsJsonObject();
+
+        // MOVE CONSTR
+        float moveConstrValue = constraintsJson.get("MoveConstraint").getAsFloat();
+        base.getTransformManager().getConstraintTool().setMoveConstraint(moveConstrValue);
+        
+        String moveRadioStr = "move_constraint_none";
+        if (moveConstrValue == 0.5f) {
+            moveRadioStr = "move_constraint_0.5";
+        } else if (moveConstrValue == 1f) {
+            moveRadioStr = "move_constraint_1";
+        } else if (moveConstrValue == 5f) {
+            moveRadioStr = "move_constraint_5";
+        } else if (moveConstrValue == 10f) {
+            moveRadioStr = "move_constraint_10";
+        } else if (moveConstrValue == 50f) {
+            moveRadioStr = "move_constraint_50";
+        }
+        
+        RadioButton moveConstrRadioButton = base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl(moveRadioStr, RadioButton.class);
+        moveConstrRadioButton.select();
+
+        // ROTATE CONSTR
+        float rotateConstrValue = constraintsJson.get("RotateConstraint").getAsFloat();
+        base.getTransformManager().getConstraintTool().setRotateConstraint(rotateConstrValue);
+        
+        String rotateRadioStr = "rotate_constraint_none";
+        if (rotateConstrValue == 1f) {
+            rotateRadioStr = "rotate_constraint_1";
+        } else if (rotateConstrValue == 5f) {
+            rotateRadioStr = "rotate_constraint_5";
+        } else if (rotateConstrValue == 10f) {
+            rotateRadioStr = "rotate_constraint_10";
+        } else if (rotateConstrValue == 45f) {
+            rotateRadioStr = "rotate_constraint_45";
+        }
+        
+        RadioButton rotateConstrRadioButton = base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl(rotateRadioStr, RadioButton.class);
+        rotateConstrRadioButton.select();
+        
+        // SCALE CONSTR
+        float scaleConstrValue = constraintsJson.get("ScaleConstraint").getAsFloat();
+        base.getTransformManager().getConstraintTool().setMoveConstraint(scaleConstrValue);
+        
+        String scaleRadioStr = "scale_constraint_none";
+        if (moveConstrValue == 0.1f) {
+            scaleRadioStr = "scale_constraint_0.1";
+        } else if (scaleConstrValue == 0.5f) {
+            scaleRadioStr = "scale_constraint_0.5";
+        } 
+        
+        RadioButton scaleConstrRadioButton = base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl(scaleRadioStr, RadioButton.class);
+        scaleConstrRadioButton.select();
+        
+        
         System.out.println("Settings are loaded!");
+    }
+
+    protected void loadEntityFromJson(Node layerNode, JsonObject jsEntity) {
+
+//                    System.out.println(objID + "OBJID");
+
+            long ID = jsEntity.get("ID").getAsLong();
+
+            String idPath = jsEntity.get("IDPath").getAsString();
+
+            String idName = jsEntity.get("IDName").getAsString();
+            idName = idName.substring(0, idName.indexOf("_IDX"));
+
+            System.out.println("Name and Path: " + idName + "  " + idPath);
+
+            // create entity
+            long entID = createEntityModel(idName, idPath, ID);
+            Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(entID).getGeneralNode();
+
+            
+            //set Transform for the entity
+            JsonObject jsTransform = (JsonObject) jsEntity.get("IDTransform");
+            Transform entTransform = new Transform();
+            entTransform.setTranslation(jsTransform.get("translationX").getAsFloat(), jsTransform.get("translationY").getAsFloat(),
+                    jsTransform.get("translationZ").getAsFloat());
+            entTransform.setRotation(new Quaternion(
+                    jsTransform.get("rotationX").getAsFloat(), jsTransform.get("rotationY").getAsFloat(), jsTransform.get("rotationZ").getAsFloat(),
+                    jsTransform.get("rotationW").getAsFloat()));
+            entTransform.setScale(jsTransform.get("scaleX").getAsFloat(), jsTransform.get("scaleY").getAsFloat(), jsTransform.get("scaleZ").getAsFloat());
+            entityNode.setLocalTransform(entTransform);
+
+            System.out.println(entTransform.toString());
+
+            // Attach Entity
+            layerNode.attachChild(entityNode);
+
+            //set data components for the entity
+            JsonObject jsDataComponents = (JsonObject) jsEntity.get("IDDataComponents");
+            for (Map.Entry<String, JsonElement> strKey : jsDataComponents.entrySet()) {
+                String value = strKey.getValue().getAsString();
+                base.getDataManager().getEntityData(ID).put(strKey.getKey(), value);
+            }
+        
     }
 
     protected void loadSweFile(String filePath) {
         JsonObject loadSWEJson = loadToJsonFile(filePath + ".swe", false);
 
-        loadSettings(filePath, loadSWEJson);
+        loadSettings(loadSWEJson.getAsJsonObject("Settings"));
 
         // load Scenes
         JsonObject jsScenes = loadSWEJson.get("Scenes").getAsJsonObject();
-        for (Map.Entry<String, JsonElement> sceneStrObj : jsScenes.entrySet()) {
-            JsonObject jsScene = sceneStrObj.getValue().getAsJsonObject();
+        for (Map.Entry<String, JsonElement> sceneObjJS : jsScenes.entrySet()) {
+
+            JsonObject jsScene = sceneObjJS.getValue().getAsJsonObject();
 
             // set new Scene
-            String strScene = sceneStrObj.getKey();
+            String strScene = sceneObjJS.getKey();
             EditorSceneObject newSceneObj = new EditorSceneObject(root, strScene);
             newSceneObj.setSceneEnabled(jsScene.get("isEnabled").getAsBoolean());
 
@@ -222,6 +326,7 @@ public class EditorSceneManager {
                 if (jsLayersGroup.get("isActive").getAsBoolean()) {
                     newSceneObj.setActivelayersGroup(newLayersGroup);
                 }
+
 
                 // load layers
                 JsonObject jsLayers = (JsonObject) jsLayersGroup.get("Layers");
@@ -252,52 +357,25 @@ public class EditorSceneManager {
                     if (isLocked) {
                         layerNode.setUserData("isLocked", true);
                     }
-
-                    // create entities
-                    JsonObject jsEntities = (JsonObject) jslayer.get("Entities");
-                    for (Map.Entry<String, JsonElement> objID : jsEntities.entrySet()) {
-                        System.out.println(objID + "OBJID");
-                        long ID = Long.valueOf(objID.getKey());
-                        JsonObject jsEntity = objID.getValue().getAsJsonObject();
-
-                        String idPath = jsEntity.get("IDPath").getAsString();
-
-                        String idName = jsEntity.get("IDName").getAsString();
-                        idName = idName.substring(0, idName.indexOf("_IDX"));
-
-                        System.out.println("Name and Path: " + idName + "  " + idPath);
-
-                        // create entity
-                        long entID = createEntityModel(idName, idPath, ID);
-                        Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(entID).getGeneralNode();
-                        newLayersGroup.getLayer(Integer.valueOf(strLayer)).attachChild(entityNode);
-
-                        //set Transform for the entity
-                        JsonObject jsTransform = (JsonObject) jsEntity.get("IDTransform");
-                        Transform entTransform = new Transform();
-                        entTransform.setTranslation(jsTransform.get("translationX").getAsFloat(), jsTransform.get("translationY").getAsFloat(),
-                                jsTransform.get("translationZ").getAsFloat());
-                        entTransform.setRotation(new Quaternion(
-                                jsTransform.get("rotationX").getAsFloat(), jsTransform.get("rotationY").getAsFloat(), jsTransform.get("rotationZ").getAsFloat(),
-                                jsTransform.get("rotationW").getAsFloat()));
-                        entTransform.setScale(jsTransform.get("scaleX").getAsFloat(), jsTransform.get("scaleY").getAsFloat(), jsTransform.get("scaleZ").getAsFloat());
-                        entityNode.setLocalTransform(entTransform);
-
-                        System.out.println(entTransform.toString());
-
-                        layerNode.attachChild(entityNode);
-
-                        //set data components for the entity
-                        JsonObject jsDataComponents = (JsonObject) jsEntity.get("IDDataComponents");
-                        for (Map.Entry<String, JsonElement> strKey : jsDataComponents.entrySet()) {
-                            String value = strKey.getValue().getAsString();
-                            base.getDataManager().getEntityData(ID).put(strKey.getKey(), value);
-                        }
-                    }
-
                 }
             }
         }
+
+        // LOAD ENTITIES
+        for (JsonElement entObj : loadSWEJson.getAsJsonArray("Entities")) {
+            JsonObject jsEntity = entObj.getAsJsonObject();
+            
+            // PLACE OF ENTITY
+            String entSceneName = entObj.getAsJsonObject().getAsJsonObject("IDScenePlace").get("Scene").getAsString();
+            String layerGroupName = jsEntity.get("IDScenePlace").getAsJsonObject().get("LayerGroup").getAsString();
+            int layerNumber = jsEntity.get("IDScenePlace").getAsJsonObject().get("Layer").getAsInt();
+            
+            Node layerNode = scenesList.get(entSceneName).getLayersGroupsList().get(layerGroupName).getLayer(layerNumber);
+            
+            loadEntityFromJson(layerNode, jsEntity);
+        }
+        
+
     }
 
     public void saveScene() {
@@ -348,10 +426,12 @@ public class EditorSceneManager {
         }
     }
 
-    private void saveSettings(String pathToSave, JsonObject saveSceneJson) {
+    private JsonObject saveSettings() {
+
+        JsonObject settingsJson = new JsonObject();
 
         // save Last IDX
-        saveSceneJson.addProperty("LastIDX", base.getEntityManager().getIdx());
+        settingsJson.addProperty("LastIDX", base.getEntityManager().getIdx());
 
         // save assets paths
         JsonObject assetsToSave = new JsonObject();
@@ -360,21 +440,34 @@ public class EditorSceneManager {
 
             assetsToSave.addProperty("AssetPath_" + assetsList.indexOf(str), str);
         }
-        saveSceneJson.add("AssetsPaths", assetsToSave);
+        settingsJson.add("AssetsPaths", assetsToSave);
 
         // save version of the Simple World Editor
-        saveSceneJson.addProperty("EditorVersion", base.getEditorVersion());
-        saveSceneJson.addProperty("savePreviewJ3o", savePreviewJ3o);
+        settingsJson.addProperty("EditorVersion", base.getEditorVersion());
+        settingsJson.addProperty("savePreviewJ3o", savePreviewJ3o);
+        
+        JsonObject constraintsJson = new JsonObject();
+        constraintsJson.addProperty("MoveConstraint", base.getTransformManager().getConstraintTool().getMoveConstraint());
+        constraintsJson.addProperty("RotateConstraint", base.getTransformManager().getConstraintTool().getRotateConstraint());
+        constraintsJson.addProperty("ScaleConstraint", base.getTransformManager().getConstraintTool().getScaleConstraint());
+        settingsJson.add("TransformConstraints", constraintsJson);
+        
+
+        return settingsJson;
 
     }
 
     private void saveSweFile(String pathToSave) {
         JsonObject saveSWEJson = new JsonObject();
 
-        saveSettings(pathToSave, saveSWEJson);
+        JsonObject settingsJson = saveSettings();
+        saveSWEJson.add("Settings", settingsJson);
 
         //save scenes
         JsonObject allScenes = new JsonObject();
+
+        // save entities
+        JsonArray entitiesToSave = new JsonArray();
 
         for (String sceneName : scenesList.keySet()) {
             JsonObject sceneToSave = new JsonObject();
@@ -412,13 +505,12 @@ public class EditorSceneManager {
                     Object isLockedLayer = layerNode.getUserData("isLocked");
                     layerToSave.addProperty("isLocked", (Boolean) isLockedLayer);
 
-                    // save ID entities
-                    JsonObject entitiesToSave = new JsonObject();
                     for (Spatial sp : layerNode.getChildren()) {
                         JsonObject entityJSON = new JsonObject();
 
                         Object idObj = sp.getUserData("EntityID");
                         long idLong = (Long) idObj;
+                        entityJSON.addProperty("ID", idLong);
 
                         // save name
                         EntityNameComponent nameComp = (EntityNameComponent) base.getEntityManager().getComponent(idLong, EntityNameComponent.class);
@@ -453,20 +545,31 @@ public class EditorSceneManager {
                         }
                         entityJSON.add("IDDataComponents", dataComponentsToSave);
 
-                        entitiesToSave.add(String.valueOf(idLong), entityJSON);
+                        // PLACE OF ENTITY
+                        JsonObject idScenePlace = new JsonObject();
+                        idScenePlace.addProperty("Scene", sceneName);
+                        idScenePlace.addProperty("LayerGroup", layersGroup.getLayersGroupName());
+                        idScenePlace.addProperty("Layer", (Integer) layerNode.getUserData("LayerNumber"));
+
+                        entityJSON.add("IDScenePlace", idScenePlace);
+
+                        entitiesToSave.add(entityJSON);
                     }
 
-                    layerToSave.add("Entities", entitiesToSave);
-                    allLayers.add(layerNode.getName(), layerToSave);
+                    allLayers.add(layerNode.getName(), layerToSave); // SAVE A LAYER
                 }
-                layersGroupToSave.add("Layers", allLayers);
-                allLayersGroups.add(layersGroup.getLayersGroupName(), layersGroupToSave);
+                layersGroupToSave.add("Layers", allLayers); // SAVE ALL LAYERS
+                allLayersGroups.add(layersGroup.getLayersGroupName(), layersGroupToSave); // SAVE LAYERGROUP
             }
+
+            // save Scene
             sceneToSave.add("LayersGroups", allLayersGroups);
             allScenes.add(sceneName, sceneToSave);
         }
 
-        saveSWEJson.add("Scenes", allScenes);
+        // save all
+        saveSWEJson.add("Scenes", allScenes); // SAVE SCENES
+        saveSWEJson.add("Entities", entitiesToSave); // SAVE ENTITIES
         saveJsonFile(pathToSave + ".swe", saveSWEJson);
         System.out.println("File saved: " + pathToSave + ".swe");
     }

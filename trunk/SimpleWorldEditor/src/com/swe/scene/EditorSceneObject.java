@@ -24,10 +24,10 @@ public class EditorSceneObject {
 
         layersGroupsList = new ConcurrentHashMap<String, EditorLayersGroupObject>();
 
-        createScenNode(sceneName);
+        createSceneNode(sceneName);
     }
 
-    private void createScenNode(String sceneName) {
+    private void createSceneNode(String sceneName) {
         //scene
         sceneNode = new Node(sceneName);
         sceneNode.setUserData("isEnabled", true);
