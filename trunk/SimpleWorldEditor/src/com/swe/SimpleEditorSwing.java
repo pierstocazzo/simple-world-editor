@@ -140,19 +140,19 @@ public class SimpleEditorSwing {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
 
-                try {
-
-                    String strLook = null;
-                    if (System.getProperty("os.name").equals("Linux")) {
-                        strLook = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-                    } else {
-                        strLook = UIManager.getSystemLookAndFeelClassName();
-                    }
-
-                    UIManager.setLookAndFeel(strLook);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+//                try {
+//
+//                    String strLook = null;
+//                    if (System.getProperty("os.name").equals("Linux")) {
+//                        strLook = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+//                    } else {
+//                        strLook = UIManager.getSystemLookAndFeelClassName();
+//                    }
+//
+//                    UIManager.setLookAndFeel(strLook);
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
 
                 JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 

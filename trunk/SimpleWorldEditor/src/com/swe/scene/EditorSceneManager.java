@@ -36,13 +36,19 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.swe.EditorBaseManager;
 import de.lessvoid.nifty.controls.RadioButton;
+import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.awt.KeyboardFocusManager;
+import java.awt.Window;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,8 +70,8 @@ public class EditorSceneManager {
     private Node root, guiNode;
     private Application app;
     private EditorBaseManager base;
-    private final JFileChooser mFileCm;
-    private FileFilter modFilter;
+//    private final JFileChooser mFileCm;
+//    private FileFilter modFilter;
     private static List<String> assetsList;
     private static ConcurrentHashMap<String, EditorSceneObject> scenesList;
     private EditorSceneObject activeScene;
@@ -86,11 +92,11 @@ public class EditorSceneManager {
         root = (Node) this.app.getViewPort().getScenes().get(0);
         guiNode = (Node) this.app.getGuiViewPort().getScenes().get(0);
 
-        mFileCm = new JFileChooser();
-        mFileCm.addChoosableFileFilter(modFilter);
-        mFileCm.setAcceptAllFileFilterUsed(false);
-        mFileCm.setPreferredSize(new Dimension(800, 600));
-        modFilter = new EditorSceneFilter();
+//        mFileCm = new JFileChooser();
+//        mFileCm.addChoosableFileFilter(modFilter);
+//        mFileCm.setAcceptAllFileFilterUsed(false);
+//        mFileCm.setPreferredSize(new Dimension(800, 600));
+//        modFilter = new EditorSceneFilter();
 
         scenePathCache = null;
         sceneNameCache = null;
@@ -131,15 +137,31 @@ public class EditorSceneManager {
     }
 
     public boolean loadScene() {
-        mFileCm.setDialogType(JFileChooser.OPEN_DIALOG);
-        mFileCm.setDialogTitle("Load Scene");
-        mFileCm.setApproveButtonToolTipText("Open");
-        mFileCm.setApproveButtonText("Open");
-        mFileCm.setFileFilter(modFilter);
-        int returnVal = mFileCm.showOpenDialog(null);
+        Window wind = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+        FileDialog fd = new FileDialog((Dialog) wind, "Choose a file", FileDialog.LOAD);
+        fd.setFilenameFilter(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                if (name.endsWith(".swe")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        fd.setAutoRequestFocus(true);
+//        fd.setAlwaysOnTop(true);
+        fd.setVisible(true);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = mFileCm.getSelectedFile();
+//        mFileCm.setDialogType(JFileChooser.OPEN_DIALOG);
+//        mFileCm.setDialogTitle("Load Scene");
+//        mFileCm.setApproveButtonToolTipText("Open");
+//        mFileCm.setApproveButtonText("Open");
+//        mFileCm.setFileFilter(modFilter);
+//        int returnVal = mFileCm.showOpenDialog(null);
+//
+        if (fd.getDirectory() != null && fd.getFile() != null && fd.getFile().endsWith(".swe")) {
+            File selectedFile = new File(correctPath(fd.getDirectory() + fd.getFile()));
 
             if (selectedFile.exists() && selectedFile.isFile() && selectedFile.getName().indexOf(".") != 0 && selectedFile.getName().length() > 0) {
                 String filePath = selectedFile.getParent();
@@ -159,9 +181,12 @@ public class EditorSceneManager {
 
                 loadSweFile(fullPath);
 
+                fd.dispose();
                 return true;
             }
         }
+
+        fd.dispose();
         return false;
     }
 
@@ -184,14 +209,14 @@ public class EditorSceneManager {
             System.out.println("Loaded Path: " + obj.getValue().getAsString());
             addAsset(obj.getValue().getAsString());
         }
-        
-        
+
+
         JsonObject constraintsJson = jsSettings.get("TransformConstraints").getAsJsonObject();
 
         // MOVE CONSTR
         float moveConstrValue = constraintsJson.get("MoveConstraint").getAsFloat();
         base.getTransformManager().getConstraintTool().setMoveConstraint(moveConstrValue);
-        
+
         String moveRadioStr = "move_constraint_none";
         if (moveConstrValue == 0.5f) {
             moveRadioStr = "move_constraint_0.5";
@@ -204,14 +229,14 @@ public class EditorSceneManager {
         } else if (moveConstrValue == 50f) {
             moveRadioStr = "move_constraint_50";
         }
-        
+
         RadioButton moveConstrRadioButton = base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl(moveRadioStr, RadioButton.class);
         moveConstrRadioButton.select();
 
         // ROTATE CONSTR
         float rotateConstrValue = constraintsJson.get("RotateConstraint").getAsFloat();
         base.getTransformManager().getConstraintTool().setRotateConstraint(rotateConstrValue);
-        
+
         String rotateRadioStr = "rotate_constraint_none";
         if (rotateConstrValue == 1f) {
             rotateRadioStr = "rotate_constraint_1";
@@ -222,25 +247,25 @@ public class EditorSceneManager {
         } else if (rotateConstrValue == 45f) {
             rotateRadioStr = "rotate_constraint_45";
         }
-        
+
         RadioButton rotateConstrRadioButton = base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl(rotateRadioStr, RadioButton.class);
         rotateConstrRadioButton.select();
-        
+
         // SCALE CONSTR
         float scaleConstrValue = constraintsJson.get("ScaleConstraint").getAsFloat();
         base.getTransformManager().getConstraintTool().setMoveConstraint(scaleConstrValue);
-        
+
         String scaleRadioStr = "scale_constraint_none";
         if (moveConstrValue == 0.1f) {
             scaleRadioStr = "scale_constraint_0.1";
         } else if (scaleConstrValue == 0.5f) {
             scaleRadioStr = "scale_constraint_0.5";
-        } 
-        
+        }
+
         RadioButton scaleConstrRadioButton = base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl(scaleRadioStr, RadioButton.class);
         scaleConstrRadioButton.select();
-        
-        
+
+
         System.out.println("Settings are loaded!");
     }
 
@@ -248,43 +273,43 @@ public class EditorSceneManager {
 
 //                    System.out.println(objID + "OBJID");
 
-            long ID = jsEntity.get("ID").getAsLong();
+        long ID = jsEntity.get("ID").getAsLong();
 
-            String idPath = jsEntity.get("IDPath").getAsString();
+        String idPath = jsEntity.get("IDPath").getAsString();
 
-            String idName = jsEntity.get("IDName").getAsString();
-            idName = idName.substring(0, idName.indexOf("_IDX"));
+        String idName = jsEntity.get("IDName").getAsString();
+        idName = idName.substring(0, idName.indexOf("_IDX"));
 
-            System.out.println("Name and Path: " + idName + "  " + idPath);
+        System.out.println("Name and Path: " + idName + "  " + idPath);
 
-            // create entity
-            long entID = createEntityModel(idName, idPath, ID);
-            Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(entID).getGeneralNode();
+        // create entity
+        long entID = createEntityModel(idName, idPath, ID);
+        Node entityNode = (Node) base.getSpatialSystem().getSpatialControl(entID).getGeneralNode();
 
-            
-            //set Transform for the entity
-            JsonObject jsTransform = (JsonObject) jsEntity.get("IDTransform");
-            Transform entTransform = new Transform();
-            entTransform.setTranslation(jsTransform.get("translationX").getAsFloat(), jsTransform.get("translationY").getAsFloat(),
-                    jsTransform.get("translationZ").getAsFloat());
-            entTransform.setRotation(new Quaternion(
-                    jsTransform.get("rotationX").getAsFloat(), jsTransform.get("rotationY").getAsFloat(), jsTransform.get("rotationZ").getAsFloat(),
-                    jsTransform.get("rotationW").getAsFloat()));
-            entTransform.setScale(jsTransform.get("scaleX").getAsFloat(), jsTransform.get("scaleY").getAsFloat(), jsTransform.get("scaleZ").getAsFloat());
-            entityNode.setLocalTransform(entTransform);
 
-            System.out.println(entTransform.toString());
+        //set Transform for the entity
+        JsonObject jsTransform = (JsonObject) jsEntity.get("IDTransform");
+        Transform entTransform = new Transform();
+        entTransform.setTranslation(jsTransform.get("translationX").getAsFloat(), jsTransform.get("translationY").getAsFloat(),
+                jsTransform.get("translationZ").getAsFloat());
+        entTransform.setRotation(new Quaternion(
+                jsTransform.get("rotationX").getAsFloat(), jsTransform.get("rotationY").getAsFloat(), jsTransform.get("rotationZ").getAsFloat(),
+                jsTransform.get("rotationW").getAsFloat()));
+        entTransform.setScale(jsTransform.get("scaleX").getAsFloat(), jsTransform.get("scaleY").getAsFloat(), jsTransform.get("scaleZ").getAsFloat());
+        entityNode.setLocalTransform(entTransform);
 
-            // Attach Entity
-            layerNode.attachChild(entityNode);
+        System.out.println(entTransform.toString());
 
-            //set data components for the entity
-            JsonObject jsDataComponents = (JsonObject) jsEntity.get("IDDataComponents");
-            for (Map.Entry<String, JsonElement> strKey : jsDataComponents.entrySet()) {
-                String value = strKey.getValue().getAsString();
-                base.getDataManager().getEntityData(ID).put(strKey.getKey(), value);
-            }
-        
+        // Attach Entity
+        layerNode.attachChild(entityNode);
+
+        //set data components for the entity
+        JsonObject jsDataComponents = (JsonObject) jsEntity.get("IDDataComponents");
+        for (Map.Entry<String, JsonElement> strKey : jsDataComponents.entrySet()) {
+            String value = strKey.getValue().getAsString();
+            base.getDataManager().getEntityData(ID).put(strKey.getKey(), value);
+        }
+
     }
 
     protected void loadSweFile(String filePath) {
@@ -364,17 +389,17 @@ public class EditorSceneManager {
         // LOAD ENTITIES
         for (JsonElement entObj : loadSWEJson.getAsJsonArray("Entities")) {
             JsonObject jsEntity = entObj.getAsJsonObject();
-            
+
             // PLACE OF ENTITY
             String entSceneName = entObj.getAsJsonObject().getAsJsonObject("IDScenePlace").get("Scene").getAsString();
             String layerGroupName = jsEntity.get("IDScenePlace").getAsJsonObject().get("LayerGroup").getAsString();
             int layerNumber = jsEntity.get("IDScenePlace").getAsJsonObject().get("Layer").getAsInt();
-            
+
             Node layerNode = scenesList.get(entSceneName).getLayersGroupsList().get(layerGroupName).getLayer(layerNumber);
-            
+
             loadEntityFromJson(layerNode, jsEntity);
         }
-        
+
 
     }
 
@@ -392,16 +417,41 @@ public class EditorSceneManager {
     }
 
     public void saveAsNewScene() {
-        mFileCm.setDialogType(JFileChooser.SAVE_DIALOG);
-        mFileCm.setDialogTitle("Save Scene");
-        mFileCm.setApproveButtonToolTipText("Save");
-        String s = "Save";
-        mFileCm.setApproveButtonText("Save");
-        mFileCm.setFileFilter(modFilter);
-        int returnVal = mFileCm.showOpenDialog(null);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = mFileCm.getSelectedFile();
+        Window wind = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+        FileDialog fd = new FileDialog((Dialog) wind, "Choose a file", FileDialog.SAVE);
+        fd.setFilenameFilter(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                if (name.endsWith(".swe")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        fd.setAutoRequestFocus(true);
+//        fd.setAlwaysOnTop(true);
+        fd.setVisible(true);
+
+//        mFileCm.setDialogType(JFileChooser.SAVE_DIALOG);
+//        mFileCm.setDialogTitle("Save Scene");
+//        mFileCm.setApproveButtonToolTipText("Save");
+//        String s = "Save";
+//        mFileCm.setApproveButtonText("Save");
+//        mFileCm.setFileFilter(modFilter);
+//        int returnVal = mFileCm.showOpenDialog(null);
+
+        if (fd.getDirectory() != null && fd.getFile() != null) {
+
+            String pathTosave = fd.getDirectory() + fd.getFile();
+            if (!pathTosave.endsWith(".swe")) {
+                pathTosave += ".swe";
+            }
+
+            pathTosave = correctPath(pathTosave);
+
+            File selectedFile = new File(pathTosave);
 
             if (selectedFile.getName().indexOf(".") != 0 && selectedFile.getName().length() > 0) {
                 String filePath = selectedFile.getParent();
@@ -424,6 +474,8 @@ public class EditorSceneManager {
                 }
             }
         }
+
+        fd.dispose();
     }
 
     private JsonObject saveSettings() {
@@ -445,13 +497,13 @@ public class EditorSceneManager {
         // save version of the Simple World Editor
         settingsJson.addProperty("EditorVersion", base.getEditorVersion());
         settingsJson.addProperty("savePreviewJ3o", savePreviewJ3o);
-        
+
         JsonObject constraintsJson = new JsonObject();
         constraintsJson.addProperty("MoveConstraint", base.getTransformManager().getConstraintTool().getMoveConstraint());
         constraintsJson.addProperty("RotateConstraint", base.getTransformManager().getConstraintTool().getRotateConstraint());
         constraintsJson.addProperty("ScaleConstraint", base.getTransformManager().getConstraintTool().getScaleConstraint());
         settingsJson.add("TransformConstraints", constraintsJson);
-        
+
 
         return settingsJson;
 
