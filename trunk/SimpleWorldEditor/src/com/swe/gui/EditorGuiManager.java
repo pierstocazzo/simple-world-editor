@@ -410,9 +410,15 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             workers.clearGui();
             workers.updateSceneGUI(true, true);
 
-//            // set default layer1 (as it's set in the LayersGroup)
-//            CheckBox cb = screen.findNiftyControl("layerVisibility1", CheckBox.class);
-//            cb.check();
+            // set default constranints
+            base.getTransformManager().getConstraintTool().setMoveConstraint(0f);
+            base.getTransformManager().getConstraintTool().setRotateConstraint(0f);
+            base.getTransformManager().getConstraintTool().setScaleConstraint(0f);
+            base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl("move_constraint_none", RadioButton.class).select();
+            base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl("rotate_constraint_none", RadioButton.class).select();
+            base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl("scale_constraint_none", RadioButton.class).select();
+            
+            
         }
         screen.getFocusHandler().resetFocusElements();
     }

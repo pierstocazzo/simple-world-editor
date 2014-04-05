@@ -253,10 +253,10 @@ public class EditorSceneManager {
 
         // SCALE CONSTR
         float scaleConstrValue = constraintsJson.get("ScaleConstraint").getAsFloat();
-        base.getTransformManager().getConstraintTool().setMoveConstraint(scaleConstrValue);
+        base.getTransformManager().getConstraintTool().setScaleConstraint(scaleConstrValue);
 
         String scaleRadioStr = "scale_constraint_none";
-        if (moveConstrValue == 0.1f) {
+        if (scaleConstrValue == 0.1f) {
             scaleRadioStr = "scale_constraint_0.1";
         } else if (scaleConstrValue == 0.5f) {
             scaleRadioStr = "scale_constraint_0.5";
