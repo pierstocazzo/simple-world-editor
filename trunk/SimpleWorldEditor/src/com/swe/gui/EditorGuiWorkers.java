@@ -218,6 +218,7 @@ public class EditorGuiWorkers extends EditorGuiAbstractChild {
         tempSelList = null;
     }
 
+    @Deprecated
     protected void updateCheckBoxes(Element mainElement) {
         for (Element childElement : mainElement.getElements()) {
 

@@ -80,7 +80,9 @@ public class EditorBaseManager {
 //        Node tempNode = new Node();
 //        rootNode.attachChild(tempNode);
         // setup global tools
-        eventManager = new EditorEventManager();
+        eventManager = new EditorEventManager(this);
+        app.getStateManager().attach(eventManager);
+        
         historyManager = new EditorHistoryManager(this.app, this);
         dataManager = new EditorDataManager();
         selectionManager = new EditorSelectionManager(this.app, this);

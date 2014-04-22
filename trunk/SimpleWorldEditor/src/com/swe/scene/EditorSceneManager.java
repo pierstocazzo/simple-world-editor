@@ -1012,7 +1012,7 @@ public class EditorSceneManager {
                 inputStr = new FileInputStream(path);
             }
 
-            InputStreamReader inputStrRead = new InputStreamReader(inputStr);
+            InputStreamReader inputStrRead = new InputStreamReader(inputStr, "UTF-8");
             BufferedReader bufRead = new BufferedReader(inputStrRead);
 //            jsObj = (JSONObject) json.parse(br);
             jsObj = new JsonParser().parse(bufRead).getAsJsonObject();

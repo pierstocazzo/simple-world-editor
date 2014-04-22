@@ -1153,21 +1153,21 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     // This is a temporary fix for updating checkboxes for tabs 
     // this function is used in the Interface/Styles/nifty-tabs-my.xml
     public void updateTabs() {
-        if (!base.getEventManager().isActive()) {
-
-            TabGroup tabGroup = screen.findNiftyControl("settingsTabsGroup", TabGroup.class);
-            String selectedTabID = tabGroup.getSelectedTab().getId();
-            workers.updateCheckBoxes(tabGroup.getSelectedTab().getElement());
-
-            // fix for selected layer red color
-            if (selectedTabID.equals("SceneTab")) {
-                workers.updateLayersGUI();
-            }
-
-            screen.getFocusHandler().resetFocusElements();
-            System.out.println("Checkboxes are updated!");
-
-        }
+//        if (!base.getEventManager().isActive()) {
+//
+//            TabGroup tabGroup = screen.findNiftyControl("settingsTabsGroup", TabGroup.class);
+//            String selectedTabID = tabGroup.getSelectedTab().getId();
+//            workers.updateCheckBoxes(tabGroup.getSelectedTab().getElement());
+//
+//            // fix for selected layer red color
+//            if (selectedTabID.equals("SceneTab")) {
+//                workers.updateLayersGUI();
+//            }
+//
+//            screen.getFocusHandler().resetFocusElements();
+//            System.out.println("Checkboxes are updated!");
+//
+//        }
 
     }
 

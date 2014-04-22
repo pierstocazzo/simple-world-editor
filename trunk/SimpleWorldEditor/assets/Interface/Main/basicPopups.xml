@@ -17,6 +17,8 @@
                 <text wrap="true" textHAlign="left" style="ma_button#text" text="
 Shortcuts:&#10;&#10;
 TAB –-- hide right panel&#10;
+Ctrl+S –-- save&#10;
+Ctrl+Shift+S –-- save As&#10;
 Shft+LeftClick –-- additive selection&#10;
 Ctrl+LeftClick –-- rectangle selection mode&#10;
 A –-- select/deselect&#10;

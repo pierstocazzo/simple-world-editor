@@ -106,6 +106,19 @@ public class EditorMappings implements AnalogListener, ActionListener {
         if (name.equals("MoveCameraHelper")) {
             camMan.setDoMoveCamera(true);
         }
+
+        
+        // NOTE: ALT CTRL SHIFT are switched off in EventManager
+        if (name.equals("LeftCtrlKey")) {
+            base.getEventManager().setCtrlBool(true);
+            base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
+        } else if (name.equals("LeftShiftKey")) {
+            base.getEventManager().setShiftBool(true);
+            base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Additive);
+        } else if (name.equals("LeftAltKey")) {
+            base.getEventManager().setAltBool(true);
+        }
+
     }
 
     public void onAction(String name, boolean isPressed, float tpf) {
@@ -119,19 +132,18 @@ public class EditorMappings implements AnalogListener, ActionListener {
             } else if (name.equals("MoveCameraHelperToSelection") && isPressed && base.getEventManager().isCtrlBool()) {
                 base.getGuiManager().cloneSelectedButton();
             } else if (name.equals("S_Key_Edt") && isPressed) {
-//                if (base.getEventManager().isCtrlBool() && !base.getEventManager().isShiftBool()) {
-//                    base.getGuiManager().saveSceneButton();
-//                } else if (base.getEventManager().isCtrlBool() && base.getEventManager().isShiftBool()) {
-//                    base.getGuiManager().saveAsNewSceneButton();
-//                }
-//                else {
-                if (base.getSelectionManager().getSelectionList().size() > 0) {
-                    base.getHistoryManager().prepareNewHistory();
-                    base.getTransformManager().scaleAll();
-                    transformResult = true;
-                    base.getEventManager().setAction(true);
+                if (base.getEventManager().isCtrlBool() && !base.getEventManager().isShiftBool()) {
+                    base.getGuiManager().saveSceneButton();
+                } else if (base.getEventManager().isCtrlBool() && base.getEventManager().isShiftBool()) {
+                    base.getGuiManager().saveAsNewSceneButton();
+                } else {
+                    if (base.getSelectionManager().getSelectionList().size() > 0) {
+                        base.getHistoryManager().prepareNewHistory();
+                        base.getTransformManager().scaleAll();
+                        transformResult = true;
+                        base.getEventManager().setAction(true);
+                    }
                 }
-//                }
             } else if (name.equals("MoveCameraHelperToSelection") && isPressed) {
                 if (!transformResult && !selectResult) {
                     Transform selectionCenter = base.getSelectionManager().getSelectionCenter();
@@ -148,33 +160,27 @@ public class EditorMappings implements AnalogListener, ActionListener {
             } else if (name.equals("W_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.WorldCoords);
-                } 
-//                else if (base.getEventManager().isAltBool()) {
-//                    base.getGuiManager().clearTransform("Translation");
-//                } 
-                else {
+                } else if (base.getEventManager().isAltBool()) {
+                    base.getGuiManager().clearTransform("Translation");
+                } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.MoveTool);
                 }
 
             } else if (name.equals("E_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.LocalCoords);
-                } 
-//                else if (base.getEventManager().isAltBool()) {
-//                    base.getGuiManager().clearTransform("Rotation");
-//                } 
-                else {
+                } else if (base.getEventManager().isAltBool()) {
+                    base.getGuiManager().clearTransform("Rotation");
+                } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.RotateTool);
                 }
 
             } else if (name.equals("R_Key_Edt") && isPressed) {
                 if (base.getEventManager().isShiftBool()) {
                     base.getTransformManager().setTrCoordinates(EditorTransformManager.TransformCoordinates.ViewCoords);
-                } 
-//                else if (base.getEventManager().isAltBool()) {
-//                    base.getGuiManager().clearTransform("Scale");
-//                } 
-                else {
+                } else if (base.getEventManager().isAltBool()) {
+                    base.getGuiManager().clearTransform("Scale");
+                } else {
                     base.getTransformManager().setTransformType(EditorTransformManager.TransformToolType.ScaleTool);
                 }
 
@@ -202,41 +208,22 @@ public class EditorMappings implements AnalogListener, ActionListener {
             }
         }
 
-
-        // set booleans for Ctrl and Shift
-        if (name.equals("LeftCtrlKey") && isPressed) {
-            base.getEventManager().setCtrlBool(true);
-            base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
-        } else if (name.equals("LeftCtrlKey") && !isPressed) {
-            base.getEventManager().setCtrlBool(false);
-            base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.MouseClick);
-        }
-
-        if (name.equals("LeftShiftKey") && isPressed) {
-            base.getEventManager().setShiftBool(true);
-            base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Additive);
-        } else if (name.equals("LeftShiftKey") && !isPressed) {
-            base.getEventManager().setShiftBool(false);
-            base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Normal);
-        }
-
-        if (name.equals("LeftAltKey") && isPressed) {
-            base.getEventManager().setAltBool(true);
-        } else if (name.equals("LeftAltKey") && !isPressed) {
-            base.getEventManager().setAltBool(false);
-        }
-
         // Select or transformTool an entity
         if (name.equals("MoveOrSelect") && isPressed && !name.equals("S_Key_Edt")) {
 
+
             if (!base.getEventManager().isActive()) {
+
+                // make transform
                 base.getHistoryManager().prepareNewHistory();
                 transformResult = base.getTransformManager().activate();
 
+                // make selection
                 if (!transformResult) {
                     selectResult = base.getSelectionManager().activate();
                 }
             }
+
             base.getEventManager().setAction(true);
 
         } else if (name.equals("MoveOrSelect") && !isPressed) {
