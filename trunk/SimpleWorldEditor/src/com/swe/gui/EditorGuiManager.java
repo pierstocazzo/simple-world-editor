@@ -159,7 +159,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         workers = new EditorGuiWorkers(base);
         workers.updateSceneGUI(true, true);
-        
+
         screen.getFocusHandler().resetFocusElements();
     }
 
@@ -417,8 +417,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl("move_constraint_none", RadioButton.class).select();
             base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl("rotate_constraint_none", RadioButton.class).select();
             base.getGuiManager().getNifty().getCurrentScreen().findNiftyControl("scale_constraint_none", RadioButton.class).select();
-            
-            
+
+
         }
         screen.getFocusHandler().resetFocusElements();
     }
@@ -536,6 +536,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             base.getHistoryManager().prepareNewHistory();
             base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
         }
+        
+        workers.updateLayersGUI();
         screen.getFocusHandler().resetFocusElements();
     }
 
@@ -556,19 +558,17 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         screen.getFocusHandler().resetFocusElements();
     }
 
-    
     public void replaceModelsButton() {
         if (entitiesListBox.getSelection().size() > 0 && !base.getEventManager().isActive()) {
             String entityName = entitiesListBox.getSelection().get(0).toString();
             String entPath = base.getSceneManager().getEntitiesListsList().get(entityName);
-            
+
             base.getSceneManager().replaceModels(entPath);
 
         }
         screen.getFocusHandler().resetFocusElements();
     }
-    
-    
+
     public void removeClonesButton() {
         if (entitiesListBox.getSelection().size() > 0 && !base.getEventManager().isActive()) {
             String entityName = entitiesListBox.getSelection().get(0).toString();
@@ -578,6 +578,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             layersGroupObjectsListBox.sortAllItems();
             layersGroupObjectsListBox.refresh();
         }
+        workers.updateLayersGUI();
         screen.getFocusHandler().resetFocusElements();
     }
 
@@ -624,6 +625,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
         for (Object indexDeselect : layersGroupObjectsListBox.getSelection()) {
             layersGroupObjectsListBox.deselectItem(indexDeselect);
         }
+        
+        workers.updateLayersGUI();
         screen.getFocusHandler().resetFocusElements();
     }
 
@@ -637,6 +640,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 
         base.getSelectionManager().getSelectionList().clear();
         base.getSelectionManager().calculateSelectionCenter();
+        
+        workers.updateLayersGUI();
         screen.getFocusHandler().resetFocusElements();
     }
 
@@ -757,7 +762,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             // textFields
             String dataComponentName = (String) componentsListBox.getSelection().get(0);
             List selectedItem = componentsListBox.getSelection();
-            
+
             // if entity is selected
             if (selectedItem.size() != 0 && base.getSelectionManager().getSelectionList().contains(lastIdOfComponentList)) {
 
@@ -1001,22 +1006,23 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
     public void lockLayer(String layerToLock) {
         if (!base.getEventManager().isActive()) {
             int iInt = Integer.valueOf(layerToLock);
-            CheckBox cb = screen.findNiftyControl("layerLock" + layerToLock, CheckBox.class);
+//            CheckBox cb = screen.findNiftyControl("layerLock" + layerToLock, CheckBox.class);
             Node layerToLockSP = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayer(iInt); // layer to switch on/off
 
             Object isLockedObj = layerToLockSP.getUserData("isLocked");
             boolean isLocked = (Boolean) isLockedObj;
 
             if (isLocked) {
-                cb.uncheck();
+//                cb.uncheck();
                 layerToLockSP.setUserData("isLocked", false);
             } else {
-                cb.check();
+//                cb.check();
                 layerToLockSP.setUserData("isLocked", true);
 
                 workers.checkSelectionList();
-
             }
+
+            workers.updateLayersGUI();
         }
     }
 
@@ -1081,6 +1087,8 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             popupMoveToLayer.getFocusHandler().resetFocusElements();
             base.getEditorMappings().addListener();
             base.getCamManager().getChaseCam().setEnabled();
+            
+            workers.updateLayersGUI();
         }
 
     }
@@ -1114,7 +1122,7 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
             }
 
 
-            System.out.println("SceneGUI Updated!");
+//            System.out.println("SceneGUI Updated!");
         }
     }
 
@@ -1168,7 +1176,6 @@ public class EditorGuiManager extends AbstractAppState implements ScreenControll
 //            System.out.println("Checkboxes are updated!");
 //
 //        }
-
     }
 
     public void moveToLayer(String srtinG) {

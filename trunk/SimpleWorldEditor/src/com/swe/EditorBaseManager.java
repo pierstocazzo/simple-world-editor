@@ -57,7 +57,22 @@ public class EditorBaseManager {
     // Version of the Editor
     private static float editorVersion;
 
-    public EditorBaseManager(Application app) {
+    
+   private EditorBaseManager() {}
+ 
+   /**
+    * SingletonHolder is loaded on the first execution of Singleton.getInstance()
+    * or the first access to SingletonHolder.INSTANCE, not before.
+    */
+   private static class SingletonHolder {
+     private static final EditorBaseManager INSTANCE = new EditorBaseManager();
+   }
+ 
+   public static EditorBaseManager getInstance() {
+     return SingletonHolder.INSTANCE;
+   }
+    
+    protected void setApp(Application app) {
 
         this.app = app;
         sceneCamera = this.app.getCamera();

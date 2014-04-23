@@ -23,7 +23,8 @@ public class SimpleEditor extends SimpleApplication {
 
 //        this.setShowSettings(false);
         this.setDisplayStatView(false);
-        EditorBaseManager baseManager = new EditorBaseManager(this);
+        EditorBaseManager baseManager = EditorBaseManager.getInstance();
+        baseManager.setApp(this);
         
         updateManager = new EditorUpdateManager(baseManager.getCamManager(),
                 baseManager.getTransformManager());

@@ -40,7 +40,7 @@ public class EditorLayersGroupObject {
     }
 
     private void createLayers(String sceneName) {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 40; i++) {
             Node layerNode = new Node("layer" + (i + 1));
             layerNode.setUserData("LayerNumber", i + 1);
             layerNode.setUserData("LayersGroupName", layersGroupName);

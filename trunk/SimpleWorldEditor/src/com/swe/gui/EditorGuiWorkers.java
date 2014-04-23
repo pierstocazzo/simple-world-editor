@@ -72,8 +72,6 @@ public class EditorGuiWorkers extends EditorGuiAbstractChild {
         boolean isLayersGroupEnabled = (Boolean) activeLayersGroup.getLayersGroupNode().getUserData("isEnabled");
         updateCheckbox(isLayersGroupEnabled, "isLayersGroupEnabled");
 
-        updateLayersGUI();
-
         // update list of layers group
         layersGroupsObjectsListBox.clear();
         for (Node layers : base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayers()) {
@@ -83,52 +81,58 @@ public class EditorGuiWorkers extends EditorGuiAbstractChild {
         }
         layersGroupsObjectsListBox.sortAllItems();
         layersGroupsObjectsListBox.refresh();
+        
+        updateLayersGUI();
 
     }
 
     protected void updateLayersGUI() {
+
         // set checkboxes for layers
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayers().size() ; i++) {
             Node layer = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getLayer(i + 1);
 
             // LAYERS VISIBILITY
-            CheckBox cbVisible = screen.findNiftyControl("layerVisibility" + (i + 1), CheckBox.class);
+            Element elEnabled = screen.findElementByName("layerBox_" + (i + 1) + "#LayerEnabling");
             Object isEnabledObj = layer.getUserData("isEnabled");
             boolean isEnabled = (Boolean) isEnabledObj;
 
+            
             if (isEnabled) {
-                cbVisible.check();
+                elEnabled.setStyle("layerBox_Enabled");
             } else {
-                cbVisible.uncheck();
+                elEnabled.setStyle("layerBox_Disabled");
             }
 
 
             // LAYERS LOCK
-            CheckBox cbLocked = screen.findNiftyControl("layerLock" + (i + 1), CheckBox.class);
+            Element elLocked = screen.findElementByName("layerBox_" + (i + 1) + "#LayerLock");
             Object isLockedObj = layer.getUserData("isLocked");
             boolean isLocked = (Boolean) isLockedObj;
 
             if (isLocked) {
-                cbLocked.check();
+                elLocked.setStyle("layerBox_Locked");
             } else {
-                cbLocked.uncheck();
+                elLocked.setStyle("layerBox_None");
             }
-
-            // deselect Red Color of all LayersVisibility
-            Element deselectImageVisibility = screen.findElementByName("layerVisibility" + (i + 1));
-            deselectImageVisibility.stopEffect(EffectEventId.onFocus);
-            Element deselectImageLock = screen.findElementByName("layerLock" + (i + 1));
-            deselectImageLock.stopEffect(EffectEventId.onFocus);
-
+            
+            // SWITCH IF A LAYER HAS MODELS
+            Element elHasModels = screen.findElementByName("layerBox_" + (i + 1) + "#LayerHasModels");
+            if (layer.getChildren().size() > 0) {
+                elHasModels.setStyle("layerBox_HasModels");
+            } else {
+                elHasModels.setStyle("layerBox_None");
+            }
+            
         }
 
         // SET THE LAYER ACTIVE (Red color)
         Node activeLayer = base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer();
         if (activeLayer != null) {
             screen.getFocusHandler().resetFocusElements();
-            int activeLayerNumb = (Integer) base.getSceneManager().getActiveSceneObject().getActivelayersGroup().getActiveLayer().getUserData("LayerNumber");
-            Element selectImage = screen.findElementByName("layerVisibility" + activeLayerNumb);
-            selectImage.startEffect(EffectEventId.onFocus);
+            int activeLayerNumb = (Integer) activeLayer.getUserData("LayerNumber");
+            Element elActive = screen.findElementByName("layerBox_" + (activeLayerNumb) + "#LayerEnabling");
+            elActive.setStyle("layerBox_Active");
         }
         screen.getFocusHandler().resetFocusElements();
     }
@@ -151,26 +155,10 @@ public class EditorGuiWorkers extends EditorGuiAbstractChild {
         layersGroupsObjectsListBox.clear();
         componentsListBox.clear();
 
-        // clear layers
-        for (int i = 0; i < 20; i++) {
-            CheckBox cb = screen.findNiftyControl("layerVisibility" + (i + 1), CheckBox.class);
-            cb.uncheck();
-            Element selectActiveLayerImage = screen.findElementByName("layerVisibility" + (i + 1));
-            selectActiveLayerImage.stopEffect(EffectEventId.onFocus);
-            selectActiveLayerImage.startEffect(EffectEventId.onEnabled);
-        }
-        // clear layers locks
-        for (int i = 0; i < 20; i++) {
-            CheckBox cb = screen.findNiftyControl("layerLock" + (i + 1), CheckBox.class);
-            if (cb.isChecked()) {
-                cb.uncheck();
-            }
-        }
-
-
         // clear assets
         assetsListBox.clear();
 
+        updateLayersGUI();
         screen.getFocusHandler().resetFocusElements();
     }
 

@@ -58,9 +58,12 @@ public class EditorMappings implements AnalogListener, ActionListener {
             "History",
             "ShowHideRightPanel",
             "SelectDeselectAll",
-            "LeftShiftKey",
-            "LeftCtrlKey",
-            "LeftAltKey",
+            "LeftShiftKey_Edt",
+            "LeftCtrlKey_Edt",
+            "LeftAltKey_Edt",
+            "RightShiftKey_Edt",
+            "RightCtrlKey_Edt",
+            "RightAltKey_Edt",
             "DelecteSelectedEnt",
             "SelectAllKey",
             "W_Key_Edt",
@@ -77,9 +80,14 @@ public class EditorMappings implements AnalogListener, ActionListener {
         app.getInputManager().addMapping("History", new KeyTrigger(KeyInput.KEY_Z));
 //        app.getInputManager().addMapping("HistoryRedo", new KeyTrigger(KeyInput.KEY_X));
         app.getInputManager().addMapping("ShowHideRightPanel", new KeyTrigger(KeyInput.KEY_TAB));
-        app.getInputManager().addMapping("LeftShiftKey", new KeyTrigger(KeyInput.KEY_LSHIFT));
-        app.getInputManager().addMapping("LeftCtrlKey", new KeyTrigger(KeyInput.KEY_LCONTROL));
-        app.getInputManager().addMapping("LeftAltKey", new KeyTrigger(KeyInput.KEY_LMENU));
+        
+        app.getInputManager().addMapping("LeftShiftKey_Edt", new KeyTrigger(KeyInput.KEY_LSHIFT));
+        app.getInputManager().addMapping("LeftCtrlKey_Edt", new KeyTrigger(KeyInput.KEY_LCONTROL));
+        app.getInputManager().addMapping("LeftAltKey_Edt", new KeyTrigger(KeyInput.KEY_LMENU));
+        app.getInputManager().addMapping("RightShiftKey_Edt", new KeyTrigger(KeyInput.KEY_RSHIFT));
+        app.getInputManager().addMapping("RightCtrlKey_Edt", new KeyTrigger(KeyInput.KEY_RCONTROL));
+        app.getInputManager().addMapping("RightAltKey_Edt", new KeyTrigger(KeyInput.KEY_RMENU));
+        
         app.getInputManager().addMapping("DelecteSelectedEnt", new KeyTrigger(KeyInput.KEY_DELETE));
         app.getInputManager().addMapping("SelectAllKey", new KeyTrigger(KeyInput.KEY_A));
         app.getInputManager().addMapping("W_Key_Edt", new KeyTrigger(KeyInput.KEY_W));
@@ -109,13 +117,13 @@ public class EditorMappings implements AnalogListener, ActionListener {
 
         
         // NOTE: ALT CTRL SHIFT are switched off in EventManager
-        if (name.equals("LeftCtrlKey")) {
+        if (name.equals("LeftCtrlKey_Edt") || name.equals("RightCtrlKey_Edt")) {
             base.getEventManager().setCtrlBool(true);
             base.getSelectionManager().setSelectionTool(EditorSelectionManager.SelectionToolType.Rectangle);
-        } else if (name.equals("LeftShiftKey")) {
+        } else if (name.equals("LeftShiftKey_Edt") || name.equals("RightShiftKey_Edt")) {
             base.getEventManager().setShiftBool(true);
             base.getSelectionManager().setSelectionMode(EditorSelectionManager.SelectionMode.Additive);
-        } else if (name.equals("LeftAltKey")) {
+        } else if (name.equals("LeftAltKey_Edt") || name.equals("RightAltKey_Edt")) {
             base.getEventManager().setAltBool(true);
         }
 
