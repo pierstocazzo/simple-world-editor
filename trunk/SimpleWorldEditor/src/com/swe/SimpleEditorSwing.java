@@ -79,7 +79,7 @@ public class SimpleEditorSwing {
         // Get the current screen size
         Dimension scrnsize = toolkit.getScreenSize();
 
-        settings.setVSync(true);
+//        settings.setVSync(true);
         settings.setWidth(scrnsize.width - 100);
         settings.setHeight(scrnsize.height - 100);
 

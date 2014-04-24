@@ -10,7 +10,7 @@
     <attributes childLayout="overlay" height="23px" />
     <effect>
       <onHover name="changeMouseCursor" id="textFieldCursor" />
-      <onHover name="border" color="#f613" post="true" />
+      <!--<onHover name="border" color="#f613" post="false" />-->
     </effect>
   </style>
 
@@ -18,10 +18,10 @@
   <style id="nifty-textfield-my#field">
     <attributes childLayout="center" childClip="true" backgroundColor="#6663" padding="0px,2px"/>
     <effect>
-      <onActive name="border" color="#2223" post="true" inset="1px" />
-      <onFocus name="colorBar" color="#8503" post="true" inset="1px" />
-      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
-      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />
+      <!--<onActive name="border" color="#2223" post="true" inset="1px" />-->
+      <onFocus name="colorBar" color="#8503" post="false" inset="1px" />
+<!--      <onEnabled name="renderQuad" startColor="#2228" endColor="#2220" post="true" length="150" />
+      <onDisabled name="renderQuad" startColor="#2220" endColor="#2228" post="true" length="150" />-->
     </effect>
   </style>
 
@@ -42,7 +42,7 @@
   <style id="nifty-textfield-my#cursor">
     <attributes filename="textfield/cursor-empty.png" />
     <effect>
-      <onCustom name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="textfield/cursor.png" post="true"/>
+      <onCustom name="imageOverlayPulsate" period="250" timeType="infinite" pulsateType="rectangle" filename="textfield/cursor.png" post="false"/>
     </effect>
   </style>
 

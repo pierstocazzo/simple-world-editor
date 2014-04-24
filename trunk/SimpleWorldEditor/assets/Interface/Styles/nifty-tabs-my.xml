@@ -31,7 +31,7 @@
     <interact onClick="updateTabs()"/>
     <effect>
       <onHover name="imageOverlay" filename="tabs/tabs.png"
-               imageMode="sprite-resize:31,23,1,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
+               imageMode="sprite-resize:31,23,1,15,1,15,11,15,1,15,1,15,1,15,11" post="false"/>
     </effect>
     
   </style>
@@ -47,12 +47,12 @@
     <attributes backgroundImage="tabs/tabs.png"
                 imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" paddingLeft="11px"
                 paddingRight="11px" width="80px" height="23px" childLayout="center" visibleToMouse="true"/>
-    <effect>
+    <!--<effect>-->
       <!-- weiss noch net :)
      <onHover name="imageOverlay" filename="tabs/tabs.png"
               imageMode="sprite-resize:31,23,0,15,1,15,11,15,1,15,1,15,1,15,11" post="true"/>
       -->
-    </effect>
+    <!--</effect>-->
   </style>
 
   <!-- The style of the text on a tab button that is the activated one. -->
