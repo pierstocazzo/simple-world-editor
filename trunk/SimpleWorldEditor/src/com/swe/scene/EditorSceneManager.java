@@ -665,8 +665,8 @@ public class EditorSceneManager {
     }
 
     public void clearAssets() {
-        for (String str : spatialsList.keySet()) {
-            dsk.deleteFromCache(new ModelKey(str));
+        for (Spatial str : spatialsList.values()) {
+            dsk.deleteFromCache(str.getKey());
         }
         spatialsList.clear();
 
