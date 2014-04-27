@@ -52,15 +52,15 @@
                                     <!--Transforms-->
                                     <control name="label" text="Transforms" with="100%"/>
                                     <panel height="26px" align="center" childLayout="horizontal">
-                                        <control id="button_move" name="button" style="ma_button" width="30px" label="M" visibleToMouse="true">
+                                        <control id="button_move" name="button" style="ma_button" width="30px" label="M" >
                                             <interact onClick="setMoveManipulator()"/>
                                         </control>              
 
-                                        <control id="button_rotate" name="button" style="ma_button" width="30px" label="R" visibleToMouse="true">
+                                        <control id="button_rotate" name="button" style="ma_button" width="30px" label="R" >
                                             <interact onClick="setRotateManipulator()"/>
                                         </control> 
                                 
-                                        <control id="button_scale" name="button" style="ma_button" width="30px" label="S" visibleToMouse="true">
+                                        <control id="button_scale" name="button" style="ma_button" width="30px" label="S" >
                                             <interact onClick="setScaleManipulator()"/>
                                         </control>
                                     </panel>  
@@ -71,13 +71,13 @@
                                     <!--Coords-->
                                     <control name="label" text="Coordinates" with="100%"/>
                                     <panel height="26px" align="center" childLayout="horizontal">
-                                        <control id="button_set_world_coords" name="button" style="ma_button" width="30px" label="W" visibleToMouse="true">
+                                        <control id="button_set_world_coords" name="button" style="ma_button" width="30px" label="W" >
                                             <interact onClick="setWorldCoords()"/>
                                         </control>              
-                                        <control id="button_set_local_coords" name="button" style="ma_button" width="30px" label="L" visibleToMouse="true">
+                                        <control id="button_set_local_coords" name="button" style="ma_button" width="30px" label="L" >
                                             <interact onClick="setLocalCoords()"/>
                                         </control>  
-                                        <control id="button_set_view_coords" name="button" style="ma_button" width="30px" label="V" visibleToMouse="true">
+                                        <control id="button_set_view_coords" name="button" style="ma_button" width="30px" label="V" >
                                             <interact onClick="setViewCoords()"/>
                                         </control>   
                                     </panel>                               
@@ -87,15 +87,15 @@
                                     <!--Clear Transforms-->
                                     <control name="label" text="Clear Transforms" with="100%"/>
                                     <panel height="26px" align="center" childLayout="horizontal">
-                                        <control id="button_clear_location" name="button" style="ma_button" width="30px" label="L" visibleToMouse="true">
+                                        <control id="button_clear_location" name="button" style="ma_button" width="30px" label="L" >
                                             <interact onClick="clearTransform(Translation)"/>
                                         </control>              
                                 
-                                        <control id="button_clear_rotation" name="button" style="ma_button" width="30px" label="R" visibleToMouse="true">
+                                        <control id="button_clear_rotation" name="button" style="ma_button" width="30px" label="R" >
                                             <interact onClick="clearTransform(Rotation)"/>
                                         </control>              
 
-                                        <control id="button_clear_scale" name="button" style="ma_button" width="30px" label="S" visibleToMouse="true">
+                                        <control id="button_clear_scale" name="button" style="ma_button" width="30px" label="S" >
                                             <interact onClick="clearTransform(Scale)"/>
                                         </control>              
                                     </panel>                       
@@ -103,7 +103,7 @@
                                     <panel height="5px" padding="10" />
                     
                                     <panel height="26px" align="center" childLayout="vertical">
-                                        <control id="button_snap_grid" name="button" style="ma_button" label="Snap Grid" visibleToMouse="true">
+                                        <control id="button_snap_grid" name="button" style="ma_button" label="Snap Grid" >
                                             <interact onClick="snapObjectsToGrid()"/>
                                         </control>              
                                     </panel>        
@@ -112,19 +112,19 @@
 
                                     <panel align="center" childLayout="vertical">
                                         <panel height="26px" align="center" childLayout="vertical">
-                                            <control id="cloneSelectedButton()" name="button" valign="center" align="center" style="ma_button" label="CloneSelected" visibleToMouse="true">
+                                            <control id="cloneSelectedButton()" name="button" valign="center" align="center" style="ma_button" label="CloneSelected" >
                                                 <interact onClick="cloneSelectedButton()"/>
                                             </control>
                                         </panel>
                        
                                         <panel height="26px" align="center" childLayout="vertical">
-                                            <control id="moveToLayerTrue" name="button" style="ma_button" label="MoveToLayer" visibleToMouse="true">
+                                            <control id="moveToLayerTrue" name="button" style="ma_button" label="MoveToLayer" >
                                                 <interact onClick="moveToLayerEnable(true)"/>
                                             </control>
                                         </panel>
                         
                                         <panel height="26px" align="center" childLayout="vertical">
-                                            <control id="selectAllButton" name="button" style="ma_button" label="SelectAll" visibleToMouse="true">
+                                            <control id="selectAllButton" name="button" style="ma_button" label="SelectAll" >
                                                 <interact onClick="selectAllButton()"/>
                                             </control>                        
                                         </panel>
@@ -133,7 +133,7 @@
                                     <panel height="5px" padding="10" />
                     
                                     <panel height="26px" align="center" childLayout="vertical">
-                                        <control id="button_set_grid" name="button" style="ma_button" label="Show Grid" visibleToMouse="true">
+                                        <control id="button_set_grid" name="button" style="ma_button" label="Show Grid">
                                             <interact onClick="setGrid()"/>
                                         </control>              
                                     </panel>
@@ -141,13 +141,13 @@
                                     <panel height="5px" padding="10" />
                     
                                     <panel height="26px" align="center" childLayout="vertical">
-                                        <control id="removeEntityInScene" name="button" valign="center" align="center" style="ma_button" label="RemoveSelected" visibleToMouse="true">
+                                        <control id="removeEntityInScene" name="button" valign="center" align="center" style="ma_button" label="RemoveSelected" >
                                             <interact onClick="removeSelectedButton()"/>
                                         </control>                                                                          
                                     </panel>     
 
                                     <panel height="26px" align="center" childLayout="vertical">
-                                        <control id="openPopupKeys" name="button" style="ma_button" label="Shortcuts" visibleToMouse="true">
+                                        <control id="openPopupKeys" name="button" style="ma_button" label="Shortcuts" >
                                             <interact onClick="popupKeys(true)"/>
                                         </control> 
                                     </panel>     
@@ -379,19 +379,19 @@
                                         </panel>-->
                                                                                 
                                         <panel childLayout="horizontal" padding="3">
-                                            <control id="newScene" name="button" valign="center" align="center" style="ma_button" label="New Scene" visibleToMouse="true">
+                                            <control id="newScene" name="button" valign="center" align="center" style="ma_button" label="New Scene" >
                                                 <interact onClick="newSceneButton()"/>
                                             </control>
-                                            <control id="loadScene" name="button" valign="center" align="center" style="ma_button" label="Load Scene" visibleToMouse="true">
+                                            <control id="loadScene" name="button" valign="center" align="center" style="ma_button" label="Load Scene" >
                                                 <interact onClick="loadSceneButton()"/>
                                             </control>
                                         </panel>
                                 
                                         <panel childLayout="horizontal" padding="3">
-                                            <control id="saveScene" name="button" valign="center" align="center" style="ma_button" label="Save Scene" visibleToMouse="true">
+                                            <control id="saveScene" name="button" valign="center" align="center" style="ma_button" label="Save Scene" >
                                                 <interact onClick="saveSceneButton()"/>
                                             </control>                                    
-                                            <control id="saveAsNewScene" name="button" valign="center" align="center" style="ma_button" label="Save as New" visibleToMouse="true">
+                                            <control id="saveAsNewScene" name="button" valign="center" align="center" style="ma_button" label="Save as New" >
                                                 <interact onClick="saveAsNewSceneButton()"/>
                                             </control>
                                         </panel>
@@ -419,16 +419,16 @@
                                             </panel>
                                             
                                             <panel childLayout="horizontal" padding="3">
-                                                <control width="50px" id="addSceneObject" name="button" valign="center" align="center" style="ma_button" label="Add" visibleToMouse="true">
+                                                <control width="50px" id="addSceneObject" name="button" valign="center" align="center" style="ma_button" label="Add" >
                                                     <interact onClick="changeSceneObjectButton(Add Scene)"/>
                                                 </control>
-                                                <control width="50px" id="editSceneObject" name="button" valign="center" align="center" style="ma_button" label="Edit" visibleToMouse="true">
+                                                <control width="50px" id="editSceneObject" name="button" valign="center" align="center" style="ma_button" label="Edit" >
                                                     <interact onClick="changeSceneObjectButton(Edit Scene)"/>
                                                 </control>
-                                                <control width="50px" id="deleteSceneObject" name="button" valign="center" align="center" style="ma_button" label="Del" visibleToMouse="true">
+                                                <control width="50px" id="deleteSceneObject" name="button" valign="center" align="center" style="ma_button" label="Del" >
                                                     <interact onClick="changeSceneObjectButton(Delete Scene)"/>
                                                 </control>
-                                                <control width="50px" id="cloneSceneObject" name="button" valign="center" align="center" style="ma_button" label="Clone" visibleToMouse="true">
+                                                <control width="50px" id="cloneSceneObject" name="button" valign="center" align="center" style="ma_button" label="Clone" >
                                                     <interact onClick="changeSceneObjectButton(Clone Scene)"/>
                                                 </control>
                                             </panel>
@@ -448,16 +448,16 @@
                                             </panel>
                                             
                                             <panel childLayout="horizontal" padding="3">
-                                                <control width="50px" id="addLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Add" visibleToMouse="true">
+                                                <control width="50px" id="addLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Add" >
                                                     <interact onClick="changeSceneObjectButton(Add LayersGroup)"/>
                                                 </control>
-                                                <control width="50px" id="editLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Edit" visibleToMouse="true">
+                                                <control width="50px" id="editLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Edit" >
                                                     <interact onClick="changeSceneObjectButton(Edit LayersGroup)"/>
                                                 </control>
-                                                <control width="50px" id="deleteLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Del" visibleToMouse="true">
+                                                <control width="50px" id="deleteLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Del" >
                                                     <interact onClick="changeSceneObjectButton(Delete LayersGroup)"/>
                                                 </control>
-                                                <control width="50px" id="cloneLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Clone" visibleToMouse="true">
+                                                <control width="50px" id="cloneLayersGroup" name="button" valign="center" align="center" style="ma_button" label="Clone" >
                                                     <interact onClick="changeSceneObjectButton(Clone LayersGroup)"/>
                                                 </control>
                                             </panel>
@@ -544,16 +544,16 @@
                                             </control>
                                     
                                             <panel childLayout="horizontal">
-                                                <control id="selectEntityInScene" name="button" valign="center" align="center" style="ma_button" label="SelectFromList" visibleToMouse="true">
+                                                <control id="selectEntityInScene" name="button" valign="center" align="center" style="ma_button" label="SelectFromList" >
                                                     <interact onClick="selectEntitiesButton()"/>
                                                 </control> 
-                                                <control id="showSelectedEntitiesButton" name="button" valign="center" align="center" style="ma_button" label="ShowSelected" visibleToMouse="true">
+                                                <control id="showSelectedEntitiesButton" name="button" valign="center" align="center" style="ma_button" label="ShowSelected" >
                                                     <interact onClick="showSelectedEntitiesButton()"/>
                                                 </control> 
                                             </panel>
                                     
                                             <panel childLayout="horizontal">   
-                                                <control id="clearSelectedEntitiesButton" name="button" valign="center" align="center" style="ma_button" label="Clear List" visibleToMouse="true">
+                                                <control id="clearSelectedEntitiesButton" name="button" valign="center" align="center" style="ma_button" label="Clear List" >
                                                     <interact onClick="clearSelectedEntitiesButton()"/>
                                                 </control> 
                                             </panel>
@@ -583,18 +583,18 @@
                                    
                                         <!--Update assets-->
                                         <panel childLayout="horizontal" padding="3">
-                                            <control id="addAsset" name="button" valign="center" align="center" style="ma_button" label="Add Asset" visibleToMouse="true">
+                                            <control id="addAsset" name="button" valign="center" align="center" style="ma_button" label="Add Asset" >
                                                 <interact onClick="AssetButton(new)"/>
                                             </control>
-                                            <control id="editAsset" name="button" valign="center" align="center" style="ma_button" label="Edit Asset" visibleToMouse="true">
+                                            <control id="editAsset" name="button" valign="center" align="center" style="ma_button" label="Edit Asset" >
                                                 <interact onClick="AssetButton(edit)"/>
                                             </control>
                                         </panel>
                                         <panel childLayout="horizontal" padding="3">
-                                            <control id="removeAsset" name="button" valign="center" align="center" style="ma_button" label="RemoveAsset" visibleToMouse="true">
+                                            <control id="removeAsset" name="button" valign="center" align="center" style="ma_button" label="RemoveAsset" >
                                                 <interact onClick="AssetButton(remove)"/>
                                             </control>
-                                            <control id="updateAssets" name="button" valign="center" align="center" style="ma_button" label="Update Assets" visibleToMouse="true">
+                                            <control id="updateAssets" name="button" valign="center" align="center" style="ma_button" label="Update Assets" >
                                                 <interact onClick="updateAssetsButton()"/>
                                             </control>
                                         </panel>
@@ -607,10 +607,10 @@
                                             </control>
                                     
                                             <panel childLayout="horizontal">
-                                                <control id="addEntity" name="button" valign="center" align="center" style="ma_button" label="Add Entity" visibleToMouse="true">
+                                                <control id="addEntity" name="button" valign="center" align="center" style="ma_button" label="Add Entity" >
                                                     <interact onClick="addEntityToSceneButton()"/>
                                                 </control>
-                                                <control id="removeEntityClones" name="button" valign="center" align="center" style="ma_button" label="Remove Clones" visibleToMouse="true">
+                                                <control id="removeEntityClones" name="button" valign="center" align="center" style="ma_button" label="Remove Clones" >
                                                     <interact onClick="removeClonesButton()"/>
                                                 </control>
                                             </panel>
@@ -619,7 +619,7 @@
                                             </panel>
                                             
                                             <panel childLayout="horizontal">
-                                                <control id="replaceSelectedModels" name="button" valign="center" align="center" style="ma_button" label="Replace Selected" visibleToMouse="true">
+                                                <control id="replaceSelectedModels" name="button" valign="center" align="center" style="ma_button" label="Replace Selected" >
                                                     <interact onClick="replaceModelsButton()"/>
                                                 </control>                                                
                                             </panel>
@@ -649,7 +649,7 @@
                                             </panel>
 
                                             <panel childLayout="horizontal">
-                                                <control id="editComponent" name="button" valign="center" width="50px" align="center" style="ma_button" label="Edit" visibleToMouse="true">
+                                                <control id="editComponent" name="button" valign="center" width="50px" align="center" style="ma_button" label="Edit" >
                                                     <interact onClick="editComponent()"/>
                                                 </control>                                         
                                                 <control id="compEditValue" name="textfield" text="" style="nifty-textfield-my"/>
@@ -659,10 +659,10 @@
                                             </panel>
                                                                                                                                     
                                             <panel childLayout="horizontal" valign="center" align="center">
-                                                <control id="addComponent" name="button" valign="center" align="center" style="ma_button" label="Add" visibleToMouse="true">
+                                                <control id="addComponent" name="button" valign="center" align="center" style="ma_button" label="Add" >
                                                     <interact onClick="addComponentButton()"/>
                                                 </control> 
-                                                <control id="removeSelectedComponent" name="button" valign="center" align="center" style="ma_button" label="Remove" visibleToMouse="true">
+                                                <control id="removeSelectedComponent" name="button" valign="center" align="center" style="ma_button" label="Remove" >
                                                     <interact onClick="removeSelectedComponentButton()"/>
                                                 </control>
                                             </panel>                                    
@@ -678,10 +678,10 @@
                                                 <control name="label" text="Apply to Selected" />
                                         
                                                 <panel childLayout="horizontal">
-                                                    <control id="copyComponentToSelectedEntity" name="button" valign="center" align="center" style="ma_button" label="Copy" visibleToMouse="true">
+                                                    <control id="copyComponentToSelectedEntity" name="button" valign="center" align="center" style="ma_button" label="Copy" >
                                                         <interact onClick="copyComponentToSelectedEntityButton()"/>
                                                     </control>
-                                                    <control id="removeComponentFromSelectedEntity" name="button" valign="center" align="center" style="ma_button" label="Remove" visibleToMouse="true">
+                                                    <control id="removeComponentFromSelectedEntity" name="button" valign="center" align="center" style="ma_button" label="Remove" >
                                                         <interact onClick="removeComponentFromSelectedEntityButton()"/>
                                                     </control>
                                                 </panel>

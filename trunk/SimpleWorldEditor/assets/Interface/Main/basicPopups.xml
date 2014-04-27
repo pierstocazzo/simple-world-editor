@@ -33,7 +33,7 @@ Numpad 1/3/7/Ctrl+1/Ctrl+3/Ctrl+7 –-- Top/Left/Front view&#10;"  />
 
             </panel>
             <panel align="center" valign="center" childLayout="horizontal" padding="5">
-                <control id="closePopupKeys" name="button" style="ma_button" label="Ok" visibleToMouse="true">
+                <control id="closePopupKeys" name="button" style="ma_button" label="Ok" >
                     <interact onClick="popupKeys(false)"/>
                 </control>
             </panel>    
@@ -58,10 +58,10 @@ Numpad 1/3/7/Ctrl+1/Ctrl+3/Ctrl+7 –-- Top/Left/Front view&#10;"  />
             </panel>
             
             <panel align="center" valign="center" childLayout="horizontal" padding="5">
-                <control id="finishAddComponent" name="button" style="ma_button" label="Ok" visibleToMouse="true">
+                <control id="finishAddComponent" name="button" style="ma_button" label="Ok" >
                     <interact onClick="finishAddComponent(true)"/>
                 </control>
-                <control id="cancelAddComponent" name="button" style="ma_button" label="Cancel" visibleToMouse="true">
+                <control id="cancelAddComponent" name="button" style="ma_button" label="Cancel" >
                     <interact onClick="finishAddComponent(false)"/>
                 </control>
             </panel>
@@ -87,10 +87,10 @@ Numpad 1/3/7/Ctrl+1/Ctrl+3/Ctrl+7 –-- Top/Left/Front view&#10;"  />
             </panel>
             
             <panel align="center" valign="center" childLayout="horizontal" padding="5">
-                <control id="finishEditSceneLg" name="button" style="ma_button" label="Ok" visibleToMouse="true">
+                <control id="finishEditSceneLg" name="button" style="ma_button" label="Ok" >
                     <interact onRelease="finishEditSceneLG(true)"/>
                 </control>
-                <control id="cancelEditSceneLg" name="button" style="ma_button" label="Cancel" visibleToMouse="true">
+                <control id="cancelEditSceneLg" name="button" style="ma_button" label="Cancel" >
                     <interact onRelease="finishEditSceneLG(false)"/>
                 </control>
             </panel>
@@ -115,10 +115,10 @@ Numpad 1/3/7/Ctrl+1/Ctrl+3/Ctrl+7 –-- Top/Left/Front view&#10;"  />
             </panel>
             
             <panel align="center" valign="center" childLayout="horizontal" padding="5">
-                <control id="finishEditAsset" name="button" style="ma_button" label="Ok" visibleToMouse="true">
+                <control id="finishEditAsset" name="button" style="ma_button" label="Ok" >
                     <interact onRelease="finishEditAsset(true)"/>
                 </control>
-                <control id="cancelEditAsset" name="button" style="ma_button" label="Cancel" visibleToMouse="true">
+                <control id="cancelEditAsset" name="button" style="ma_button" label="Cancel" >
                     <interact onRelease="finishEditAsset(false)"/>
                 </control>
             </panel>
@@ -217,7 +217,7 @@ Numpad 1/3/7/Ctrl+1/Ctrl+3/Ctrl+7 –-- Top/Left/Front view&#10;"  />
                 </panel>
                     
                 <panel height="40px" align="center" childLayout="horizontal">
-                    <control id="moveToLayerFalse" name="button" style="ma_button" label="Cancel" visibleToMouse="true">
+                    <control id="moveToLayerFalse" name="button" style="ma_button" label="Cancel" >
                         <interact onClick="moveToLayerEnable(false)"/>
                     </control>
                 </panel>
