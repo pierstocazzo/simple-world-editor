@@ -318,67 +318,65 @@ public class EditorSceneManager {
         loadSettings(loadSWEJson.getAsJsonObject("Settings"));
 
         // load Scenes
-        JsonObject jsScenes = loadSWEJson.get("Scenes").getAsJsonObject();
-        for (Map.Entry<String, JsonElement> sceneObjJS : jsScenes.entrySet()) {
+        for ( JsonElement sceneElement : loadSWEJson.get("Scenes").getAsJsonArray()) {
 
-            JsonObject jsScene = sceneObjJS.getValue().getAsJsonObject();
+            JsonObject sceneJO = sceneElement.getAsJsonObject();
 
             // set new Scene
-            String strScene = sceneObjJS.getKey();
+            String strScene = sceneJO.get("sceneName").getAsString();
             EditorSceneObject newSceneObj = new EditorSceneObject(root, strScene);
-            newSceneObj.setSceneEnabled(jsScene.get("isEnabled").getAsBoolean());
+            newSceneObj.setSceneEnabled(sceneJO.get("isEnabled").getAsBoolean());
 
             // set Scene active
             Node newSceneNode = newSceneObj.getSceneNode();
-            newSceneNode.setUserData("isActive", jsScene.get("isActive").getAsBoolean());
-            if (jsScene.get("isActive").getAsBoolean()) {
+            newSceneNode.setUserData("isActive", sceneJO.get("isActive").getAsBoolean());
+            if (sceneJO.get("isActive").getAsBoolean()) {
                 setActiveSceneObject(newSceneObj);
             }
 
             scenesList.put(strScene, newSceneObj); // add a scene to the list
 
             // Load LayersGroups of a Scene
-            JsonObject jsAllLayersGroups = (JsonObject) jsScene.get("LayersGroups");
-            for (Map.Entry<String, JsonElement> layersGroupStrObj : jsAllLayersGroups.entrySet()) {
-                JsonObject jsLayersGroup = layersGroupStrObj.getValue().getAsJsonObject();
+            for (  JsonElement layersGroupElem : sceneJO.get("LayersGroups").getAsJsonArray()) {
+                
+                JsonObject layersGroupJO = layersGroupElem.getAsJsonObject();
 
-                newSceneObj.createLayersGroup(layersGroupStrObj.getKey());
-                EditorLayersGroupObject newLayersGroup = newSceneObj.getLayersGroupsList().get(layersGroupStrObj.getKey());
-                newLayersGroup.setLayersGroupEnabled(jsLayersGroup.get("isEnabled").getAsBoolean());
+                String layerGroupNameFromJO = layersGroupJO.get("layerGroupName").getAsString();
+                newSceneObj.createLayersGroup(layerGroupNameFromJO);
+                EditorLayersGroupObject newLayersGroup = newSceneObj.getLayersGroupsList().get(layerGroupNameFromJO);
+                newLayersGroup.setLayersGroupEnabled(layersGroupJO.get("isEnabled").getAsBoolean());
 
                 // set LayersGroup active
                 Node newLayersGroupNode = newLayersGroup.getLayersGroupNode();
-                if (jsLayersGroup.get("isActive").getAsBoolean()) {
+                if (layersGroupJO.get("isActive").getAsBoolean()) {
                     newSceneObj.setActivelayersGroup(newLayersGroup);
                 }
 
 
                 // load layers
-                JsonObject jsLayers = (JsonObject) jsLayersGroup.get("Layers");
-                for (Map.Entry<String, JsonElement> layerStrObj : jsLayers.entrySet()) {
-                    JsonObject jslayer = layerStrObj.getValue().getAsJsonObject();
+                for ( JsonElement layerElem : layersGroupJO.get("Layers").getAsJsonArray()) {
+                    JsonObject layerJO = layerElem.getAsJsonObject();
                     // get layer
-                    String strLayer = layerStrObj.getKey();
-                    strLayer = strLayer.substring(strLayer.indexOf("layer") + 5, strLayer.length());
-                    Node layerNode = newLayersGroup.getLayer(Integer.valueOf(strLayer));
-                    System.out.println(strLayer + "Layer number");
+                    int strLayer = layerJO.get("layerNumber").getAsInt();
+                    Node layerNode = newLayersGroup.getLayer(strLayer);
+//                    System.out.println(strLayer + "Layer number");
 
                     // get layer states
-                    boolean isActive = jslayer.get("isActive").getAsBoolean();
+                    boolean isActive = layerJO.get("isActive").getAsBoolean();
                     if (isActive) {
                         newLayersGroup.setActiveLayer(layerNode);
 //                    layerNode.setUserData("isActive", true);
                     }
 
                     // don't forget to parse gui layers
-                    boolean isEnabled = jslayer.get("isEnabled").getAsBoolean();
+                    boolean isEnabled = layerJO.get("isEnabled").getAsBoolean();
                     if (isEnabled) {
                         newLayersGroup.getLayersGroupNode().attachChild(layerNode);
                         layerNode.setUserData("isEnabled", true);
                     }
 
                     // Locked Layer stats
-                    boolean isLocked = jslayer.get("isLocked").getAsBoolean();
+                    boolean isLocked = layerJO.get("isLocked").getAsBoolean();
                     if (isLocked) {
                         layerNode.setUserData("isLocked", true);
                     }
@@ -516,7 +514,7 @@ public class EditorSceneManager {
         saveSWEJson.add("Settings", settingsJson);
 
         //save scenes
-        JsonObject allScenes = new JsonObject();
+        JsonArray allScenes = new JsonArray();
 
         // save entities
         JsonArray entitiesToSave = new JsonArray();
@@ -526,6 +524,7 @@ public class EditorSceneManager {
 
             // save scene states
             Node sceneNode = scenesList.get(sceneName).getSceneNode();
+            sceneToSave.addProperty("sceneName", scenesList.get(sceneName).getSceneName());
             Object isActScene = sceneNode.getUserData("isActive");
             sceneToSave.addProperty("isActive", (Boolean) isActScene);
             Object isEnScene = sceneNode.getUserData("isEnabled");
@@ -533,23 +532,25 @@ public class EditorSceneManager {
 
 
             //save LayerGroups
-            JsonObject allLayersGroups = new JsonObject();
+            JsonArray allLayersGroups = new JsonArray();
             for (EditorLayersGroupObject layersGroup : scenesList.get(sceneName).getLayersGroupsList().values()) {
-                JsonObject layersGroupToSave = new JsonObject();
+                JsonObject layerGroupToSave = new JsonObject();
 
                 // save layerGroup states
                 Node layersGroupNode = layersGroup.getLayersGroupNode();
+                layerGroupToSave.addProperty("layerGroupName", layersGroup.getLayersGroupName());
                 Object isActLayersGroup = layersGroupNode.getUserData("isActive");
-                layersGroupToSave.addProperty("isActive", (Boolean) isActLayersGroup);
+                layerGroupToSave.addProperty("isActive", (Boolean) isActLayersGroup);
                 Object isEnLayersGroup = layersGroupNode.getUserData("isEnabled");
-                layersGroupToSave.addProperty("isEnabled", (Boolean) isEnLayersGroup);
+                layerGroupToSave.addProperty("isEnabled", (Boolean) isEnLayersGroup);
 
                 //save layers
-                JsonObject allLayers = new JsonObject();
+                JsonArray allLayers = new JsonArray();
                 for (Node layerNode : layersGroup.getLayers()) {
                     JsonObject layerToSave = new JsonObject();
 
                     // save layer states
+                    layerToSave.addProperty("layerNumber", (Integer) layerNode.getUserData("LayerNumber"));
                     Object isActLayer = layerNode.getUserData("isActive");
                     layerToSave.addProperty("isActive", (Boolean) isActLayer);
                     Object isEnLayer = layerNode.getUserData("isEnabled");
@@ -608,15 +609,15 @@ public class EditorSceneManager {
                         entitiesToSave.add(entityJSON);
                     }
 
-                    allLayers.add(layerNode.getName(), layerToSave); // SAVE A LAYER
+                    allLayers.add(layerToSave); // SAVE A LAYER
                 }
-                layersGroupToSave.add("Layers", allLayers); // SAVE ALL LAYERS
-                allLayersGroups.add(layersGroup.getLayersGroupName(), layersGroupToSave); // SAVE LAYERGROUP
+                layerGroupToSave.add("Layers", allLayers); // SAVE ALL LAYERS
+                allLayersGroups.add(layerGroupToSave); // SAVE LAYERGROUP
             }
 
             // save Scene
             sceneToSave.add("LayersGroups", allLayersGroups);
-            allScenes.add(sceneName, sceneToSave);
+            allScenes.add(sceneToSave);
         }
 
         // save all
